@@ -5,8 +5,11 @@
   "dependencies": {
     "antd": "^3.18.2",
     "axios": "^0.18.0",
+    "convert-csv-to-json": "0.0.14",
+    "csv": "^5.1.1",
     "csvtojson": "^2.0.8",
     "react": "^16.8.6",
+    "react-csv": "^1.1.1",
     "react-dom": "^16.8.6",
     "react-excel-workbook": "0.0.4",
     "react-file-reader": "^1.1.4",
