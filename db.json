@@ -22,10 +22,14 @@
   ],
   "Route": [
     {
-      "routeName": "root1",
-      "routeAreas": "Karve Nagar,Kothrud",
-      "routePincodes": "411607,41106",
-      "distributerid": 1
+      "routenumber": "root1",
+      "areas": [
+        "Karve Nagar"
+      ],
+      "pincodes": [
+        411607
+      ],
+      "id": 1
     },
     {
       "routenumber": "root2",
@@ -36,16 +40,6 @@
         411411
       ],
       "id": 2
-    },
-    {
-      "routenumber": "11",
-      "areas": [
-        "Karve Nagar"
-      ],
-      "pincodes": [
-        411411
-      ],
-      "id": 3
     }
   ],
   "Boy": [
@@ -105,55 +99,60 @@
   ],
   "DemoSheet": [
     {
-      "root1": [
-        {
-          "id": 1,
-          "name": "Jathar",
-          "buff": "1",
-          "cow": "2",
-          "date": "4/5/2019"
-        },
-        {
-          "id": 2,
-          "name": "Kulkarni",
-          "buff": "0.5",
-          "cow": "3",
-          "date": "5/5/2019"
-        },
-        {
-          "id": 3,
-          "name": "kakde",
-          "buff": "5",
-          "cow": "6",
-          "date": "6/5/2019"
-        }
-      ]
+      "customerName": "Ankush Zambre",
+      "address": "Dhayari",
+      "pincode": 411042,
+      "contact": 9786541230,
+      "email": "ankush@gmail.com",
+      "paymentType": "Cash"
     },
     {
-      "root2": [
-        {
-          "id": 4,
-          "name": "yogita",
-          "buff": "1",
-          "cow": "2",
-          "date": "7/5/2019"
-        },
-        {
-          "id": 5,
-          "name": "Vanita",
-          "buff": "0.5",
-          "cow": "3",
-          "date": "8/5/2019"
-        }
-      ]
+      "customerName": "Mukand kadu",
+      "address": "dattawadi",
+      "pincode": 411042,
+      "contact": 9786541230,
+      "email": "mukand@gmail.com",
+      "paymentType": "Cash"
     }
   ],
   "BlankSheet": [
     {
-      "root1": []
+      "customerName": "",
+      "address": "",
+      "pincode": null,
+      "contact": null,
+      "email": "",
+      "paymentType": ""
+    }
+  ],
+  "Customer": [
+    {
+      "customerName": "a",
+      "address": "b",
+      "pincode": "123",
+      "contact": "7080904050",
+      "email": "a@gmail.com",
+      "paymentType": "cash",
+      "distributerid": 1,
+      "routeid": 1,
+      "id": 1
+    }
+  ],
+  "CreateCustomer": [
+    {
+      "id": 1,
+      "routeName": "root1",
+      "routeId": 1
     },
     {
-      "root2": []
+      "id": 2,
+      "routeName": "root2",
+      "routeId": 2
+    },
+    {
+      "id": 3,
+      "routeName": "root3",
+      "routeId": 3
     }
   ]
 }
