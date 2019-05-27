@@ -1,21 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom'
-
+import { BrowserRouter, Route } from 'react-router-dom'
 import Login from './pages/login'
 import Register from './pages/register'
 import MainHeader from './components/mainheader'
-
-
 import { Layout } from 'antd';
 import { Row, Col } from 'antd';
 import CreateCustomer from './pages/createcustomer';
 import BusinessSetUP from './pages/businesssetup';
 import Home from './pages/home'
-const { Header, Content, Footer } = Layout;
-
-
-
-
+const { Content } = Layout;
 function App() {
   return (
     <BrowserRouter >

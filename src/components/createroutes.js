@@ -1,5 +1,5 @@
-import React,{Component} from 'react'
-import { Form, Input, Button, Select, Checkbox,  Row, Col,message } from 'antd';
+import React from 'react'
+import { Form, Input, Button, Select,Row, Col,message } from 'antd';
 import axios from 'axios';
 
 const formItemLayout = {
@@ -35,12 +35,16 @@ class CreateRoutesInfoForm extends React.Component {
         for(let item in data) {
           if(item==='distributerServiceAreas'){
             data[item].map((menu,index) => {
-               this.state.areas.push(<Option value={menu} key={index}>{menu}</Option>) 
+              return(
+                this.state.areas.push(<Option value={menu} key={index}>{menu}</Option>) 
+              )
             })
           }
           else if(item==='distributerServicePincodes') {
             data[item].map((menu,index) => {
-              this.state.pincodes.push(<Option value={menu} key={index}>{menu}</Option>) 
+              return(
+                this.state.pincodes.push(<Option value={menu} key={index}>{menu}</Option>) 
+              )
            })
           }
         }

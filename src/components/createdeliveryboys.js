@@ -1,5 +1,5 @@
-import React,{Component} from 'react'
-import { Form, Input, Button, Select, Checkbox,  Row, Col,message } from 'antd';
+import React from 'react'
+import { Form, Input, Button, Select,Row, Col,message } from 'antd';
 import axios from 'axios';
 
 const formItemLayout = {
@@ -26,7 +26,9 @@ class CreateDeliveryBoysForm extends React.Component {
     axios.get('http://localhost:3005/Route').then((response)=> {
       this.setState({routesData:response.data})
       this.state.routesData.map((data,index) => {
-        this.state.routes.push(<Option value={data.routenumber} key={index}>{data.routenumber}</Option>)
+        return(
+          this.state.routes.push(<Option value={data.routenumber} key={index}>{data.routenumber}</Option>)
+        )
       })
     })
   }

@@ -1,5 +1,5 @@
-import React,{Component} from 'react'
-import { Form, Input, Button, Upload, Icon,   Select, Checkbox,  Row, Col, message } from 'antd';
+import React from 'react'
+import { Form, Button, Icon,  Row, Col, message } from 'antd';
 import axios from 'axios';
 // import Workbook from 'react-excel-workbook';
 import csv from 'csv';
@@ -9,7 +9,6 @@ import ReactFileReader from 'react-file-reader';
 // import fs from 'fs';
 // import file from './demo.xlsx'
 // import XLSX  from 'xlsx'
-import csvToJson from 'convert-csv-to-json';
 import { CSVLink } from "react-csv";
 class CreateCustomersForms extends React.Component {
     constructor() {

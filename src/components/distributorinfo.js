@@ -1,5 +1,5 @@
-import React,{Component} from 'react'
-import { Form, Input, Button, Select, Checkbox,  Row, Col, InputNumber,message } from 'antd';
+import React from 'react'
+import { Form, Input, Button, Select, Row, Col,message } from 'antd';
 import axios from 'axios';
 const formItemLayout = {
   labelCol: { span: 8 },
@@ -36,29 +36,37 @@ class DistributorInfoForm extends React.Component {
         axios.get("http://localhost:3005/location").then((response) => {
         this.setState({locationData:response.data})
         for(let data in this.state.locationData[0]) {
-            if(data=='state') {
+            if(data === 'state') {
                 this.state.locationData[0][data].map((item,index) =>{
-                    this.state.states.push(<Option value={item} key={index}>{item}</Option>) 
+                    return(
+                        this.state.states.push(<Option value={item} key={index}>{item}</Option>) 
+                    )
                 })
             }
-            else if(data==='city') {
+            else if(data === 'city') {
                 this.state.locationData[0][data].map((item,index) =>{
-                    this.state.citys.push(<Option value={item} key={index}>{item}</Option>) 
+                    return(
+                        this.state.citys.push(<Option value={item} key={index}>{item}</Option>) 
+                    )
                 })
             }
-            else if(data==='area') {
+            else if(data === 'area') {
                 this.state.locationData[0][data].map((item,index) =>{
-                    this.state.areas.push(<Option value={item} key={index}>{item}</Option>) 
+                    return(
+                        this.state.areas.push(<Option value={item} key={index}>{item}</Option>) 
+                    )
                 })
             }
-            else if(data==='pincode') {
+            else if(data === 'pincode') {
                 this.state.locationData[0][data].map((item,index) =>{
-                    this.state.pincodes.push(<Option value={item} key={index}>{item}</Option>) 
+                    return(
+                        this.state.pincodes.push(<Option value={item} key={index}>{item}</Option>) 
+                    )
                 })
             }
             }
         })
-        }
+    }
     
     check = () => {
         this.props.form.validateFields((err,values) => {
@@ -79,13 +87,12 @@ class DistributorInfoForm extends React.Component {
             })
         }
         });
-
     };
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
         <div>
-        <div className="formbox">
+        <div className = "formbox">
         <h2> Step 1: Distributor Information  </h2>
             <Row>
                 <Col span={12}>
