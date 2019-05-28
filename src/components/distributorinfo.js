@@ -21,8 +21,8 @@ function handleChange(value) {
 }
 
 class DistributorInfoForm extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state={
             locationData:[],
             states:[],
@@ -30,6 +30,8 @@ class DistributorInfoForm extends React.Component {
             areas:[],
             pincodes:[],
         }
+        console.log(this.props.nextFlag);
+        
         
     }
 componentDidMount() {
@@ -63,6 +65,7 @@ componentDidMount() {
   check = () => {
     this.props.form.validateFields((err,values) => {
       if (!err) {
+          this.props.nextFlag("data");
            let  serviceAreas =values.serviceAreas.join(",");
                values.serviceAreas=serviceAreas;
 

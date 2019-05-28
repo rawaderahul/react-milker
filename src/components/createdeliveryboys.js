@@ -37,6 +37,7 @@ class CreateDeliveryBoysForm extends React.Component {
   check = () => {
     this.props.form.validateFields((err,values) => {
       if (!err) {
+        this.props.nextFlag("data");
         values.distributerid = 1;
         values.routeid = 7; 
          axios.post('http://127.0.0.1:8000/api/WorkerDetail',values).then((response) => {

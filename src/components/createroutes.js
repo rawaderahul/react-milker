@@ -51,6 +51,7 @@ class CreateRoutesInfoForm extends React.Component {
   check = () => {
     this.props.form.validateFields((err,values) => {
       if (!err) {
+        this.props.nextFlag("data");
         values.distributerid = 1;
         values.routeAreas = values.routeAreas.join(',');
         values.routePincodes = values.routePincodes.join(',');

@@ -136,6 +136,17 @@
       "distributerid": 1,
       "routeid": 1,
       "id": 1
+    },
+    {
+      "customerName": "",
+      "address": "",
+      "pincode": "",
+      "contact": "",
+      "email": "",
+      "paymentType": "",
+      "distributerid": 1,
+      "routeid": 1,
+      "id": 2
     }
   ],
   "CreateCustomer": [

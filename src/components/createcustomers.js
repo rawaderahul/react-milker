@@ -1,15 +1,8 @@
 import React,{Component} from 'react'
 import { Form, Input, Button, Upload, Icon,   Select, Checkbox,  Row, Col, message } from 'antd';
 import axios from 'axios';
-// import Workbook from 'react-excel-workbook';
 import csv from 'csv';
 import ReactFileReader from 'react-file-reader';
-// import CSVReader from "react-csv-reader";
-// import excelToJson from 'convert-excel-to-json';
-// import fs from 'fs';
-// import file from './demo.xlsx'
-// import XLSX  from 'xlsx'
-import csvToJson from 'convert-csv-to-json';
 import { CSVLink } from "react-csv";
 class CreateCustomersForms extends React.Component {
     constructor() {
@@ -63,6 +56,7 @@ class CreateCustomersForms extends React.Component {
     }
     addCustomer=() => {
         if(this.state.csvDataSource) {
+        this.props.nextFlag("data");
         this.state.csvDataSource.map((item,index) => {
          if(index!==0){
            var data={

@@ -6,44 +6,51 @@ import CreateDeliveryBoys from '../components/createdeliveryboys'
 import CreateCustomers from '../components/createcustomers'
 
 const Step = Steps.Step;
-const steps = [
-  {
-    title: 'Distributer',
-    content: <DistributorInfo />,
-  },
-  {
-    title: 'Create Routes',
-    content: <CreateRoutes />,
-  },
-  {
-    title: 'Create Delivery Boys',
-    content: <CreateDeliveryBoys />,
-  },
-  {
-    title: 'Create Customers',
-    content: <CreateCustomers />,
-  },
-];
+
 
 class BusinessSetUP extends Component{
     constructor(props) {
         super(props);
         this.state = {
           current: 0,
+          flag:true
         };
     }
 
       next() {
         const current = this.state.current + 1;
         this.setState({ current });
+        this.setState({flag:true})
       }
     
       prev() {
         const current = this.state.current - 1;
         this.setState({ current });
       }
+     
+      nextFlag=(e)=> {
+        this.setState({flag:false})
+      }
 
     render(){
+      const steps = [
+        {
+          title: 'Distributer',
+          content: <DistributorInfo nextFlag={(e) => this.nextFlag(e)}/>,
+        },
+        {
+          title: 'Create Routes',
+          content: <CreateRoutes nextFlag={(e) => this.nextFlag(e)}/>,
+        },
+        {
+          title: 'Create Delivery Boys',
+          content: <CreateDeliveryBoys nextFlag={(e) => this.nextFlag(e)}/>,
+        },
+        {
+          title: 'Create Customers',
+          content: <CreateCustomers nextFlag={(e) => this.nextFlag(e)}/>,
+        },
+      ];
         const { current } = this.state;
         return(
             <div>
@@ -63,12 +70,12 @@ class BusinessSetUP extends Component{
                           </Button>
                         )}
                         {current < steps.length - 1 && (
-                          <Button type="primary" onClick={() => this.next()}>
+                          <Button type="primary" onClick={() => this.next()} disabled={this.state.flag}>
                             Next
                           </Button>
                         )}
                         {current === steps.length - 1 && (
-                          <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                          <Button type="primary" onClick={() => message.success('Processing complete!')} disabled={this.state.flag}>
                             Done
                           </Button>
                         )}
