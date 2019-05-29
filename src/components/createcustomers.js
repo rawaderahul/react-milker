@@ -64,8 +64,8 @@ class CreateCustomersForms extends React.Component {
             // "routeid":item[1],
             "customerName":item[0],
             "address":item[1],
-            "pincode":item[2],
-            "contact":item[3],
+            "pincode":45612,
+            "contact":4545666,
             "email":item[4],
             "paymentType":item[5],
            }
@@ -73,7 +73,7 @@ class CreateCustomersForms extends React.Component {
            data.routeid=1;
            console.log(data);
            
-           axios.post("http://localhost:3005/Customer",data)
+           axios.post("http://127.0.0.1:8000/api/Customer",data)
            .then((response) => {
            })
          }
@@ -110,9 +110,9 @@ class CreateCustomersForms extends React.Component {
                     <Row>
                         <Col span={12} >
                                 {this.state.CreateCustomer && 
-                                this.state.CreateCustomer.map((item) => {
+                                this.state.CreateCustomer.map((item,index) => {
                                   return(
-                                    <div>
+                                    <div key={index}>
                                       <h3> Download {item.routeName} blank template </h3>
                                       <Row>
                                       <Col span={12} >
