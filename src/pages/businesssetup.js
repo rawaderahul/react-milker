@@ -7,13 +7,15 @@ import CreateCustomers from '../components/createcustomers'
 
 const Step = Steps.Step;
 
-
 class BusinessSetUP extends Component{
     constructor(props) {
         super(props);
         this.state = {
           current: 0,
-          flag:true
+          flag:true,
+          DistributorInfoData:{},
+          CreateRoutesData:[],
+          CreateDeliveryBoysData:[]
         };
     }
 
@@ -28,19 +30,33 @@ class BusinessSetUP extends Component{
         this.setState({ current });
       }
      
-      nextFlag=(e)=> {
+      nextFlag=(data)=> {
         this.setState({flag:false})
       }
+      DistributorInfo=(e)=> {
+      this.setState({DistributorInfoData:e})
+      
+    }
+    CreateRoutes=(e)=> {
+        this.setState({CreateRoutesData:e})
+      }
+      CreateDeliveryBoys=(e)=> {
+        this.setState({CreateDeliveryBoysData:e})
+      }
 
-    render(){
+      render(){
+        console.log(this.state.DistributorInfoData);
       const steps = [
         {
           title: 'Distributer',
-          content: <DistributorInfo nextFlag={(e) => this.nextFlag(e)}/>,
+          content: <DistributorInfo nextFlag={(e) => this.nextFlag(e)} DistributorInfo={this.DistributorInfo} DistributorInfoData={this.state.DistributorInfoData}/>,
         },
         {
           title: 'Create Routes',
-          content: <CreateRoutes nextFlag={(e) => this.nextFlag(e)}/>,
+          content: <CreateRoutes nextFlag={(e) => this.nextFlag(e)}
+           CreateRoutes={this.CreateRoutes} 
+           CreateRoutesData={this.state.CreateRoutesData}
+           DistributorInfoData={this.state.DistributorInfoData}/>,
         },
         {
           title: 'Create Delivery Boys',
@@ -70,7 +86,7 @@ class BusinessSetUP extends Component{
                           </Button>
                         )}
                         {current < steps.length - 1 && (
-                          <Button type="primary" onClick={() => this.next()} disabled={this.state.flag}>
+                          <Button type="primary" onClick={() => this.next()} >
                             Next
                           </Button>
                         )}

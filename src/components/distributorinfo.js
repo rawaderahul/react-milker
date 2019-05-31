@@ -20,7 +20,7 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 
-class DistributorInfoForm extends React.Component {
+class DistributorInfoDataForm extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -29,10 +29,29 @@ class DistributorInfoForm extends React.Component {
             citys:[],
             areas:[],
             pincodes:[],
+
+            organizationName:null,
+            firstName:null,
+            lastName:null,
+            contact:null,
+            address:null,
+            state:null,
+            city:null,
+            area:null,
+            pincode:null,
+            serviceAreas:null,
+            servicePincodes:null,
+            DistributorInfoData:{}
+
         }
-        console.log(this.props.nextFlag);
-        
-        
+    }
+    
+    componentWillMount() {
+
+        if(this.props.DistributorInfoData) {
+            const data=this.props.DistributorInfoData;
+            this.setState({DistributorInfoData:data})
+        }
     }
     componentDidMount() {
         axios.get("http://localhost:3005/location").then((response) => {
@@ -68,34 +87,64 @@ class DistributorInfoForm extends React.Component {
             }
             }
         })
+        console.log(this.state.DistributorInfoData);
+        
+        this.setState({
+            organizationName: this.state.DistributorInfoData.organizationName ? this.state.DistributorInfoData.organizationName : '',
+            firstName: this.state.DistributorInfoData.firstName ? this.state.DistributorInfoData.firstName : '',
+            lastName: this.state.DistributorInfoData.lastName ? this.state.DistributorInfoData.lastName : '',
+            contact: this.state.DistributorInfoData.contact ? this.state.DistributorInfoData.contact : '',
+            address: this.state.DistributorInfoData.address ? this.state.DistributorInfoData.address : '',
+            state: this.state.DistributorInfoData.state ? this.state.DistributorInfoData.state : [],
+            city: this.state.DistributorInfoData.city ? this.state.DistributorInfoData.city : [],
+            area: this.state.DistributorInfoData.area ? this.state.DistributorInfoData.area : [],
+            pincode: this.state.DistributorInfoData.pincode ? this.state.DistributorInfoData.pincode : [],
+            serviceAreas: this.state.DistributorInfoData.serviceAreas ? this.state.DistributorInfoData.serviceAreas : [],
+            servicePincodes: this.state.DistributorInfoData.servicePincodes ? this.state.DistributorInfoData.servicePincodes : [],
+           
+        }) 
     }
+    
     
   check = () => {
     this.props.form.validateFields((err,values) => {
-      if (!err) {
-          this.props.nextFlag("data");
-           let  serviceAreas =values.serviceAreas.join(",");
-               values.serviceAreas=serviceAreas;
 
-               let servicePincodes=values.servicePincodes.join(",");
-               values.servicePincodes=servicePincodes;
-              
-               values.deliveryCharge=0;
-               values.email= "trush@gmail.com";
-            console.log(values);
-
-
-              axios.post("http://127.0.0.1:8000/api/Distributer",values).then((response) => {
-
-                message.success("All information of distributer submited succesfully")
-                this.props.form.resetFields();
-              })
+        if (!err) {
+            
+            //   let  serviceAreas =values.serviceAreas.join(",");
+            //   values.serviceAreas=serviceAreas;
+            
+            //   let servicePincodes=values.servicePincodes.join(",");
+            //   values.servicePincodes=servicePincodes;
+            
+            values.deliveryCharge = 0;
+            values.email= "trush@gmail.com";
+            
+            this.props.DistributorInfo(values);
+            this.setState({
+                DistributorInfoData:values,
+                organizationName:null,
+                firstName:null,
+                lastName:null,
+                contact:null,
+                address:null,
+                state:[],
+                city:[],
+                area:[],
+                pincode:[],
+                serviceAreas:[],
+                servicePincodes:[],
+            })
+           this.props.form.resetFields();
       }
     });
 
   };
+
   render() {
+    console.log(this.state.DistributorInfoData);
     const { getFieldDecorator } = this.props.form;
+    
     return (
       <div>
       <div className="formbox">
@@ -104,6 +153,7 @@ class DistributorInfoForm extends React.Component {
             <Col span={12}>
                 <Form.Item {...formItemLayout} label="Company Name">
                 {getFieldDecorator('organizationName', {
+                    initialValue:this.state.organizationName ,
                     rules: [
                     {required: true,message: 'Please input your company name'},
                     { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
@@ -111,17 +161,9 @@ class DistributorInfoForm extends React.Component {
                 })(<Input placeholder="Please input company name" />)}
                 </Form.Item>
 
-                <Form.Item {...formItemLayout} label="First Name">
-                {getFieldDecorator('firstName', {
-                    rules: [
-                        {required: true,message: 'Please input first name'},
-                        { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
-                        ],
-                    })(<Input placeholder="Please input company name" />)}
-                    </Form.Item>
-
                     <Form.Item {...formItemLayout} label="First Name">
                     {getFieldDecorator('firstName', {
+                        initialValue:this.state.firstName,
                         rules: [
                             {required: true,message: 'Please input first name'},
                             { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
@@ -131,6 +173,7 @@ class DistributorInfoForm extends React.Component {
 
                     <Form.Item {...formItemLayout} label="Last Name">
                     {getFieldDecorator('lastName', {
+                        initialValue:this.state.lastName,
                         rules: [
                             {required: true,message: 'Please input last name'},
                             { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
@@ -140,28 +183,31 @@ class DistributorInfoForm extends React.Component {
 
                     <Form.Item {...formItemLayout} label="Phone Number">
                     {getFieldDecorator('contact', {
+                        initialValue:this.state.contact,
                         rules: [
                             { required: true, message: 'Please input your phone number!' },
                             { pattern : '[0-9]', message: 'Please enter only digit!' },
                             { max: 10, message: 'Please enter 10 digit number' }
                     ],
-                    })(<Input placeholder = "Please input your phone number!" style={{ width: '100%' }}/>)}
+                    })(<Input placeholder = "Please input your phone number!" style={{ width: '100%' }} />)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Address">
                     {getFieldDecorator('address', {
+                        initialValue:this.state.address,
                         rules: [
                             {required: true,message: 'Please input address',},
                         ],
                     })(<Input placeholder="Please input address" />)}
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="Select State" hasFeedback>
+                    <Form.Item {...formItemLayout} label="Select State">
 
                     {getFieldDecorator('state', {
+                        initialValue:this.state.state,
                         rules: [
                             { required: true, message: 'Please select state!' }
                         ],
                     })(
-                        <Select placeholder="Please select state">
+                        <Select placeholder="Please select state" >
                         {/* <Option value="maharastra">Maharastra</Option>
                         <Option value="gujrat">Gujrat</Option> */}
                         {this.state.states}
@@ -169,8 +215,9 @@ class DistributorInfoForm extends React.Component {
                     )}
                     </Form.Item>
 
-                    <Form.Item {...formItemLayout} label="Select City" hasFeedback>
+                    <Form.Item {...formItemLayout} label="Select City" >
                     {getFieldDecorator('city', {
+                        initialValue:this.state.city,
                         rules: [
                             { required: true, message: 'Please select city!' }
                         ],
@@ -181,8 +228,9 @@ class DistributorInfoForm extends React.Component {
                     )}
                     </Form.Item>
 
-                    <Form.Item {...formItemLayout} label="Select Area" hasFeedback>
+                    <Form.Item {...formItemLayout} label="Select Area"  >
                     {getFieldDecorator('area', {
+                        initialValue:this.state.area,
                         rules: [
                             { required: true, message: 'Please select area!' }
                         ],
@@ -193,8 +241,9 @@ class DistributorInfoForm extends React.Component {
                     )}
                     </Form.Item>
 
-                    <Form.Item {...formItemLayout} label="Select Pincode" hasFeedback>
+                    <Form.Item {...formItemLayout} label="Select Pincode">
                     {getFieldDecorator('pincode', {
+                        initialValue:this.state.pincode,
                         rules: [
                             { required: true, message: 'Please select area!' }
                         ],
@@ -212,8 +261,9 @@ class DistributorInfoForm extends React.Component {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item {...formItemLayout} label=" Service Areas" hasFeedback>
+                    <Form.Item {...formItemLayout} label=" Service Areas" >
                             {getFieldDecorator('serviceAreas', {
+                                initialValue:this.state.serviceAreas,
                                 rules: [
                                     { required: true, message: 'Please select Distributor areas!' }
                                 ],
@@ -222,16 +272,15 @@ class DistributorInfoForm extends React.Component {
                             mode="multiple"
                             style={{ width: '100%' }}
                             placeholder="Please select Distributor areas!"
-                            // defaultValue={['a10', 'c12']}
-                            onChange={handleChange}
                         >
                             {this.state.areas}
                         </Select>,
                                 )}
                     </Form.Item>
 
-                    <Form.Item {...formItemLayout} label=" Service Pincodes" hasFeedback>
+                    <Form.Item {...formItemLayout} label=" Service Pincodes" >
                         {getFieldDecorator('servicePincodes', {
+                            initialValue:this.state.servicePincodes,
                             rules: [
                                 { required: true, message: 'Please select Distributor Pincodes!' }
                             ],
@@ -240,8 +289,7 @@ class DistributorInfoForm extends React.Component {
                             mode="multiple"
                             style={{ width: '100%' }}
                             placeholder="Please select Distributor Pincodes!"
-                            // defaultValue={['a10', 'c12']}
-                            onChange={handleChange}
+                            // onChange={handleChange}
                         >
                             {this.state.pincodes}
                         </Select>,
@@ -255,5 +303,5 @@ class DistributorInfoForm extends React.Component {
     }
 }
 
-const DistributorInfo = Form.create({ name: 'dynamic_rule' })(DistributorInfoForm);
-export default DistributorInfo;
+const DistributorInfoData = Form.create({ name: 'dynamic_rule' })(DistributorInfoDataForm);
+export default DistributorInfoData;
