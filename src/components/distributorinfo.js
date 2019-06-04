@@ -16,9 +16,7 @@ const { Option } = Select;
 //   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 // }
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
+
 
 class DistributorInfoDataForm extends React.Component {
     constructor(props) {
@@ -87,7 +85,6 @@ class DistributorInfoDataForm extends React.Component {
             }
             }
         })
-        console.log(this.state.DistributorInfoData);
         
         this.setState({
             organizationName: this.state.DistributorInfoData.organizationName ? this.state.DistributorInfoData.organizationName : '',
@@ -110,16 +107,8 @@ class DistributorInfoDataForm extends React.Component {
     this.props.form.validateFields((err,values) => {
 
         if (!err) {
-            
-            //   let  serviceAreas =values.serviceAreas.join(",");
-            //   values.serviceAreas=serviceAreas;
-            
-            //   let servicePincodes=values.servicePincodes.join(",");
-            //   values.servicePincodes=servicePincodes;
-            
             values.deliveryCharge = 0;
             values.email= "trush@gmail.com";
-            
             this.props.DistributorInfo(values);
             this.setState({
                 DistributorInfoData:values,
@@ -142,7 +131,6 @@ class DistributorInfoDataForm extends React.Component {
   };
 
   render() {
-    console.log(this.state.DistributorInfoData);
     const { getFieldDecorator } = this.props.form;
     
     return (

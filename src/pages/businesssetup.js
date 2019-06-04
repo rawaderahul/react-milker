@@ -4,6 +4,7 @@ import DistributorInfo from '../components/distributorinfo'
 import CreateRoutes from '../components/createroutes'
 import CreateDeliveryBoys from '../components/createdeliveryboys'
 import CreateCustomers from '../components/createcustomers'
+import axios from 'axios';
 
 const Step = Steps.Step;
 
@@ -15,7 +16,8 @@ class BusinessSetUP extends Component{
           flag:true,
           DistributorInfoData:{},
           CreateRoutesData:[],
-          CreateDeliveryBoysData:[]
+          CreateDeliveryBoysData:[],
+          CreateCustomersData:[]
         };
     }
 
@@ -24,47 +26,71 @@ class BusinessSetUP extends Component{
         this.setState({ current });
         this.setState({flag:true})
       }
-    
+      flag=()=> {
+      this.setState({flag:false})
+      }
       prev() {
         const current = this.state.current - 1;
         this.setState({ current });
       }
      
-      nextFlag=(data)=> {
-        this.setState({flag:false})
-      }
+     
       DistributorInfo=(e)=> {
-      this.setState({DistributorInfoData:e})
+       this.setState({
+        DistributorInfoData:e,
+        flag:false
+       })
+     }
+     CreateRoutes=(e)=> {
+        this.setState({CreateRoutesData:e,flag:false})
+      }
+      CreateDeliveryBoys =(e)=> {
+        this.setState({CreateDeliveryBoysData:e,flag:false})
+        
+      }
+      CreateCustomers =(e)=> {
+      this.setState({CreateCustomersData:e,flag:false})
+      console.log(this.state.CreateCustomersData);
       
-    }
-    CreateRoutes=(e)=> {
-        this.setState({CreateRoutesData:e})
       }
-      CreateDeliveryBoys=(e)=> {
-        this.setState({CreateDeliveryBoysData:e})
+      finish=()=> { 
+        let  DistributorInfoData=this.state.DistributorInfoData;
+        let serviceAreas=DistributorInfoData.serviceAreas.join(",");
+        let servicePincodes=DistributorInfoData.servicePincodes.join(",");
+        DistributorInfoData.serviceAreas=serviceAreas;
+        DistributorInfoData.servicePincodes=servicePincodes;
+        axios.post("http://127.0.0.1:8000/api/Distributer",DistributorInfoData).then((response) => {
+          console.log(response.data);
+        })
       }
-
       render(){
-        console.log(this.state.DistributorInfoData);
       const steps = [
         {
           title: 'Distributer',
-          content: <DistributorInfo nextFlag={(e) => this.nextFlag(e)} DistributorInfo={this.DistributorInfo} DistributorInfoData={this.state.DistributorInfoData}/>,
+          content: <DistributorInfo DistributorInfo={this.DistributorInfo} DistributorInfoData={this.state.DistributorInfoData}/>,
         },
         {
           title: 'Create Routes',
-          content: <CreateRoutes nextFlag={(e) => this.nextFlag(e)}
+          content: <CreateRoutes flag={this.flag}
            CreateRoutes={this.CreateRoutes} 
            CreateRoutesData={this.state.CreateRoutesData}
            DistributorInfoData={this.state.DistributorInfoData}/>,
         },
         {
           title: 'Create Delivery Boys',
-          content: <CreateDeliveryBoys nextFlag={(e) => this.nextFlag(e)}/>,
+          content: <CreateDeliveryBoys flag={this.flag}
+          CreateDeliveryBoysData={this.state.CreateDeliveryBoysData}
+          CreateDeliveryBoys={this.CreateDeliveryBoys}
+          CreateRoutesData={this.state.CreateRoutesData}
+          />,
         },
         {
           title: 'Create Customers',
-          content: <CreateCustomers nextFlag={(e) => this.nextFlag(e)}/>,
+          content: <CreateCustomers flag={this.flag}
+          CreateCustomersData={this.state.CreateCustomersData}
+          CreateRoutesData={this.state.CreateRoutesData}
+          CreateCustomers={this.CreateCustomers}
+          />,
         },
       ];
         const { current } = this.state;
@@ -86,12 +112,12 @@ class BusinessSetUP extends Component{
                           </Button>
                         )}
                         {current < steps.length - 1 && (
-                          <Button type="primary" onClick={() => this.next()} >
+                          <Button type="primary" onClick={() => this.next()} disabled={this.state.flag}>
                             Next
                           </Button>
                         )}
                         {current === steps.length - 1 && (
-                          <Button type="primary" onClick={() => message.success('Processing complete!')} disabled={this.state.flag}>
+                          <Button type="primary" onClick={this.finish} disabled={this.state.flag}>
                             Done
                           </Button>
                         )}

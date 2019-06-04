@@ -14,7 +14,6 @@ const formTailLayout = {
 
 const { Option } = Select;
 function handleChange(value) {
-  // console.log(`selected ${value}`);
 }
 
 class CreateRoutesInfoForm extends React.Component {
@@ -24,7 +23,6 @@ class CreateRoutesInfoForm extends React.Component {
       locationData:[],
             areas:[],
             pincodes:[],
-            routeCreate:false,
             routeData:[],
             CreateRoutesData:[],
             routeName:'',
@@ -37,8 +35,8 @@ class CreateRoutesInfoForm extends React.Component {
     }
   }
   componentDidMount() {
-    console.log(this.props.DistributorInfoData);
     if(this.props.DistributorInfoData) {
+      
       this.setState({CreateRoutesData:this.props.CreateRoutesData})
         this.props.DistributorInfoData.serviceAreas.map((menu,index) => {
             return(
@@ -51,6 +49,9 @@ class CreateRoutesInfoForm extends React.Component {
             )
           })
     }
+    if(this.props.CreateRoutesData.length > 0) {
+      this.props.flag()
+    }
     }
     
     showModal = (item,index) => {
@@ -62,7 +63,6 @@ class CreateRoutesInfoForm extends React.Component {
       });
     };
     handleOk = (values) => {
-      console.log(values);
       this.state.CreateRoutesData.splice(values.id,1)
       delete values.id;
       this.state.CreateRoutesData.push(values)
@@ -79,9 +79,6 @@ class CreateRoutesInfoForm extends React.Component {
   check = () => {
     this.props.form.validateFields((err,values) => {
       if (!err) {
-        this.props.nextFlag("data");
-        values.distributerid = 1;
-        this.setState({routeCreate:true});
         this.state.CreateRoutesData.push(values);
         this.props.CreateRoutes(this.state.CreateRoutesData);
         this.props.form.resetFields();
@@ -93,8 +90,8 @@ class CreateRoutesInfoForm extends React.Component {
   edit = (item) => {
       this.setState({
         routeName:item.routeName,
-        routeAreas:item.routeAreas.split(","),
-        routePincodes:item.routePincodes.split(",")
+        routeAreas:item.routeAreas,
+        routePincodes:item.routePincodes
       })
    
   }

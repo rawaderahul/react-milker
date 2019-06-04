@@ -1,7 +1,7 @@
 import React from 'react'
-import { Form, Input, Button, Select,Row, Col,message } from 'antd';
+import { Form, Input, Button, Select,Row, Col,message ,Icon} from 'antd';
 import axios from 'axios';
-
+import EditDeliveryBoy from './editdeliveryboy';
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 12 },
@@ -18,40 +18,61 @@ class CreateDeliveryBoysForm extends React.Component {
     this.state = {
       routesData:[],
       routes:[],
-      boyCreate:false,
-      boyData:[]
+      CreateDeliveryBoysData:[],
+      editableData:{},
+      isEdit:false
     }
   }
   componentDidMount() {
-    axios.get('http://localhost:3005/Route').then((response)=> {
-      this.setState({routesData:response.data})
-      this.state.routesData.map((data,index) => {
+    if(this.props.CreateRoutesData) {
+      this.props.CreateRoutesData.map((item,index) => {
         return(
-          this.state.routes.push(<Option value={data.routenumber} key={index}>{data.routenumber}</Option>)
+          this.state.routes.push(<Option value={item.routeName} key={index}>{item.routeName}</Option>)
         )
       })
-    })
+    }
+    if(this.props.CreateDeliveryBoysData.length > 0) {
+      this.props.flag()
+      this.setState({CreateDeliveryBoysData:this.props.CreateDeliveryBoysData})
+    }
   }
+  showModal = (item,index) => {
+    item.id=index;
+    this.setState({
+      editableData:item,
+      isEdit:true,
 
-  boyCreated=()=> {
-    return <span>Delivery boy <b>{this.state.boyData.workerName}</b> is created for <b>{this.state.boyData.route}</b> areas </span>
-  }
+    });
+  };
+  handleOk = (values) => {
+    console.log(values);
+    this.state.CreateDeliveryBoysData.splice(values.id,1)
+    delete values.id;
+    this.state.CreateDeliveryBoysData.push(values)
+    this.setState({
+      isEdit:false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      isEdit:false,
+    });
+  };
+  
   check = () => {
     this.props.form.validateFields((err,values) => {
       if (!err) {
-        this.props.nextFlag("data");
-        values.distributerid = 1;
-        values.routeid = 7; 
-         axios.post('http://127.0.0.1:8000/api/WorkerDetail',values).then((response) => {
-          message.success("All information of Route created succesfully")
-          this.setState({boyCreate:true,boyData:values})
+          this.state.CreateDeliveryBoysData.push(values)
+          this.props.CreateDeliveryBoys(this.state.CreateDeliveryBoysData)
           this.props.form.resetFields();
-         })
       }
     });
   };
 
   render() {
+    console.log(this.state.CreateDeliveryBoysData);
+    
     const { getFieldDecorator } = this.props.form;
     return (
         <div>
@@ -76,7 +97,7 @@ class CreateDeliveryBoysForm extends React.Component {
                         ],
                     })(<Input   placeholder="Please input your phone number!" />)}
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="Select Route Name" hasFeedback>
+                <Form.Item {...formItemLayout} label="Select Route Name">
                 {getFieldDecorator('route', {
                     rules: [{ required: true, message: 'Select Route Name' }],
                 })(
@@ -92,9 +113,20 @@ class CreateDeliveryBoysForm extends React.Component {
                 </Form.Item>
             </Col>
             <Col span={12}>
-              {
-                this.state.boyCreate ? this.boyCreated() :null
+            {
+                this.state.CreateDeliveryBoysData.length > 0 ? this.state.CreateDeliveryBoysData.map((item,index) => {
+                  return (
+                  <span style={{ fontSize: '15px'}} key={index}>
+                       Boy <b>{item.workerName}</b> is created for {item.route} areas 
+                        <Icon type="edit" style={{ fontSize: '30px', color: '#08c' }} onClick={() => this.showModal(item,index)}/><br></br>
+                  </span>
+                  )
+                }) :null
               }
+              {this.state.isEdit ?
+               <EditDeliveryBoy handleOk={this.handleOk} handleCancel={this.handleCancel} handleCancel={this.handleCancel}
+               editableData={this.state.editableData} routes={this.state.routes} 
+               /> : null}
             </Col>
         </Row>    
       </div>

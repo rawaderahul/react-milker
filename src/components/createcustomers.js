@@ -13,38 +13,35 @@ class CreateCustomersForms extends React.Component {
             sheets:[],
             blankSheets:[],
             blankDataSource:[],
-            CreateCustomer:[]
+            CreateCustomersData:[]
+
         }
     }
-
-    normFile = e => {
-        console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e && e.fileList;
-      };
-     
+    
       componentDidMount() {
+        if(this.props.CreateCustomersData) {
+      this.setState({CreateCustomersData:this.props.CreateCustomersData})
+
+        }
         axios.get('http://localhost:3005/DemoSheet').then((response) => {
             this.setState({demoDataSource:response.data})
           })
           axios.get('http://localhost:3005/BlankSheet').then((response) => {
             this.setState({blankDataSource:response.data})
           })
-          axios.get('http://localhost:3005/CreateCustomer').then((response) => {
-            this.setState({CreateCustomer:response.data})
-          })
+          if(this.props.CreateCustomersData.length > 0) {
+            this.props.flag()
+          }
+         
       }
 
       handleFiles = (files,routeName) => {
-        console.log("1",files[0].name,"2",routeName);
         if(files[0].name===`${routeName}.csv`) {
            var reader = new FileReader();
         reader.onload = (e) => {
         csv.parse(reader.result, (err, data) => {
           this.setState({csvDataSource:data})
-          this.addCustomer();
+          this.addCustomer(routeName);
         });
       }
       reader.readAsText(files[0]);
@@ -54,31 +51,24 @@ class CreateCustomersForms extends React.Component {
         }
        
     }
-    addCustomer=() => {
+    addCustomer=(routeName) => {
         if(this.state.csvDataSource) {
-        this.props.nextFlag("data");
         this.state.csvDataSource.map((item,index) => {
          if(index!==0){
-           var data={
-            // "distributerid":item[0],
-            // "routeid":item[1],
+           this.state.CreateCustomersData.push({
+             "routeName":routeName,
             "customerName":item[0],
             "address":item[1],
-            "pincode":45612,
-            "contact":4545666,
+            "pincode":Number(item[2]),
+            "contact":Number(item[3]),
             "email":item[4],
             "paymentType":item[5],
-           }
-           data.distributerid=1;
-           data.routeid=1;
-           console.log(data);
-           
-           axios.post("http://127.0.0.1:8000/api/Customer",data)
-           .then((response) => {
            })
-         }
+          }
         })
+        this.props.CreateCustomers(this.state.CreateCustomersData);
       } 
+      
       }
       exportCSV = (sheetName) => {
         var csvRow=[];
@@ -102,6 +92,7 @@ class CreateCustomersForms extends React.Component {
         
        }
     render(){
+      console.log(this.state.CreateCustomersData);
         // const { getFieldDecorator } = this.props.form;
         return(
             <div className="formbox">
@@ -109,8 +100,8 @@ class CreateCustomersForms extends React.Component {
                 <div>
                     <Row>
                         <Col span={12} >
-                                {this.state.CreateCustomer && 
-                                this.state.CreateCustomer.map((item,index) => {
+                                {this.props.CreateRoutesData && 
+                                this.props.CreateRoutesData.map((item,index) => {
                                   return(
                                     <div key={index}>
                                       <h3> Download {item.routeName} blank template </h3>
