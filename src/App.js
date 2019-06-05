@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import { Row, Col } from 'antd';
 import CreateCustomer from './pages/createcustomer';
 import BusinessSetUP from './pages/businesssetup';
+import Dashboard from './pages/dashboardsetup';
 import Home from './pages/home'
 const { Content } = Layout;
 function App() {
@@ -16,13 +17,14 @@ function App() {
         <MainHeader ></MainHeader>
         
         <Content>
-          <div className="container py-3">
+          <div style={{margin:10}}>
           <Row>
             <Col>  
               <Route exact path="/login" component={ Login } /> 
               <Route exact path="/register" component={ Register } /> 
               <Route exact path="/createcustomer" component={ CreateCustomer } /> 
               <Route exact path="/businesssetup" component={ BusinessSetUP } /> 
+              <Route exact path="/managebusiness" component={ Dashboard } /> 
               <Route exact path="/" component={ Home } />   
             </Col>  
           </Row>

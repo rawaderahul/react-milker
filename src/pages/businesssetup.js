@@ -1,12 +1,32 @@
 import React,{Component} from 'react'
-import { Steps, Button, message } from 'antd';
+import { Steps, Button, message, Layout, Menu, Breadcrumb, Icon,Modal } from 'antd';
 import DistributorInfo from '../components/distributorinfo'
 import CreateRoutes from '../components/createroutes'
 import CreateDeliveryBoys from '../components/createdeliveryboys'
 import CreateCustomers from '../components/createcustomers'
 import axios from 'axios';
-
+import  { Redirect } from 'react-router-dom'
+const { Header, Content, Footer, Sider } = Layout;
+const { SubMenu } = Menu;
 const Step = Steps.Step;
+
+function countDown() {
+  let secondsToGo = 3;
+  const modal = Modal.success({
+    title: 'Congratulation',
+    content: `You have successfully setup business.`,
+  });
+  const timer = setInterval(() => {
+    secondsToGo -= 1;
+    modal.update({
+      content: `You have successfully setup business.`,
+    });
+  }, 1000);
+  setTimeout(() => {
+    clearInterval(timer);
+    modal.destroy();
+  }, secondsToGo * 1000);
+}
 
 class BusinessSetUP extends Component{
     constructor(props) {
@@ -17,7 +37,8 @@ class BusinessSetUP extends Component{
           DistributorInfoData:{},
           CreateRoutesData:[],
           CreateDeliveryBoysData:[],
-          CreateCustomersData:[]
+          CreateCustomersData:[],
+          isRedirect:false
         };
     }
 
@@ -54,6 +75,7 @@ class BusinessSetUP extends Component{
       
       }
       finish=()=> { 
+        this.setState({isRedirect:true})
         let  DistributorInfoData=this.state.DistributorInfoData;
         let serviceAreas=DistributorInfoData.serviceAreas.join(",");
         let servicePincodes=DistributorInfoData.servicePincodes.join(",");
@@ -62,6 +84,7 @@ class BusinessSetUP extends Component{
         axios.post("http://127.0.0.1:8000/api/Distributer",DistributorInfoData).then((response) => {
           console.log(response.data);
         })
+        countDown();
       }
       render(){
       const steps = [
@@ -95,7 +118,21 @@ class BusinessSetUP extends Component{
       ];
         const { current } = this.state;
         return(
-            <div>
+          <Layout style={{ minHeight: '100vh' }} >
+        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: 'orange'}}>
+          <div className="logo" />
+          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" style={{  background: 'orange'}}>
+            <Menu.Item key="1">
+              <Icon type="pie-chart" />
+              <span>Business Setup</span>
+            </Menu.Item>
+            
+            </Menu>
+        </Sider>
+        <Layout>
+          <Header style={{ background: 'orange', padding: 0 }} />
+          <Content style={{ margin: '0 16px' }}>
+          <div>
                 <h1> <span>Setting Up Your Business </span>  </h1>
                   <div>
                     <Steps current={current}>
@@ -123,8 +160,21 @@ class BusinessSetUP extends Component{
                         )}
                       </div>  
                     </div>
-                  </div>                
+                  </div>  
+                  {
+                    this.state.isRedirect ? <Redirect to ='/managebusiness'  />: null
+                  }              
             </div>
+            {/* <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>User</Breadcrumb.Item>
+              <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            </Breadcrumb>
+            
+            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div> */}
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        </Layout>
+      </Layout>
         )
     }
 }
