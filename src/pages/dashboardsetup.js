@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import {BrowserRouter as Router, Route,Link } from 'react-router-dom'
 import Distributor from '../dashboard/distributor';
 import Customer from '../dashboard/customer';
 import Deliveryboy from '../dashboard/deliveryboy';
@@ -16,7 +15,9 @@ const { SubMenu } = Menu;
 class Dashboard extends React.Component {
   state = {
     collapsed: false,
-    select:null
+    select:'Distributor',
+    selectWithMenu:['Distributor','Manage Business']
+    
   };
 
   onCollapse = collapsed => {
@@ -24,24 +25,40 @@ class Dashboard extends React.Component {
     this.setState({ collapsed });
   };
   subMenuHandle=(e)=>{
-  this.setState({select:e.item.props.children})
-
+  this.setState({select:e.key , selectWithMenu:e.keyPath})
+  console.log(e);
   }
-  condition=()=>{
-
+  
+  condition=(select)=>{
+   switch(select) {
+     case "Distributor" : return <Distributor/> ;
+     break;
+     case "Workers" :return  <Deliveryboy/>;
+     break;
+     case "Routes" :return  <RouteInfo/>;
+     break;
+     case "Customer" :return  <Customer/>;
+     break;
+     case "Distributer Quata" : return <Distributorquota/>;
+     break;
+     case "Wholesaler" :return  <Wholesaler/>;
+     break;
+     case "Messages" :return  <Messages/>;
+     break;
+   }
   }
   render() {
+    console.log(this.state.select);
+    
     return (
-        <Router>
       <Layout style={{ minHeight: '100vh' }} >
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: 'orange'}}>
           <div className="logo" />
           <Menu theme="light" defaultSelectedKeys={['1']}
            mode="inline" style={{  background: 'orange'}}
-           
            >
             <SubMenu onClick={this.subMenuHandle}
-              key="sub1"
+              key="Manage Business"
               title={
                 <span>
                   <Icon type="pie-chart" />
@@ -49,22 +66,15 @@ class Dashboard extends React.Component {
                 </span>
               }
               >
-              <Menu.Item key="distributor" >Distributer
-              <Link to="/managebusiness/distributor"/>
-              </Menu.Item>
-              <Menu.Item key="/manage-business/deliveryboy">Workers
-              <Link to="/managebusiness/deliveryboy"/>
-              </Menu.Item>
-              <Menu.Item key="routeinfo">Routes
-              <Link to="/managebusiness/routeinfo"/>
-              </Menu.Item>
-              <Menu.Item key="customer">Customer
-              <Link to="/managebusiness/customer"/>
-              </Menu.Item>
-            </SubMenu>
 
+              <Menu.Item key="Distributor" >Distributor</Menu.Item>
+              <Menu.Item key="Workers">Workers</Menu.Item>
+              <Menu.Item key="Routes">Routes</Menu.Item>
+              <Menu.Item key="Customer">Customer</Menu.Item>
+              
+            </SubMenu>
             <SubMenu onClick={this.subMenuHandle}
-              key="sub2"
+              key="Manage Daily"
               title={
                 <span>
                   <Icon type="pie-chart" />
@@ -72,15 +82,10 @@ class Dashboard extends React.Component {
                 </span>
               }
               >
-              <Menu.Item key="distributor" >Distributer Quata
-              <Link to="/managedaily/distributorquota"/>
-              </Menu.Item>
-              <Menu.Item key="wholsaler">Wholsaler
-              <Link to="/managedaily/wholesaler"/>
-              </Menu.Item>
-              <Menu.Item key="messages">Messages
-              <Link to="/managedaily/messages"/>
-              </Menu.Item>
+              <Menu.Item key="Distributer Quata" >Distributer Quata</Menu.Item>
+              <Menu.Item key="Wholesaler">Wholesaler</Menu.Item>
+              <Menu.Item key="Messages">Messages</Menu.Item>
+              
             </SubMenu>
           </Menu>
         </Sider>
@@ -89,26 +94,19 @@ class Dashboard extends React.Component {
           <Content style={{ margin: '0 16px' }}>
               
             <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Manage Business</Breadcrumb.Item>
-              <Breadcrumb.Item>{this.state.select}</Breadcrumb.Item>
+              <Breadcrumb.Item>{this.state.selectWithMenu[1]}</Breadcrumb.Item>
+              <Breadcrumb.Item>{this.state.selectWithMenu[0]}</Breadcrumb.Item>
             </Breadcrumb>
-             <Route path="/managebusiness/routeinfo" component={RouteInfo} />
-             <Route path="/managebusiness/deliveryboy" component={Deliveryboy} />
-             <Route path="/managebusiness/customer" component={Customer} />
-             <Route exact path="/managebusiness/distributor" component={Distributor} />
-
-             <Route path="/managedaily/distributorquota" component={Distributorquota} />
-             <Route path="/managedaily/wholesaler" component={Wholesaler} />
-             <Route path="/managedaily/messages" component={Messages} />
-
-
+            {
+              this.condition(this.state.select)
+            }
+           
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
         </Layout>
       </Layout>
-      </Router>
     );
   }
 }
+
 
 export default Dashboard;

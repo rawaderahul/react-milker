@@ -9,6 +9,7 @@ import CreateCustomer from './pages/createcustomer';
 import BusinessSetUP from './pages/businesssetup';
 import Dashboard from './pages/dashboardsetup';
 import Home from './pages/home'
+import Distributor from './dashboard/distributor';
 const { Content } = Layout;
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route exact path="/createcustomer" component={ CreateCustomer } /> 
               <Route exact path="/businesssetup" component={ BusinessSetUP } /> 
               <Route exact path="/managebusiness" component={ Dashboard } /> 
+
               <Route exact path="/" component={ Home } />   
             </Col>  
           </Row>
