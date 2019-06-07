@@ -1,16 +1,7 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
-import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
 
-// const data = [];
-// for (let i = 0; i < 100; i++) {
-//   data.push({
-//     Cid: i.toString(),
-//     name: `Edrward ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   });
-// }
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -159,7 +150,8 @@ class EditableTable extends Component {
         return;
       }
       const newRow = row;
-      const newData = [...this.state.customerName];
+      // row.rid = 1;
+      const newData = [...this.state.customerData];
       const index = newData.findIndex(item => Cid === item.Cid);
       if (index > -1) {
         const item = newData[index];
@@ -167,13 +159,14 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put('http://127.0.0.1:8000/api/CustomerListByRouteId/1',this.state.editingKey,newRow)
+        axios.put(`http://127.0.0.1:8000/api/CustomerListByRouteId/${this.state.editingKey}`,newRow)
           .then((res)=>{
             this.setState({customerData: newData, editingKey: '' })
           })
-      } else {
+      } 
+      else {
         newData.push(row);
-        this.setState({ customerName: newData, editingKey: '' });
+        this.setState({ customerData: newData, editingKey: '' });
       }
     });
   }
@@ -206,7 +199,11 @@ class EditableTable extends Component {
     });
 
     return (
+      <div>
       <EditableContext.Provider value={this.props.form}>
+       <Button onClick={this.add} type="primary" style={{ marginBottom: 16 }}>
+        Add
+       </Button>
         <Table
           rowkey="Cid" 
           components={components}
@@ -219,6 +216,7 @@ class EditableTable extends Component {
           }}
         />
       </EditableContext.Provider>
+      </div>
     );
   }
 }

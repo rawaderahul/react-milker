@@ -2,15 +2,6 @@ import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    Rid: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -63,10 +54,8 @@ class EditableTable extends Component {
     super(props);
     this.state = { 
         data:null ,
-        customerData: null,
+        rootInfo: null,
         editingKey: '' ,
-
-
     };
     this.columns = [
       {
@@ -122,12 +111,10 @@ class EditableTable extends Component {
 
   componentDidMount() {
       axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((res)=>{
-          this.setState({customerData: res.data})
-          console.log(this.state.customerData);
+          this.setState({rootInfo: res.data})
       })
       
   }
-  
 
   isEditing = record => record.Rid === this.state.editingKey;
 
@@ -140,7 +127,9 @@ class EditableTable extends Component {
       if (error) {
         return;
       }
-      const newData = [...this.state.customerName];
+      const newRow = row;
+      row.distributerid = 2;
+      const newData = [...this.state.rootInfo];
       const index = newData.findIndex(item => Rid === item.Rid);
       if (index > -1) {
         const item = newData[index];
@@ -148,10 +137,15 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        this.setState({ dcustomerNameata: newData, editingKey: '' });
+        console.log(newRow);
+        axios.put(`http://127.0.0.1:8000/api/Route/${this.state.editingKey}`,newRow)
+          .then((res)=>{
+            this.setState({rootInfo: newData, editingKey: '' })
+
+          })
       } else {
         newData.push(row);
-        this.setState({ customerName: newData, editingKey: '' });
+        this.setState({ rootInfo: newData, editingKey: '' });
       }
     });
   }
@@ -186,10 +180,10 @@ class EditableTable extends Component {
     return (
       <EditableContext.Provider value={this.props.form}>
         <Table
-          rowkey="Rid" 
+          rowKey="Rid" 
           components={components}
           bordered
-          dataSource={this.state.customerData}
+          dataSource={this.state.rootInfo}
           columns={columns}
           rowClassName="editable-row"
           pagination={{
