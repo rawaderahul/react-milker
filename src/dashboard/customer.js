@@ -215,7 +215,7 @@ class EditableTable extends Component {
         </Button>
   
         <Table
-          rowkey="Cid" 
+          rowKey="Cid" 
           components={components}
           bordered
           dataSource={this.state.customerData}

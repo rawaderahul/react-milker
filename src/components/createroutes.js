@@ -35,23 +35,25 @@ class CreateRoutesInfoForm extends React.Component {
     }
   }
   componentDidMount() {
-    if(this.props.DistributorInfoData) {
-      
-      this.setState({CreateRoutesData:this.props.CreateRoutesData})
-        this.props.DistributorInfoData.serviceAreas.map((menu,index) => {
-            return(
-              this.state.areas.push(<Option value={menu} key={index}>{menu}</Option>) 
-            )
-          })
-          this.props.DistributorInfoData.servicePincodes.map((menu,index) => {
-            return(
-              this.state.pincodes.push(<Option value={menu} key={index}>{menu}</Option>) 
-            )
-          })
-    }
-    if(this.props.CreateRoutesData.length > 0) {
+    let DistributorInfoData=JSON.parse(sessionStorage.getItem('DistributorInfoData'))
+    let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
+
+    if(CreateRoutesData) {
+      this.setState({CreateRoutesData})
       this.props.flag()
-    }
+     }
+   else if(DistributorInfoData) {
+      DistributorInfoData.serviceAreas.map((menu,index) => {
+        return(
+          this.state.areas.push(<Option value={menu} key={index}>{menu}</Option>) 
+          )
+        })
+        DistributorInfoData.servicePincodes.map((menu,index) => {
+          return(
+            this.state.pincodes.push(<Option value={menu} key={index}>{menu}</Option>) 
+            )
+          })
+        }
     }
     
     showModal = (item,index) => {
@@ -80,10 +82,10 @@ class CreateRoutesInfoForm extends React.Component {
     this.props.form.validateFields((err,values) => {
       if (!err) {
         this.state.CreateRoutesData.push(values);
-        this.props.CreateRoutes(this.state.CreateRoutesData);
+        this.props.flag()
+        window.sessionStorage.setItem("CreateRoutesData", JSON.stringify(this.state.CreateRoutesData));
         this.props.form.resetFields();
       }
-
     });
   };
   

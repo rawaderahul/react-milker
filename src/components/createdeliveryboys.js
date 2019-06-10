@@ -24,17 +24,21 @@ class CreateDeliveryBoysForm extends React.Component {
     }
   }
   componentDidMount() {
-    if(this.props.CreateRoutesData) {
-      this.props.CreateRoutesData.map((item,index) => {
+    let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
+    let CreateDeliveryBoysData=JSON.parse(sessionStorage.getItem('CreateDeliveryBoysData'))
+
+    if(CreateDeliveryBoysData) {
+      this.props.flag()
+      this.setState({CreateDeliveryBoysData})
+    }
+   else if(CreateRoutesData) {
+      CreateRoutesData.map((item,index) => {
         return(
           this.state.routes.push(<Option value={item.routeName} key={index}>{item.routeName}</Option>)
         )
       })
     }
-    if(this.props.CreateDeliveryBoysData.length > 0) {
-      this.props.flag()
-      this.setState({CreateDeliveryBoysData:this.props.CreateDeliveryBoysData})
-    }
+    
   }
   showModal = (item,index) => {
     item.id=index;
@@ -64,15 +68,14 @@ class CreateDeliveryBoysForm extends React.Component {
     this.props.form.validateFields((err,values) => {
       if (!err) {
           this.state.CreateDeliveryBoysData.push(values)
-          this.props.CreateDeliveryBoys(this.state.CreateDeliveryBoysData)
+          this.props.flag()
+          window.sessionStorage.setItem("CreateDeliveryBoysData", JSON.stringify(this.state.CreateDeliveryBoysData));
           this.props.form.resetFields();
       }
     });
   };
 
   render() {
-    console.log(this.state.CreateDeliveryBoysData);
-    
     const { getFieldDecorator } = this.props.form;
     return (
         <div>

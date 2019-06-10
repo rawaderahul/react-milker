@@ -1,0 +1,17 @@
+.main-header{
+  box-shadow: 0px 2px 4px rgba(00,00,00,0.1);
+}
+
+
+.main-header .ant-layout-header{
+  background-color: #fafbfc;
+}
+.ant-layout-header .logo{
+  color: #3f6ad0;
+}
+.ant-menu .ant-select-selection{
+    border: 1px solid #6c757d;
+}
+.ant-menu .ant-select-selection:hover{
+    
+}

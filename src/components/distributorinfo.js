@@ -33,27 +33,21 @@ class DistributorInfoDataForm extends React.Component {
             lastName:null,
             contact:null,
             address:null,
-            state:null,
-            city:null,
-            area:null,
-            pincode:null,
-            serviceAreas:null,
-            servicePincodes:null,
+            state:[],
+            city:[],
+            area:[],
+            pincode:[],
+            serviceAreas:[],
+            servicePincodes:[],
             DistributorInfoData:{}
-
         }
     }
     
-    componentWillMount() {
-
-        if(this.props.DistributorInfoData) {
-            const data=this.props.DistributorInfoData;
-            this.setState({DistributorInfoData:data})
-        }
-    }
+   
     componentDidMount() {
         axios.get("http://localhost:3005/location").then((response) => {
         this.setState({locationData:response.data})
+
         for(let data in this.state.locationData[0]) {
             if(data === 'state') {
                 this.state.locationData[0][data].map((item,index) =>{
@@ -86,20 +80,28 @@ class DistributorInfoDataForm extends React.Component {
             }
         })
         
-        this.setState({
-            organizationName: this.state.DistributorInfoData.organizationName ? this.state.DistributorInfoData.organizationName : '',
-            firstName: this.state.DistributorInfoData.firstName ? this.state.DistributorInfoData.firstName : '',
-            lastName: this.state.DistributorInfoData.lastName ? this.state.DistributorInfoData.lastName : '',
-            contact: this.state.DistributorInfoData.contact ? this.state.DistributorInfoData.contact : '',
-            address: this.state.DistributorInfoData.address ? this.state.DistributorInfoData.address : '',
-            state: this.state.DistributorInfoData.state ? this.state.DistributorInfoData.state : [],
-            city: this.state.DistributorInfoData.city ? this.state.DistributorInfoData.city : [],
-            area: this.state.DistributorInfoData.area ? this.state.DistributorInfoData.area : [],
-            pincode: this.state.DistributorInfoData.pincode ? this.state.DistributorInfoData.pincode : [],
-            serviceAreas: this.state.DistributorInfoData.serviceAreas ? this.state.DistributorInfoData.serviceAreas : [],
-            servicePincodes: this.state.DistributorInfoData.servicePincodes ? this.state.DistributorInfoData.servicePincodes : [],
-           
-        }) 
+        
+        let DistributorInfoData = JSON.parse(sessionStorage.getItem('DistributorInfoData'))
+
+        if(DistributorInfoData) {
+            this.props.flag()
+            this.setState({
+                organizationName: DistributorInfoData.organizationName,
+                firstName:DistributorInfoData.firstName, 
+                lastName: DistributorInfoData.lastName ,
+                contact: DistributorInfoData.contact,
+                address: DistributorInfoData.address ,
+                state: DistributorInfoData.state ,
+                city: DistributorInfoData.city, 
+                area: DistributorInfoData.area ,
+                pincode:DistributorInfoData.pincode ,
+                serviceAreas:DistributorInfoData.serviceAreas,
+                servicePincodes:DistributorInfoData.servicePincodes,
+
+            }) 
+
+        }
+
     }
     
     
@@ -109,7 +111,6 @@ class DistributorInfoDataForm extends React.Component {
         if (!err) {
             values.deliveryCharge = 0;
             values.email= "trush@gmail.com";
-            this.props.DistributorInfo(values);
             this.setState({
                 DistributorInfoData:values,
                 organizationName:null,
@@ -124,7 +125,12 @@ class DistributorInfoDataForm extends React.Component {
                 serviceAreas:[],
                 servicePincodes:[],
             })
+            this.props.flag()
+
            this.props.form.resetFields();
+           
+    window.sessionStorage.setItem("DistributorInfoData", JSON.stringify(values));
+
       }
     });
 
