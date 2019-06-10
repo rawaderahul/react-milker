@@ -60,19 +60,19 @@ class EditableTable extends Component {
     this.columns = [
       {
         title: 'Name',
-        dataIndex: 'RouteName',
+        dataIndex: 'routeName',
         width: '20%',
         editable: true,
       },
       {
         title: 'Route Areas',
-        dataIndex: 'RouteAreas',
+        dataIndex: 'routeAreas',
         width: '15%',
         editable: true,
       },
       {
         title: 'Route Pin Code',
-        dataIndex: 'RoutePincodes',
+        dataIndex: 'routePincodes',
         width: '15%',
         editable: true,
       },
@@ -88,19 +88,19 @@ class EditableTable extends Component {
                 {form => (
                   <a
                     href="javascript:;"
-                    onClick={() => this.save(form, record.Rid)}
+                    onClick={() => this.save(form, record.rId)}
                     style={{ marginRight: 8 }}
                   >
                     Save
                   </a>
                 )}
               </EditableContext.Consumer>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.Rid)}>
+              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rId)}>
                 <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingKey !== ''} onClick={() => this.edit(record.Rid)}>
+            <a disabled={editingKey !== ''} onClick={() => this.edit(record.rId)}>
               Edit
             </a>
           );
@@ -116,21 +116,21 @@ class EditableTable extends Component {
       
   }
 
-  isEditing = record => record.Rid === this.state.editingKey;
+  isEditing = record => record.rId === this.state.editingKey;
 
   cancel = () => {
     this.setState({ editingKey: '' });
   };
 
-  save(form, Rid) {
+  save(form, rId) {
     form.validateFields((error, row) => {
       if (error) {
         return;
       }
       const newRow = row;
-      row.distributerid = 2;
+      row.distributerid = 1;
       const newData = [...this.state.rootInfo];
-      const index = newData.findIndex(item => Rid === item.Rid);
+      const index = newData.findIndex(item => rId === item.rId);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
@@ -139,9 +139,8 @@ class EditableTable extends Component {
         });
         console.log(newRow);
         axios.put(`http://127.0.0.1:8000/api/Route/${this.state.editingKey}`,newRow)
-          .then((res)=>{
+          .then(()=>{
             this.setState({rootInfo: newData, editingKey: '' })
-
           })
       } else {
         newData.push(row);
@@ -150,8 +149,8 @@ class EditableTable extends Component {
     });
   }
 
-  edit(Rid) {
-    this.setState({ editingKey: Rid });
+  edit(rId) {
+    this.setState({ editingKey: rId });
   }
 
   render() {
@@ -180,7 +179,7 @@ class EditableTable extends Component {
     return (
       <EditableContext.Provider value={this.props.form}>
         <Table
-          rowKey="Rid" 
+          rowKey="rId" 
           components={components}
           bordered
           dataSource={this.state.rootInfo}

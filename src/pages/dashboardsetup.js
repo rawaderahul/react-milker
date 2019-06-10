@@ -15,8 +15,8 @@ const { SubMenu } = Menu;
 class Dashboard extends React.Component {
   state = {
     collapsed: false,
-    select:'Distributor',
-    selectWithMenu:['Distributor','Manage Business']
+    select:'Distributer Quata',
+    selectWithMenu:['Distributer Quata','Manage Daily']
     
   };
 
@@ -31,6 +31,8 @@ class Dashboard extends React.Component {
   
   condition=(select)=>{
    switch(select) {
+    case "Distributer Quata" : return <Distributorquota/>;
+    break;
      case "Distributor" : return <Distributor/> ;
      break;
      case "Workers" :return  <Deliveryboy/>;
@@ -38,8 +40,6 @@ class Dashboard extends React.Component {
      case "Routes" :return  <RouteInfo/>;
      break;
      case "Customer" :return  <Customer/>;
-     break;
-     case "Distributer Quata" : return <Distributorquota/>;
      break;
      case "Wholesaler" :return  <Wholesaler/>;
      break;

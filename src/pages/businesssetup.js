@@ -11,7 +11,7 @@ const { SubMenu } = Menu;
 const Step = Steps.Step;
 
 function countDown() {
-  let secondsToGo = 3;
+  let secondsToGo = 5;
   const modal = Modal.success({
     title: 'Congratulation',
     content: `You have successfully setup business.`,
@@ -34,10 +34,6 @@ class BusinessSetUP extends Component{
         this.state = {
           current: 0,
           flag:true,
-          DistributorInfoData:{},
-          CreateRoutesData:[],
-          CreateDeliveryBoysData:[],
-          CreateCustomersData:[],
           isRedirect:false
         };
     }
@@ -55,28 +51,9 @@ class BusinessSetUP extends Component{
         this.setState({ current });
       }
      
-     
-      DistributorInfo=(e)=> {
-       this.setState({
-        DistributorInfoData:e,
-        flag:false
-       })
-     }
-     CreateRoutes=(e)=> {
-        this.setState({CreateRoutesData:e,flag:false})
-      }
-      CreateDeliveryBoys =(e)=> {
-        this.setState({CreateDeliveryBoysData:e,flag:false})
-        
-      }
-      CreateCustomers =(e)=> {
-      this.setState({CreateCustomersData:e,flag:false})
-      console.log(this.state.CreateCustomersData);
-      
-      }
       finish=()=> { 
+        let DistributorInfoData = JSON.parse(sessionStorage.getItem('DistributorInfoData'))
         this.setState({isRedirect:true})
-        let  DistributorInfoData=this.state.DistributorInfoData;
         let serviceAreas=DistributorInfoData.serviceAreas.join(",");
         let servicePincodes=DistributorInfoData.servicePincodes.join(",");
         DistributorInfoData.serviceAreas=serviceAreas;
@@ -90,30 +67,19 @@ class BusinessSetUP extends Component{
       const steps = [
         {
           title: 'Distributer',
-          content: <DistributorInfo DistributorInfo={this.DistributorInfo} DistributorInfoData={this.state.DistributorInfoData}/>,
+          content: <DistributorInfo flag={this.flag} />,
         },
         {
           title: 'Create Routes',
-          content: <CreateRoutes flag={this.flag}
-           CreateRoutes={this.CreateRoutes} 
-           CreateRoutesData={this.state.CreateRoutesData}
-           DistributorInfoData={this.state.DistributorInfoData}/>,
+          content: <CreateRoutes flag={this.flag} />,
         },
         {
           title: 'Create Delivery Boys',
-          content: <CreateDeliveryBoys flag={this.flag}
-          CreateDeliveryBoysData={this.state.CreateDeliveryBoysData}
-          CreateDeliveryBoys={this.CreateDeliveryBoys}
-          CreateRoutesData={this.state.CreateRoutesData}
-          />,
+          content: <CreateDeliveryBoys flag={this.flag} />,
         },
         {
           title: 'Create Customers',
-          content: <CreateCustomers flag={this.flag}
-          CreateCustomersData={this.state.CreateCustomersData}
-          CreateRoutesData={this.state.CreateRoutesData}
-          CreateCustomers={this.CreateCustomers}
-          />,
+          content: <CreateCustomers flag={this.flag} />,
         },
       ];
         const { current } = this.state;
@@ -165,13 +131,7 @@ class BusinessSetUP extends Component{
                     this.state.isRedirect ? <Redirect to ='/managebusiness'  />: null
                   }              
             </div>
-            {/* <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div> */}
-          </Content>
+           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
         </Layout>
       </Layout>

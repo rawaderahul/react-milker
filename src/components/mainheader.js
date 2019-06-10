@@ -7,6 +7,7 @@ import Login from '../pages/login'
 import Register from '../pages/register'
 import CreateCustomer from '../pages/createcustomer'
 import { Row, Col } from 'antd';
+import './mainheader.css'
 const { Header } = Layout;
 const Option = Select.Option;
 
@@ -44,7 +45,7 @@ const menu = (
 class MainHeader extends Component{
     render(){
         return(
-<div>
+<div className="main-header">
 <div className="marquee">
   <div>
     <span>Need Help: <Icon type="phone" theme="filled" rotate={120}  /> <a href="tel:+7038375655">+91 7038375655</a></span>

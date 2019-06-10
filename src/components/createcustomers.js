@@ -13,14 +13,23 @@ class CreateCustomersForms extends React.Component {
             sheets:[],
             blankSheets:[],
             blankDataSource:[],
-            CreateCustomersData:[]
+            CreateCustomersData:[],
+            CreateRoutesData:[]
 
         }
     }
     
       componentDidMount() {
-        if(this.props.CreateCustomersData) {
-      this.setState({CreateCustomersData:this.props.CreateCustomersData})
+    let CreateCustomersData=JSON.parse(sessionStorage.getItem('CreateCustomersData'))
+    let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
+    console.log(CreateRoutesData);
+
+        if(CreateRoutesData) {
+        this.setState({CreateRoutesData})
+      }
+      if(CreateCustomersData) {
+        this.props.flag();
+        this.setState({CreateCustomersData})
 
         }
         axios.get('http://localhost:3005/DemoSheet').then((response) => {
@@ -29,9 +38,6 @@ class CreateCustomersForms extends React.Component {
           axios.get('http://localhost:3005/BlankSheet').then((response) => {
             this.setState({blankDataSource:response.data})
           })
-          if(this.props.CreateCustomersData.length > 0) {
-            this.props.flag()
-          }
          
       }
 
@@ -66,7 +72,9 @@ class CreateCustomersForms extends React.Component {
            })
           }
         })
-        this.props.CreateCustomers(this.state.CreateCustomersData);
+        this.props.flag()
+
+        window.sessionStorage.setItem("CreateCustomersData", JSON.stringify(this.state.CreateCustomersData));
       } 
       
       }
@@ -92,7 +100,6 @@ class CreateCustomersForms extends React.Component {
         
        }
     render(){
-      console.log(this.state.CreateCustomersData);
         // const { getFieldDecorator } = this.props.form;
         return(
             <div className="formbox">
@@ -100,8 +107,8 @@ class CreateCustomersForms extends React.Component {
                 <div>
                     <Row>
                         <Col span={12} >
-                                {this.props.CreateRoutesData && 
-                                this.props.CreateRoutesData.map((item,index) => {
+                                {this.state.CreateRoutesData && 
+                                this.state.CreateRoutesData.map((item,index) => {
                                   return(
                                     <div key={index}>
                                       <h3> Download {item.routeName} blank template </h3>
