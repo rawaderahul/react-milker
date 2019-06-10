@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
-import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
-
+import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
+import RouteModal from './modals/routeinfo'
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -55,7 +55,9 @@ class EditableTable extends Component {
     this.state = { 
         data:null ,
         rootInfo: null,
-        editingKey: '' ,
+        editingid: '' ,
+        areas:[],
+        pincodes:[]
     };
     this.columns = [
       {
@@ -80,7 +82,7 @@ class EditableTable extends Component {
         title: 'operation',
         dataIndex: 'operation',
         render: (text, record) => {
-          const { editingKey } = this.state;
+          const { editingid } = this.state;
           const editable = this.isEditing(record);
           return editable ? (
             <span>
@@ -88,19 +90,19 @@ class EditableTable extends Component {
                 {form => (
                   <a
                     href="javascript:;"
-                    onClick={() => this.save(form, record.rId)}
+                    onClick={() => this.save(form, record.rid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
                   </a>
                 )}
               </EditableContext.Consumer>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rId)}>
+              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rid)}>
                 <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingKey !== ''} onClick={() => this.edit(record.rId)}>
+            <a disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
               Edit
             </a>
           );
@@ -113,16 +115,19 @@ class EditableTable extends Component {
       axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((res)=>{
           this.setState({rootInfo: res.data})
       })
+      axios.get('http://127.0.0.1:8000/api/Distributer/1').then((res)=>{
+        this.setState({areas: res.data[0].serviceAreas, pincodes:res.data[0].servicePincodes})
+    })
       
   }
 
-  isEditing = record => record.rId === this.state.editingKey;
+  isEditing = record => record.rid === this.state.editingid;
 
   cancel = () => {
-    this.setState({ editingKey: '' });
+    this.setState({ editingid: '' });
   };
 
-  save(form, rId) {
+  save(form, rid) {
     form.validateFields((error, row) => {
       if (error) {
         return;
@@ -130,29 +135,43 @@ class EditableTable extends Component {
       const newRow = row;
       row.distributerid = 1;
       const newData = [...this.state.rootInfo];
-      const index = newData.findIndex(item => rId === item.rId);
+      const index = newData.findIndex(item => rid === item.rid);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        console.log(newRow);
-        axios.put(`http://127.0.0.1:8000/api/Route/${this.state.editingKey}`,newRow)
+        axios.put(`http://127.0.0.1:8000/api/Route/${this.state.editingid}`,newRow)
           .then(()=>{
-            this.setState({rootInfo: newData, editingKey: '' })
+            this.setState({rootInfo: newData, editingid: '' })
           })
       } else {
         newData.push(row);
-        this.setState({ rootInfo: newData, editingKey: '' });
+        this.setState({ rootInfo: newData, editingid: '' });
       }
     });
   }
 
-  edit(rId) {
-    this.setState({ editingKey: rId });
+  edit(rid) {
+    this.setState({ editingid: rid });
   }
-
+  addRoute=()=> {
+    this.setState({visible:true})
+  }
+  addNewRoute=(event) => {
+    axios.post('http://127.0.0.1:8000/api/Route',event).then((response) => {
+    console.log(response);
+    })
+    this.setState({
+      visible: false,
+    });
+  };
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
   render() {
     const components = {
       body: {
@@ -178,8 +197,11 @@ class EditableTable extends Component {
 
     return (
       <EditableContext.Provider value={this.props.form}>
+         <Button onClick={this.addRoute} type="primary" style={{ marginBottom: 16 }}>
+          Add Route
+        </Button>
         <Table
-          rowKey="rId" 
+          rowKey="rid" 
           components={components}
           bordered
           dataSource={this.state.rootInfo}
@@ -189,6 +211,14 @@ class EditableTable extends Component {
             onChange: this.cancel,
           }}
         />
+        {
+         this.state.visible ? <RouteModal 
+         addNewRoute={this.addNewRoute}
+         hideModal={this.hideModal}
+         areas={this.state.areas}
+         pincodes={this.state.pincodes}
+      /> : null
+       } 
       </EditableContext.Provider>
     );
   }

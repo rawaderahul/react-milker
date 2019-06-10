@@ -55,8 +55,8 @@ class EditableTable extends Component {
     this.state = { 
         data:null ,
         customerData: null,
-        editingKey: '' ,
-        iAddCustomer : false
+        editingid: '' ,
+        visible:false
     };
     this.columns = [
       {
@@ -99,7 +99,7 @@ class EditableTable extends Component {
         title: 'operation',
         dataIndex: 'operation',
         render: (text, record) => {
-          const { editingKey } = this.state;
+          const { editingid } = this.state;
           const editable = this.isEditing(record);
           return editable ? (
             <span>
@@ -107,19 +107,19 @@ class EditableTable extends Component {
                 {form => (
                   <a
                     href="javascript:;"
-                    onClick={() => this.save(form, record.Cid)}
+                    onClick={() => this.save(form, record.cid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
                   </a>
                 )}
               </EditableContext.Consumer>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.Cid)}>
+              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.cid)}>
                 <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingKey !== ''} onClick={() => this.edit(record.Cid)}>
+            <a disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
               Edit
             </a>
           );
@@ -136,13 +136,13 @@ class EditableTable extends Component {
       
   }
   
-  isEditing = record => record.Cid === this.state.editingKey;
+  isEditing = record => record.cid === this.state.editingid;
 
   cancel = () => {
-    this.setState({ editingKey: '' });
+    this.setState({ editingid: '' });
   };
 
-  save(form, Cid) {
+  save(form, cid) {
     form.validateFields((error, row) => {
       if (error) {
         return;
@@ -150,39 +150,49 @@ class EditableTable extends Component {
       const newRow = row;
       // row.rid = 1;
       const newData = [...this.state.customerData];
-      const index = newData.findIndex(item => Cid === item.Cid);
+      const index = newData.findIndex(item => cid === item.cid);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/CustomerListByRouteId/${this.state.editingKey}`,newRow)
+        axios.put(`http://127.0.0.1:8000/api/Customer/${this.state.editingid}`,newRow)
           .then((res)=>{
-            this.setState({customerData: newData, editingKey: '' })
+            this.setState({customerData: newData, editingid: '' })
           })
       } 
       else {
         newData.push(row);
-        this.setState({ customerData: newData, editingKey: '' });
+        this.setState({ customerData: newData, editingid: '' });
       }
     });
   }
 
-  edit(Cid) {
-    this.setState({ editingKey: Cid });
+  edit(cid) {
+    this.setState({ editingid: cid });
   }
 
   addCustomer = () => {
-    this.setState({iAddCustomer: true});
-    console.log("You select customer add button");
+    this.setState({visible:true});
   }
 
-  condition(){
-    return <CustomerModal 
-    flag={this.state.iAddCustomer}
-    />
-  }
+  addNewCustomer = (event) => {
+    axios.post('http://127.0.0.1:8000/api/Customer',event).then((response) => {
+    console.log(response);
+
+    })
+    this.setState({
+      visible: false,
+    });
+  };
+
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
 
   render() {
     const components = {
@@ -215,7 +225,7 @@ class EditableTable extends Component {
         </Button>
   
         <Table
-          rowKey="Cid" 
+          rowKey="cid" 
           components={components}
           bordered
           dataSource={this.state.customerData}
@@ -225,7 +235,12 @@ class EditableTable extends Component {
             onChange: this.cancel,
           }}
         />
-        {this.condition()}
+       {
+         this.state.visible ? <CustomerModal 
+         addNewCustomer={this.addNewCustomer}
+         hideModal={this.hideModal}
+      /> : null
+       } 
       </EditableContext.Provider>
       </div>
     );
