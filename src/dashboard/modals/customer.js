@@ -16,6 +16,8 @@ export default class CustomerModal extends React.Component {
     });
   };
 
+  okText="Save"
+  
   render() {
     return (
       <div>
