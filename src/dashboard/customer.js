@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-
+import CustomerModal from './modals/customer'
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -56,8 +56,7 @@ class EditableTable extends Component {
         data:null ,
         customerData: null,
         editingKey: '' ,
-
-
+        iAddCustomer : false
     };
     this.columns = [
       {
@@ -137,7 +136,6 @@ class EditableTable extends Component {
       
   }
   
-
   isEditing = record => record.Cid === this.state.editingKey;
 
   cancel = () => {
@@ -175,6 +173,17 @@ class EditableTable extends Component {
     this.setState({ editingKey: Cid });
   }
 
+  addCustomer = () => {
+    this.setState({iAddCustomer: true});
+    console.log("You select customer add button");
+  }
+
+  condition(){
+    return <CustomerModal 
+    flag={this.state.iAddCustomer}
+    />
+  }
+
   render() {
     const components = {
       body: {
@@ -201,9 +210,10 @@ class EditableTable extends Component {
     return (
       <div>
       <EditableContext.Provider value={this.props.form}>
-       <Button onClick={this.add} type="primary" style={{ marginBottom: 16 }}>
-        Add
-       </Button>
+        <Button onClick={this.addCustomer} type="primary" style={{ marginBottom: 16 }}>
+          Add Customer
+        </Button>
+  
         <Table
           rowkey="Cid" 
           components={components}
@@ -215,6 +225,7 @@ class EditableTable extends Component {
             onChange: this.cancel,
           }}
         />
+        {this.condition()}
       </EditableContext.Provider>
       </div>
     );
