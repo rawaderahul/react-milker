@@ -77,7 +77,7 @@ class Dashboard extends React.Component {
               key="Manage Daily"
               title={
                 <span>
-                  <Icon type="pie-chart" />
+                  <Icon type="line-chart" />
                   <span>Manage Daily</span>
                 </span>
               }
