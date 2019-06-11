@@ -168,7 +168,7 @@ class EditableTable extends Component {
 
   delete(rid) {
     const data = [...this.state.rootInfo];
-    axios.delete('http://127.0.0.1:8000/api/Route/'+rid)
+    axios.delete('http://127.0.0.1:8000/api/Route/4')
     .then(()=>{
       this.setState({ rootInfo : data.filter(item => item.rid !== rid) });
     })  

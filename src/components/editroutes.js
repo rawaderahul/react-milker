@@ -13,7 +13,6 @@ class Edit extends Component {
     handleOk=() => {
         this.props.form.validateFields((err,values) => {
             if (!err) {
-                console.log(values);
                 values.id=this.props.editableData.id;
                 this.props.handleOk(values);
                 this.props.form.resetFields();

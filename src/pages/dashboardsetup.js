@@ -7,29 +7,47 @@ import RouteInfo from '../dashboard/routeinfo';
 import Distributorquota from '../dashboard/distributorquota';
 import Wholesaler from '../dashboard/wholesaler';
 import Messages from '../dashboard/messages';
-
+import axios from 'axios';
+import AnyRoute from '../dashboard/anyroute'
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class Dashboard extends React.Component {
-  state = {
-    collapsed: false,
-    select:'Distributer Quata',
-    selectWithMenu:['Distributer Quata','Manage Daily']
-    
-  };
+  constructor(){
+    super();
+
+    this.state = {
+      collapsed: false,
+      select:'Distributer Quata',
+      selectWithMenu:['Distributer Quata','Manage Daily'],
+      routeData:[],
+      rid:null
+      
+    };
+  }
+
+  componentDidMount() {
+    axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((response)=> {
+    this.setState({routeData:response.data})
+    })
+  }
+  
 
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
   subMenuHandle=(e)=>{
-  this.setState({select:e.key , selectWithMenu:e.keyPath})
+  this.setState({select:e.key ,rid:e.item.props.id, selectWithMenu:e.keyPath})
   }
   
   condition=(select)=>{
-   switch(select) {
+    const { routeData }=this.state;
+  let menu=  routeData.map((item) => {
   
+    })
+
+   switch(select) {
      case "Distributor" : return <Distributor/> ;
      case "Workers" :return  <Deliveryboy/>;
      case "Routes" :return  <RouteInfo/>;
@@ -37,11 +55,16 @@ class Dashboard extends React.Component {
      case "Distributer Quata" : return <Distributorquota/>;
      case "Wholesaler" :return  <Wholesaler/>;
      case "Messages" :return  <Messages/>;
-     default:return  <Distributor/>;
+     default:return  <AnyRoute rid={this.state.rid}/>;
    }
+
   }
   render() {
-    
+    const menu= this.state.routeData && this.state.routeData.map((item) => {
+      return(
+        <Menu.Item key={item.routeName} id={item.rid}>{item.routeName}</Menu.Item>
+      );
+    })
     return (
       <Layout style={{ minHeight: '100vh' }} >
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: 'orange'}}>
@@ -77,6 +100,7 @@ class Dashboard extends React.Component {
               <Menu.Item key="Distributer Quata" >Distributer Quata</Menu.Item>
               <Menu.Item key="Wholesaler">Wholesaler</Menu.Item>
               <Menu.Item key="Messages">Messages</Menu.Item>
+              {menu}
               
             </SubMenu>
           </Menu>
