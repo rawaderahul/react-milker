@@ -1,6 +1,6 @@
 body { 
-  font-family: 'Roboto', sans-serif; 
-  background: #f0f2f5; 
+  font-size: 16px;
+  background: #E9ECF0; 
   background-size: contain;
 }
 
@@ -12,6 +12,11 @@ font-family: 'Raleway', sans-serif;
 
 .container { 
   max-width: 1200px; 
+  margin: auto;
+  padding:0px 15px;
+}
+.container-fluid{
+  max-width: 100%; 
   margin: auto;
   padding:0px 15px;
 }
@@ -29,7 +34,8 @@ a:hover{ color:#3f6ad8;}
   margin-top:1em;   */
 }
 .main-header{
-  box-shadow: 0px 2px 4px rgba(00,00,00,0.1);
+  box-shadow: 0px 4px 7px rgba(00,00,00,0.1);
+  z-index: 99;
 }
 .main-header .marquee{
   background: #3f6ad8;
@@ -45,8 +51,9 @@ a:hover{ color:#3f6ad8;}
   padding: 0;
 }
 .ant-menu .ant-select-selection{
-  border: 1px solid #6c757d;
+  border: 1px solid #3f6ad8;
   box-shadow: 0px 2px 4px rgba(00,00,00,0.1);
+  color: #3f6ad8;
 }
 .ant-layout-header ul {
   border-bottom: 0;

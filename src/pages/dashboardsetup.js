@@ -44,10 +44,10 @@ class Dashboard extends React.Component {
     
     return (
       <Layout style={{ minHeight: '100vh' }} >
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: 'orange'}}>
+        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: '#FEFEFF'}}>
           <div className="logo" />
           <Menu theme="light" defaultSelectedKeys={['1']}
-           mode="inline" style={{  background: 'orange'}}
+           mode="inline" style={{  background: '#FEFEFF'}}
            >
             <SubMenu onClick={this.subMenuHandle}
               key="Manage Business"
