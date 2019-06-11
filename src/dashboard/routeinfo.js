@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
 import RouteModal from './modals/routeinfo';
-import { Link } from 'react-router-dom'
+
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -89,28 +89,28 @@ class EditableTable extends Component {
             <span>
               <EditableContext.Consumer>
                 {form => (
-                  <Link
-                    to="javascript;"
+                  <a
+                    href="javascript:;"
                     onClick={() => this.save(form, record.rid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
-                  </Link>
+                  </a>
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rid)}>
-                <Link>Cancel</Link>
+                <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
             <span>
-              <Link disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
+              <a disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
                 Edit
-              </Link>&nbsp;&nbsp;&nbsp;
+              </a>&nbsp;&nbsp;&nbsp;
               {
-                <Link disabled={editingid !== ''} onClick={() => this.delete(record.rid)}>Delete</Link> && 
+                <a disabled={editingid !== ''} onClick={() => this.delete(record.rid)}>Delete</a> && 
               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.rid)}>
-                  <Link to="javascript;">Delete</Link>
+                  <a href="javascript:;">Delete</a>
               </Popconfirm>
               }
             </span>

@@ -205,7 +205,6 @@ class ShopDetails extends React.Component {
   }
 
   render() {
-    console.log(this.state.distributorData);
     
     const { dataSource } = this.state;
     const components = {

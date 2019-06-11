@@ -2,7 +2,6 @@ import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
 import CustomerModal from './modals/customer';
-import { Link } from 'react-router-dom'
 
 const EditableContext = React.createContext();
 
@@ -108,28 +107,28 @@ class EditableTable extends Component {
             <span>
               <EditableContext.Consumer>
                 { form => (
-                  <Link
-                    to="javascript;"
+                  <a
+                    href="javascript:;"
                     onClick={() => this.save(form, record.cid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
-                  </Link>
+                  </a>
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.cid)}>
-                <Link>Cancel</Link>
+                <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
             <span>
-               <Link disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
+               <a disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
               Edit
-            </Link>&nbsp;&nbsp;&nbsp;
+            </a>&nbsp;&nbsp;&nbsp;
             {  
-            <Link disabled={deletable !== ''} onClick={() => this.delete(record.cid)}>Delete</Link> && 
+            <a disabled={deletable !== ''} onClick={() => this.delete(record.cid)}>Delete</a> && 
                <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.cid)}>
-                   <Link to="javascript;">Delete</Link>
+                   <a to="javascript:;">Delete</a>
                 </Popconfirm>
             }
             </span>

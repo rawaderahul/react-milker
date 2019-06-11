@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form,Input,Modal,InputNumber } from 'antd';
+import { Form,Input,Modal } from 'antd';
 
 class ModalForm extends React.Component {
 
