@@ -1,7 +1,9 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import CustomerModal from './modals/customer'
+import CustomerModal from './modals/customer';
+import { Link } from 'react-router-dom'
+
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -101,37 +103,54 @@ class EditableTable extends Component {
         render: (text, record) => {
           const { editingid } = this.state;
           const editable = this.isEditing(record);
+          const deletable=this.isDeleting(record);
           return editable ? (
             <span>
               <EditableContext.Consumer>
-                {form => (
-                  <a
-                    href="javascript:;"
+                { form => (
+                  <Link
+                    to="javascript;"
                     onClick={() => this.save(form, record.cid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
-                  </a>
+                  </Link>
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.cid)}>
-                <a>Cancel</a>
+                <Link>Cancel</Link>
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
+            <span>
+               <Link disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
               Edit
-            </a>
+            </Link>&nbsp;&nbsp;&nbsp;
+            {  
+            <Link disabled={deletable !== ''} onClick={() => this.delete(record.cid)}>Delete</Link> && 
+               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.cid)}>
+                   <Link to="javascript;">Delete</Link>
+                </Popconfirm>
+            }
+            </span>
+           
           );
+          
         },
       },
     ];
   }
 
+  isDeleting=record => record.cid === this.state.editingid;
+
+  delete=(cid) => {
+  axios.delete("http://127.0.0.1:8000/api/Customer/"+cid).then((response)=>{
+    
+  })
+  }
   componentDidMount() {
       axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/1').then((res)=>{
           this.setState({customerData: res.data})
-          console.log(this.state.customerData);
       })
       
   }
@@ -213,6 +232,7 @@ class EditableTable extends Component {
           dataIndex: col.dataIndex,
           title: col.title,
           editing: this.isEditing(record),
+
         }),
       };
     });

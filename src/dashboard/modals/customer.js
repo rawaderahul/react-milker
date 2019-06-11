@@ -1,14 +1,11 @@
 import React,{Component} from 'react'
-import { Modal, Button, Table, Input, InputNumber, Popconfirm, Form } from 'antd';
+import { Modal,Input,Form } from 'antd';
 
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 12 },
 };
-const formTailLayout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 8, offset: 8 },
-};
+
 class ModalForm extends Component{ 
 
   addNewCustomer=()=> {

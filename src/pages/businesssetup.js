@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { Steps, Button, message, Layout, Menu, Breadcrumb, Icon,Modal } from 'antd';
+import { Steps, Button, Layout, Menu,Icon,Modal } from 'antd';
 import DistributorInfo from '../components/distributorinfo'
 import CreateRoutes from '../components/createroutes'
 import CreateDeliveryBoys from '../components/createdeliveryboys'
@@ -7,7 +7,7 @@ import CreateCustomers from '../components/createcustomers'
 import axios from 'axios';
 import  { Redirect } from 'react-router-dom'
 const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 const Step = Steps.Step;
 
 function countDown() {

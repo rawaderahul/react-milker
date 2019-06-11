@@ -1,5 +1,6 @@
 import React,{Component} from 'react'
 import {Form,Input,Tooltip,Icon,Cascader,Select,Row,Col,Checkbox,Button, AutoComplete, } from 'antd';
+import { Link } from 'react-router-dom'
   
   const { Option } = Select;
   const AutoCompleteOption = AutoComplete.Option;
@@ -231,7 +232,7 @@ class Register1 extends Component{
             valuePropName: 'checked',
           })(
             <Checkbox>
-              I have read the <a href="">agreement</a>
+              I have read the <Link to="">agreement</Link>
             </Checkbox>,
           )}
         </Form.Item>

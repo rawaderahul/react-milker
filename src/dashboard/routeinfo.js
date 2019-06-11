@@ -1,7 +1,8 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
-import RouteModal from './modals/routeinfo'
+import RouteModal from './modals/routeinfo';
+import { Link } from 'react-router-dom'
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -88,23 +89,23 @@ class EditableTable extends Component {
             <span>
               <EditableContext.Consumer>
                 {form => (
-                  <a
-                    href="javascript:;"
+                  <Link
+                    to="javascript;"
                     onClick={() => this.save(form, record.rid)}
                     style={{ marginRight: 8 }}
                   >
                     Save
-                  </a>
+                  </Link>
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rid)}>
-                <a>Cancel</a>
+                <Link>Cancel</Link>
               </Popconfirm>
             </span>
           ) : (
-            <a disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
+            <Link disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
               Edit
-            </a>
+            </Link>
           );
         },
       },
