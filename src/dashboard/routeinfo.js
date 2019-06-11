@@ -103,9 +103,17 @@ class EditableTable extends Component {
               </Popconfirm>
             </span>
           ) : (
-            <Link disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
-              Edit
-            </Link>
+            <span>
+              <Link disabled={editingid !== ''} onClick={() => this.edit(record.rid)}>
+                Edit
+              </Link>&nbsp;&nbsp;&nbsp;
+              {
+                <Link disabled={editingid !== ''} onClick={() => this.delete(record.rid)}>Delete</Link> && 
+              <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.rid)}>
+                  <Link to="javascript;">Delete</Link>
+              </Popconfirm>
+              }
+            </span>
           );
         },
       },
@@ -157,10 +165,20 @@ class EditableTable extends Component {
   edit(rid) {
     this.setState({ editingid: rid });
   }
-  addRoute=()=> {
+
+  delete(rid) {
+    const data = [...this.state.rootInfo];
+    axios.delete('http://127.0.0.1:8000/api/Route/'+rid)
+    .then(()=>{
+      this.setState({ rootInfo : data.filter(item => item.rid !== rid) });
+    })  
+  }
+
+  addRoute = () => {
     this.setState({visible:true})
   }
-  addNewRoute=(event) => {
+
+  addNewRoute = (event) => {
     axios.post('http://127.0.0.1:8000/api/Route',event).then((response) => {
     console.log(response);
     })
@@ -168,11 +186,13 @@ class EditableTable extends Component {
       visible: false,
     });
   };
+
   hideModal = () => {
     this.setState({
       visible: false,
     });
   };
+
   render() {
     const components = {
       body: {

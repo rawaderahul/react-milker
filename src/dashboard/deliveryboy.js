@@ -13,7 +13,7 @@ class EditableCell extends React.Component {
     }
     return <Input />;
   };
-
+ 
   renderCell = ({ getFieldDecorator }) => {
     const {
       editing,
@@ -57,7 +57,7 @@ class EditableTable extends Component {
     this.state = { 
         data:null ,
         deliveryBoyData: null,
-        editingKey: '' ,
+        editingid: '' ,
         isAddCustomer : false,
         visible: false
 
@@ -79,7 +79,7 @@ class EditableTable extends Component {
         title: 'operation',
         dataIndex: 'operation',
         render: (text, record) => {
-          const { editingKey } = this.state;
+          const { editingid } = this.state;
           const editable = this.isEditing(record);
           return editable ? (
             <span>
@@ -100,9 +100,9 @@ class EditableTable extends Component {
             </span>
           ) : (
             <span>
-              <Link disabled={editingKey !== ''} onClick={() => this.edit(record.wid)}>
+              <Link disabled={editingid !== ''} onClick={() => this.edit(record.wid)}>
                 Edit
-              </Link>
+              </Link>&nbsp;&nbsp;&nbsp;
                {
                  <Link onClick={() => this.delete(record.wid)}>Delete</Link> && 
                <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.wid)}>
@@ -123,10 +123,10 @@ class EditableTable extends Component {
     })
   }
   
-  isEditing = record => record.wid === this.state.editingKey;
+  isEditing = record => record.wid === this.state.editingid;
 
   cancel = () => {
-    this.setState({ editingKey: '' });
+    this.setState({ editingid: '' });
   };
 
   save(form, wid) {
@@ -145,29 +145,29 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/WorkerDetail/${this.state.editingKey}`,newRow)
+        axios.put(`http://127.0.0.1:8000/api/WorkerDetail/${this.state.editingid}`,newRow)
           .then((res)=>{
-            this.setState({deliveryBoyData: newData, editingKey: '' })
+            this.setState({deliveryBoyData: newData, editingid: '' })
           })
       } 
       else {
         newData.push(row);
-        this.setState({ deliveryBoyData: newData, editingKey: '' });
+        this.setState({ deliveryBoyData: newData, editingid: '' });
       }
     });
   }
 
   edit(wid) {
-    this.setState({ editingKey: wid });
+    this.setState({ editingid: wid });
   }
 
-  delete(id) {
+  delete(wid) {
     const data = [...this.state.deliveryBoyData];
-   axios.delete('http://127.0.0.1:8000/api/WorkerDetail',id)
+    axios.delete('http://127.0.0.1:8000/api/WorkerDetail/'+wid)
     .then(()=>{
-      this.setState({ deliveryBoyData: data.filter(item => item.id !== id) });
-    })
-}
+      this.setState({ deliveryBoyData: data.filter(item => item.wid !== wid) });
+    })  
+  }
 
   addWorker = () => {
     this.setState({visible: true})
