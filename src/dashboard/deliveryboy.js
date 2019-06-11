@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
-import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import * as Workers from '../services/workersInfo';
 
 import WorkerModal from './modals/deliveryboy'
 
@@ -13,7 +13,7 @@ class EditableCell extends React.Component {
     }
     return <Input />;
   };
-
+ 
   renderCell = ({ getFieldDecorator }) => {
     const {
       editing,
@@ -57,7 +57,7 @@ class EditableTable extends Component {
     this.state = { 
         data:null ,
         deliveryBoyData: null,
-        editingKey: '' ,
+        editingid: '' ,
         isAddCustomer : false,
         visible: false
 
@@ -79,7 +79,7 @@ class EditableTable extends Component {
         title: 'operation',
         dataIndex: 'operation',
         render: (text, record) => {
-          const { editingKey } = this.state;
+          const { editingid } = this.state;
           const editable = this.isEditing(record);
           return editable ? (
             <span>
@@ -100,9 +100,9 @@ class EditableTable extends Component {
             </span>
           ) : (
             <span>
-              <a disabled={editingKey !== ''} onClick={() => this.edit(record.wid)}>
+              <a disabled={editingid !== ''} onClick={() => this.edit(record.wid)}>
                 Edit
-              </a>
+              </a>&nbsp;&nbsp;&nbsp;
                {
                  <a onClick={() => this.delete(record.wid)}>Delete</a> && 
                <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.wid)}>
@@ -117,16 +117,16 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/workerListByDistributer/1').then((res)=>{
+    Workers.getWorkerListByDistributer().then((res)=>{
       this.setState({deliveryBoyData: res.data})
       console.log(this.state.deliveryBoyData);
     })
   }
   
-  isEditing = record => record.wid === this.state.editingKey;
+  isEditing = record => record.wid === this.state.editingid;
 
   cancel = () => {
-    this.setState({ editingKey: '' });
+    this.setState({ editingid: '' });
   };
 
   save(form, wid) {
@@ -145,37 +145,36 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/WorkerDetail/${this.state.editingKey}`,newRow)
+        Workers.putWorkerDetail(this.state.editingid,newRow)
           .then((res)=>{
-            this.setState({deliveryBoyData: newData, editingKey: '' })
+            this.setState({deliveryBoyData: newData, editingid: '' })
           })
       } 
       else {
         newData.push(row);
-        this.setState({ deliveryBoyData: newData, editingKey: '' });
+        this.setState({ deliveryBoyData: newData, editingid: '' });
       }
     });
   }
 
   edit(wid) {
-    this.setState({ editingKey: wid });
+    this.setState({ editingid: wid });
   }
 
-  delete(id) {
+  delete(wid) {
     const data = [...this.state.deliveryBoyData];
-   axios.delete('http://127.0.0.1:8000/api/WorkerDetail',id)
+    Workers.deleteWorkerDetails(wid)
     .then(()=>{
-      this.setState({ deliveryBoyData: data.filter(item => item.id !== id) });
-    })
-}
+      this.setState({ deliveryBoyData: data.filter(item => item.wid !== wid) });
+    })  
+  }
 
   addWorker = () => {
     this.setState({visible: true})
   }
   addNewWorker = (event) => {
-    axios.post('http://127.0.0.1:8000/api/WorkerDetail' ,event)
+    Workers.postWorkerDetail(event)
     .then((response) => {
-    console.log(response.data)
     })
     this.setState({visible: false})
   }

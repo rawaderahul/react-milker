@@ -9,7 +9,6 @@ import CreateCustomer from './pages/createcustomer';
 import BusinessSetUP from './pages/businesssetup';
 import Dashboard from './pages/dashboardsetup';
 import Home from './pages/home'
-import Distributor from './dashboard/distributor';
 const { Content } = Layout;
 function App() {
   return (

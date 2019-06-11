@@ -1,6 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Select,Row, Col,message ,Icon} from 'antd';
-import axios from 'axios';
+import { Form, Input, Button, Select,Row, Col,Icon} from 'antd';
 import EditDeliveryBoy from './editdeliveryboy';
 const formItemLayout = {
   labelCol: { span: 8 },
@@ -127,7 +126,7 @@ class CreateDeliveryBoysForm extends React.Component {
                 }) :null
               }
               {this.state.isEdit ?
-               <EditDeliveryBoy handleOk={this.handleOk} handleCancel={this.handleCancel} handleCancel={this.handleCancel}
+               <EditDeliveryBoy handleOk={this.handleOk} handleCancel={this.handleCancel}
                editableData={this.state.editableData} routes={this.state.routes} 
                /> : null}
             </Col>

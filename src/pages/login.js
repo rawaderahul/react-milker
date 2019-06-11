@@ -1,7 +1,6 @@
 import React,{Component} from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { Link } from 'react-router-dom'
-import Register from './register';
 
 class Login1 extends Component{
 
@@ -47,13 +46,13 @@ class Login1 extends Component{
                 valuePropName: 'checked',
                 initialValue: true,
               })(<Checkbox>Remember me</Checkbox>)}
-              <a className="login-form-forgot" href="">
+              <Link className="login-form-forgot" to="">
                 Forgot password
-              </a>
+              </Link>
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
-              Or  <Link to="/register" component={ Register } > register now! </Link> 
+              Or  <Link to="/register" > register now! </Link> 
             </Form.Item>
           </Form>
           </div>

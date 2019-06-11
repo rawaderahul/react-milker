@@ -9,7 +9,7 @@ import Wholesaler from '../dashboard/wholesaler';
 import Messages from '../dashboard/messages';
 
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class Dashboard extends React.Component {
@@ -21,34 +21,26 @@ class Dashboard extends React.Component {
   };
 
   onCollapse = collapsed => {
-    console.log(collapsed);
     this.setState({ collapsed });
   };
   subMenuHandle=(e)=>{
   this.setState({select:e.key , selectWithMenu:e.keyPath})
-  console.log(e);
   }
   
   condition=(select)=>{
    switch(select) {
-    case "Distributer Quata" : return <Distributorquota/>;
-    break;
+  
      case "Distributor" : return <Distributor/> ;
-     break;
      case "Workers" :return  <Deliveryboy/>;
-     break;
      case "Routes" :return  <RouteInfo/>;
-     break;
      case "Customer" :return  <Customer/>;
-     break;
+     case "Distributer Quata" : return <Distributorquota/>;
      case "Wholesaler" :return  <Wholesaler/>;
-     break;
      case "Messages" :return  <Messages/>;
-     break;
+     default:return  <Distributor/>;
    }
   }
   render() {
-    console.log(this.state.select);
     
     return (
       <Layout style={{ minHeight: '100vh' }} >

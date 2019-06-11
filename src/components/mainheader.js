@@ -1,11 +1,6 @@
 import React,{Component} from 'react'
 import { Layout, Select,  Menu, Dropdown, Icon  } from 'antd';
 import { Link } from 'react-router-dom'
-import Home from '../pages/home'
-import BusinessSetUP from '../pages/businesssetup'
-import Login from '../pages/login'
-import Register from '../pages/register'
-import CreateCustomer from '../pages/createcustomer'
 import { Row, Col } from 'antd';
 import './mainheader.css'
 const { Header } = Layout;
@@ -14,29 +9,28 @@ const Option = Select.Option;
 function handleChange(value) {
     console.log(`selected ${value}`);
 }
-  
 
 const menu = (
     <Menu>
       <Menu.Item>
-        <a  href="#">
+        <Link  to="#">
           Edit Profile
-        </a>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <a  href="#">
+        <Link  to="#">
           Manage Routes
-        </a>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <a  href="#">
+        <Link  to="#">
           Manage Delivery Boy
-        </a>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <a  href="#">
+        <Link  to="#">
           Manage Customers
-        </a>
+        </Link>
       </Menu.Item>
     </Menu>
   );
@@ -56,7 +50,7 @@ class MainHeader extends Component{
     <div className="container-fluid">
         <Row>      
             <Col >
-            <Link to='/'  component={Home}>  <div className="logo"> Milkers </div>  </Link>
+            <Link to='/'  >  <div className="logo"> Milkers </div>  </Link>
                 <Menu
                     mode="horizontal"
                     defaultSelectedKeys={['2']}
@@ -66,12 +60,12 @@ class MainHeader extends Component{
                         <Option value="jack">Marathi</Option>
                         <Option value="lucy">English</Option>
                     </Select>
-                    <Menu.Item key="2"><Link to='/' component={Home}>  Home </Link></Menu.Item>
+                    <Menu.Item key="2"><Link to='/' >  Home </Link></Menu.Item>
 
-                    <Menu.Item key="3"><Link to='/businesssetup' component={BusinessSetUP}>  Business Set UP </Link></Menu.Item>                    
-                    <Menu.Item key="4"><Link to='/createcustomer' component={CreateCustomer}>  Create  Customer </Link></Menu.Item>
-                    <Menu.Item key="5"><Link to='/login' component={Login}>  Login </Link></Menu.Item>
-                    <Menu.Item key="6"><Link to='/register' component={Register}>  Register </Link></Menu.Item>
+                    <Menu.Item key="3"><Link to='/businesssetup'>  Business Set UP </Link></Menu.Item>                    
+                    <Menu.Item key="4"><Link to='/createcustomer'>  Create  Customer </Link></Menu.Item>
+                    <Menu.Item key="5"><Link to='/login' >  Login </Link></Menu.Item>
+                    <Menu.Item key="6"><Link to='/register'>  Register </Link></Menu.Item>
                     
                     <Dropdown overlay={menu} trigger={['click']}>
                         <Link className="ant-dropdown-link" to="#">

@@ -58,10 +58,11 @@ class CreateCustomersForms extends React.Component {
        
     }
     addCustomer=(routeName) => {
-        if(this.state.csvDataSource) {
-        this.state.csvDataSource.map((item,index) => {
+      const {csvDataSource,CreateCustomersData}= this.state;
+        if(csvDataSource) {
+        csvDataSource.map((item,index) => {
          if(index!==0){
-           this.state.CreateCustomersData.push({
+           CreateCustomersData.push({
              "routeName":routeName,
             "customerName":item[0],
             "address":item[1],
@@ -71,10 +72,12 @@ class CreateCustomersForms extends React.Component {
             "paymentType":item[5],
            })
           }
+          return 0;
         })
+        this.setState({CreateCustomersData})
         this.props.flag()
 
-        window.sessionStorage.setItem("CreateCustomersData", JSON.stringify(this.state.CreateCustomersData));
+        window.sessionStorage.setItem("CreateCustomersData", JSON.stringify(CreateCustomersData));
       } 
       
       }

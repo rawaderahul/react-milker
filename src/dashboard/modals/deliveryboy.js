@@ -1,7 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-import { Form, Select, Input, Button,Modal,InputNumber } from 'antd';
-const { TextArea } = Input;
+import { Form,Input,Modal } from 'antd';
 
 class ModalForm extends React.Component {
 
@@ -48,10 +46,12 @@ class ModalForm extends React.Component {
             >
               {getFieldDecorator('contact', {
                 rules: [{ required: true, message: 'Please enter contact number' },
-                       { pattern: '[0-9]', message:'Please enter only digit'}
+                        { max: 10 , message: "Please enter 10 digit number" },
+                        { pattern:'[0-9]', message: "Please enter only number"}
+
                       ],
               })(
-                <InputNumber style = {{ width: '100%'}} />
+                <Input style = {{ width: '100%'}} />
               )}
             </Form.Item>
           </Form>
