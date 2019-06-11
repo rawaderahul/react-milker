@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
-import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import * as Workers from '../services/workersInfo';
+
 import WorkerModal from './modals/deliveryboy'
 
 const EditableContext = React.createContext();
@@ -116,7 +117,7 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/workerListByDistributer/1').then((res)=>{
+    Workers.getWorkerListByDistributer().then((res)=>{
       this.setState({deliveryBoyData: res.data})
       console.log(this.state.deliveryBoyData);
     })
@@ -144,7 +145,7 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/WorkerDetail/${this.state.editingid}`,newRow)
+        Workers.putWorkerDetail(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({deliveryBoyData: newData, editingid: '' })
           })
@@ -162,7 +163,7 @@ class EditableTable extends Component {
 
   delete(wid) {
     const data = [...this.state.deliveryBoyData];
-    axios.delete('http://127.0.0.1:8000/api/WorkerDetail/'+wid)
+    Workers.deleteWorkerDetails(wid)
     .then(()=>{
       this.setState({ deliveryBoyData: data.filter(item => item.wid !== wid) });
     })  
@@ -172,9 +173,8 @@ class EditableTable extends Component {
     this.setState({visible: true})
   }
   addNewWorker = (event) => {
-    axios.post('http://127.0.0.1:8000/api/WorkerDetail' ,event)
+    Workers.postWorkerDetail(event)
     .then((response) => {
-    console.log(response.data)
     })
     this.setState({visible: false})
   }

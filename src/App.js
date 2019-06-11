@@ -17,7 +17,7 @@ function App() {
         <MainHeader ></MainHeader>
         
         <Content>
-          <div style={{margin:10}}>
+          <div>
           <Row>
             <Col>  
               <Route exact path="/login" component={ Login } /> 

@@ -1,8 +1,8 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
-import RouteModal from './modals/routeinfo';
-
+import * as RoutesInfo from '../services/routesInfo';
+import RouteModal from './modals/routeinfo'
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -121,7 +121,7 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-      axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((res)=>{
+      RoutesInfo.getGetRoutesByDistributerId().then((res)=>{
           this.setState({rootInfo: res.data})
       })
       axios.get('http://127.0.0.1:8000/api/Distributer/1').then((res)=>{
@@ -151,7 +151,7 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/Route/${this.state.editingid}`,newRow)
+        RoutesInfo.putRoutesInfo(this.state.editingid,newRow)
           .then(()=>{
             this.setState({rootInfo: newData, editingid: '' })
           })
@@ -168,7 +168,7 @@ class EditableTable extends Component {
 
   delete(rid) {
     const data = [...this.state.rootInfo];
-    axios.delete('http://127.0.0.1:8000/api/Route/4')
+    RoutesInfo.deleteRoutesInfo(rid)
     .then(()=>{
       this.setState({ rootInfo : data.filter(item => item.rid !== rid) });
     })  
@@ -179,8 +179,8 @@ class EditableTable extends Component {
   }
 
   addNewRoute = (event) => {
-    axios.post('http://127.0.0.1:8000/api/Route',event).then((response) => {
-    console.log(response);
+    RoutesInfo.postRoutesInfo(event)
+    .then((response) => {
     })
     this.setState({
       visible: false,

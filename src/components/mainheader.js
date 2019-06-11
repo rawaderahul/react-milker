@@ -47,7 +47,7 @@ class MainHeader extends Component{
   </div>
 </div>
 <Header >
-    <div className="container">
+    <div className="container-fluid">
         <Row>      
             <Col >
             <Link to='/'  >  <div className="logo"> Milkers </div>  </Link>
@@ -56,7 +56,7 @@ class MainHeader extends Component{
                     defaultSelectedKeys={['2']}
                     style={{ lineHeight: '64px', float:"right" }}
                 >
-                    <Select defaultValue="English" style={{ width: 120 }} onChange={handleChange}>
+                    <Select defaultValue="English" style={{ width: "150px", marginRight: "30px" }} onChange={handleChange}>
                         <Option value="jack">Marathi</Option>
                         <Option value="lucy">English</Option>
                     </Select>

@@ -1,6 +1,7 @@
 import React from 'react'
-import { Table, Input,Form, } from 'antd'
 import axios from 'axios';
+import { Table, Input,Form, } from 'antd'
+import * as DistributorsInfo from '../services/distributorInfo';
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -110,7 +111,8 @@ class ShopDetails extends React.Component {
   }
   componentDidMount = () => {
     let dataSource;
-    axios.get('http://127.0.0.1:8000/api/Distributer/1').then((response) =>{
+    DistributorsInfo.getPerticluarDistributorInfo()
+      .then((response) =>{
       this.setState({distributorData:response.data[0]})
       dataSource= [{
         name:<b>OrganizationName:</b>,
@@ -193,7 +195,8 @@ class ShopDetails extends React.Component {
     const { distributorData }=this.state;
     distributorData[row.id]=row.value;
     this.setState({distributorData})
-    axios.put('http://127.0.0.1:8000/api/Distributer/'+this.state.distributorData.did,this.state.distributorData).then()
+    DistributorsInfo.putDistributorInfo(this.state.distributorData.did, this.state.distributorData)
+    .then()
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.id === item.id);
     const item = newData[index];
