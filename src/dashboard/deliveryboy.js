@@ -13,7 +13,7 @@ class EditableCell extends React.Component {
     }
     return <Input />;
   };
-
+ 
   renderCell = ({ getFieldDecorator }) => {
     const {
       editing,
