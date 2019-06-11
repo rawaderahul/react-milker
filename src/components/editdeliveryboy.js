@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Select,Row, Col,message,Icon,Modal} from 'antd';
+import { Form, Input,Select,Modal} from 'antd';
 
 const formItemLayout = {
     labelCol: { span: 8 },

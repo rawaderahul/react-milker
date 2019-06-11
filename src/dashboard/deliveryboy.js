@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as Workers from '../services/workers';
+import * as Workers from '../services/workersInfo';
 
 import WorkerModal from './modals/deliveryboy'
 
@@ -101,10 +101,10 @@ class EditableTable extends Component {
           ) : (
             <span>
               <a disabled={editingid !== ''} onClick={() => this.edit(record.wid)}>
-                Edit 
+                Edit
               </a>&nbsp;&nbsp;&nbsp;
                {
-                 <a disabled={editingid !== ''} onClick={() => this.delete(record.wid)}>Delete</a> && 
+                 <a onClick={() => this.delete(record.wid)}>Delete</a> && 
                <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.wid)}>
                    <a href="javascript:;">Delete</a>
                 </Popconfirm>

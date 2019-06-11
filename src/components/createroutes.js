@@ -1,6 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Select,Row, Col,message,Icon,Modal} from 'antd';
-import axios from 'axios';
+import { Form, Input, Button, Select,Row, Col,Icon} from 'antd';
 import EditRoutes from './editroutes';
 const formItemLayout = {
   labelCol: { span: 8 },
@@ -169,7 +168,7 @@ class CreateRoutesInfoForm extends React.Component {
                 }) :null
               }
              {this.state.isEdit ?
-               <EditRoutes handleOk={this.handleOk} handleCancel={this.handleCancel} handleCancel={this.handleCancel}
+               <EditRoutes handleOk={this.handleOk} handleCancel={this.handleCancel} 
                editableData={this.state.editableData} pincodes={this.state.pincodes} areas={this.state.areas}
                /> : null}
 

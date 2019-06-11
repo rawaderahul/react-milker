@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { uri } from '../services/commonURI';
+import { uri } from './commonURI';
 
 export function getCustomerListByDistributerId(){
     return axios.get(uri + 'CustomerListByDistributerId/1')

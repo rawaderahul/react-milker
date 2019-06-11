@@ -1,6 +1,7 @@
 import React from 'react'
-import { Table, Input, Button, Popconfirm, Form, } from 'antd'
 import axios from 'axios';
+import { Table, Input,Form, } from 'antd'
+import * as DistributorsInfo from '../services/distributorInfo';
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -10,7 +11,6 @@ const EditableRow = ({ form, index, ...props }) => (
     <tr {...props} />
   </EditableContext.Provider>
 );
-const { TextArea } = Input;
 
 const EditableFormRow = Form.create()(EditableRow);
 
@@ -111,87 +111,75 @@ class ShopDetails extends React.Component {
   }
   componentDidMount = () => {
     let dataSource;
-    axios.get('http://127.0.0.1:8000/api/Distributer/1').then((response) =>{
+    DistributorsInfo.getPerticluarDistributorInfo()
+      .then((response) =>{
       this.setState({distributorData:response.data[0]})
       dataSource= [{
-        id:1,
         name:<b>OrganizationName:</b>,
         value:this.state.distributorData['organizationName'],
-        key:'organizationName'
+        id:'organizationName'
 
       },
       {
-        id:2,
         name:<b>FirstName</b>,
         value:this.state.distributorData['firstName'],
-        key:'firstName'
+        id:'firstName'
       },
       {
-        id:3,
         name:<b>LastName:</b>,
         value:this.state.distributorData['lastName'],
-        key:'lastName'
+        id:'lastName'
       },
       {
-        id:4,
         name:<b>Contact:</b>,
         value:this.state.distributorData['contact'],
-        key:'contact'
+        id:'contact'
       },
       {
-        id:5,
         name:<b>Address:</b>,
         value:this.state.distributorData['address'],
-        key:'address'
+        id:'address'
       },
       {
-        id:6,
         name:<b>Email:</b>,
         value:this.state.distributorData['email'],
-        key:'email'
+        id:'email'
       },
       {
-        id:7,
         name:<b>Pincode:</b>,
         value:this.state.distributorData['pincode'],
-        key:'pincode'
+        id:'pincode'
       },
       {
-        id:8,
         name:<b>City:</b>,
         value:this.state.distributorData['city'],
-        key:'city'
+        id:'city'
       },
       {
-        id:9,
         name:<b>State:</b>,
         value:this.state.distributorData['state'],
-        key:'state'
+        id:'state'
       },
       {
-        id:10,
         name:<b>Area:</b>,
         value:this.state.distributorData['area'],
-        key:'area'
+        id:'area'
       },
      
       {
-        id:11,
         name:<b>ServiceAreas:</b>,
         value:this.state.distributorData['serviceAreas'],
-        key:'serviceAreas'
+        id:'serviceAreas'
       },
       {
-        id:12,
         name:<b>ServicePincodes:</b>,
         value:this.state.distributorData['servicePincodes'],
-        key:'servicePincodes'
+        id:'servicePincodes'
       },
       {
-        id:13,
         name:<b>DeliveryCharge:</b>,
         value:this.state.distributorData['deliveryCharge'],
-        key:'deliveryCharge'
+        id:'deliveryCharge'
       }
       ]
       this.setState({dataSource})
@@ -204,8 +192,11 @@ class ShopDetails extends React.Component {
   }
 
   handleSave = (row) => {
-    this.state.distributorData[row.key]=row.value;
-    axios.put('http://127.0.0.1:8000/api/Distributer/'+this.state.distributorData.Did,this.state.distributorData).then()
+    const { distributorData }=this.state;
+    distributorData[row.id]=row.value;
+    this.setState({distributorData})
+    DistributorsInfo.putDistributorInfo(this.state.distributorData.did, this.state.distributorData)
+    .then()
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.id === item.id);
     const item = newData[index];
@@ -217,7 +208,6 @@ class ShopDetails extends React.Component {
   }
 
   render() {
-    console.log(this.state.distributorData);
     
     const { dataSource } = this.state;
     const components = {
@@ -244,7 +234,7 @@ class ShopDetails extends React.Component {
     return (
       <div>
         <Table className='header distributor-details'
-         rowKey="id"
+         rowKey="did"
          pagination={false}
           components={components}
           rowClassName={() => 'editable-row'}

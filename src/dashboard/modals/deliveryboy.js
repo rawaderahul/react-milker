@@ -1,7 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-import { Form, Select, Input, Button,Modal,InputNumber } from 'antd';
-const { TextArea } = Input;
+import { Form,Input,Modal } from 'antd';
 
 class ModalForm extends React.Component {
 

@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
-import * as RoutesInfo from '../services/routes';
+import * as RoutesInfo from '../services/routesInfo';
 import RouteModal from './modals/routeinfo'
 const EditableContext = React.createContext();
 
