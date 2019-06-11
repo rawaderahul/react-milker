@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import * as CustomersInfo from '../services/customer';
 import CustomerModal from './modals/customer'
 const EditableContext = React.createContext();
 
@@ -129,9 +130,9 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-      axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/1').then((res)=>{
-          this.setState({customerData: res.data})
-          console.log(this.state.customerData);
+    CustomersInfo.getCustomerListByDistributerId()
+      .then((res)=>{
+        this.setState({customerData: res.data})
       })
       
   }
@@ -157,11 +158,11 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
-        axios.put(`http://127.0.0.1:8000/api/Customer/${this.state.editingid}`,newRow)
+        CustomersInfo.putCustomerInfo(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({customerData: newData, editingid: '' })
           })
-      } 
+        } 
       else {
         newData.push(row);
         this.setState({ customerData: newData, editingid: '' });
@@ -178,12 +179,11 @@ class EditableTable extends Component {
   }
 
   addNewCustomer = (event) => {
-    axios.post('http://127.0.0.1:8000/api/Customer',event).then((response) => {
-    console.log(response);
-
+    CustomersInfo.postCustomerInfo(event)
+     .then((response) => {
     })
     this.setState({
-      visible: false,
+    visible: false,
     });
   };
 

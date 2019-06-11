@@ -1,1 +1,1 @@
-export const uri='http://salty-badlands-70835.herokuapp.com/api/';
+export const uri='http://127.0.0.1:8000/api/';
