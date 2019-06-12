@@ -1,9 +1,18 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
-import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as CustomersInfo from '../services/customerInfo';
+import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
+import moment from 'moment';
+import * as CustomersInfo from '../services/distributorInfo';
+import * as CustomersInfoer from '../services/customerInfo'
 import CustomerModal from './modals/customer'
+import Quotabuffalo from './quotabuffalo';
+import Quotacow from './quotacow'
+import './stylesheets/distributorquota.css'
+var dataTo=null;
+
 const EditableContext = React.createContext();
+
+const { RangePicker } = DatePicker;
 
 class EditableCell extends React.Component {
   getInput = () => {
@@ -55,46 +64,61 @@ class EditableTable extends Component {
     super(props);
     this.state = { 
         data:null ,
-        customerData: null,
+        customerData: [],
         editingid: '' ,
-        visible:false
+        visible:false,
+        todaysDate: null,
+        dataTo: null
     };
     this.columns = [
       {
-        title: 'Name',
-        dataIndex: 'customerName',
-        width: '20%',
-        editable: true,
+        title: 'Daily',
+        children:[
+          {
+            title:'Route Name',
+            align:'center',
+            dataIndex: 'routeName',
+            width: '20%',
+            editable: true,
+          }
+        ],
       },
       {
-        title: 'Contact',
-        dataIndex: 'contact',
+        title: 'Quota - 100',
+        children:[
+          {
+            title:'Buffalo',
+            align:'center',
+            dataIndex: 'buffalo',
+            width: '15%',
+            editable: true,
+          }
+        ]
+      },
+      {
+        title: 'Quota - 80',
+        children:[
+          {
+            title:'Cow',
+            align:'center',
+            dataIndex: 'cow',
+            width: '15%',
+            editable: true,
+          }
+        ]
+      },
+      {
+        title: 'Manage Buffalo',
+        dataIndex: 'manageBuffalo',
         width: '15%',
         editable: true,
       },
       {
-        title: 'address',
-        dataIndex: 'address',
+        title: 'Manage Cow',
+        dataIndex: 'manageCow',
         width: '15%',
         editable: true,
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        width: '15%',
-        editable: true,
-      },
-      {
-        title: 'Payment Type',
-        dataIndex: 'paymentType',
-        width: '15%',
-        editable: true,
-      },
-      {
-        title: 'Pin Code',
-        dataIndex: 'pincode',
-        width: '15%',
-        editable: true,
+       
       },
       {
         title: 'operation',
@@ -109,59 +133,105 @@ class EditableTable extends Component {
                 { form => (
                   <a
                     href="javascript:;"
-                    onClick={() => this.save(form, record.cid)}
+                    onClick={() => this.save(form, record.id)}
                     style={{ marginRight: 8 }}
                   >
                     Save
                   </a>
                 )}
               </EditableContext.Consumer>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.cid)}>
+              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
                 <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
             <span>
-               <a disabled={editingid !== ''} onClick={() => this.edit(record.cid)}>
+               <a disabled={editingid !== ''} onClick={() => this.edit(record.id)}>
               Edit
             </a>&nbsp;&nbsp;&nbsp;
             {  
-            <a disabled={deletable !== ''} onClick={() => this.delete(record.cid)}>Delete</a> && 
-               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.cid)}>
+            <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
+               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
                    <a to="javascript:;">Delete</a>
                 </Popconfirm>
             }
             </span>
-           
           );
-          
         },
       },
     ];
   }
 
-  isDeleting=record => record.cid === this.state.editingid;
+  isDeleting=record => record.id === this.state.editingid;
 
-  delete=(cid) => {
-  axios.delete("http://127.0.0.1:8000/api/Customer/"+cid).then((response)=>{
-    
+  delete = (id) => {
+  axios.delete("http://127.0.0.1:8000/api/Customer/"+id).then((response)=>{
   })
   }
   componentDidMount() {
-    CustomersInfo.getCustomerListByDistributerId()
+    var totalbuffalo = 0;
+    var totalcow = 0;
+    var totalData = {};
+    const {customerData} = this.state;
+
+    let addColumn1 = {
+      id: 400,
+      routeName:<b>Should Sell / Manage </b>,
+      buffalo: 2,
+      cow: 0,
+      manageBuffalo: 3,
+      manageCow: 0
+    }
+    let addColumn2 = {
+      id: 401,
+      routeName:<b>More Purchase </b>,
+      buffalo: 0,
+      cow: 5,
+      manageBuffalo: 0,
+      manageCow: 0
+    }
+    
+    CustomersInfo.getDistributorQuota()
       .then((res)=>{
-        this.setState({customerData: res.data})
+        res.data.map((item)=>{
+          totalbuffalo = totalbuffalo + item.buffalo;
+          totalcow = totalcow + item.cow;
+           totalData = {
+            id: 402,
+            routeName:<b>Total </b>,
+            buffalo: totalbuffalo,
+            cow: totalcow,
+            manageBuffalo: 0,
+            manageCow: 0
+          }
+          
+        })
+        res.data.push(totalData);
+        res.data.push(addColumn1);
+        res.data.push(addColumn2);
+       this.setState({customerData : res.data });
       })
-      
+      // this.state.customerData.push();
+      // this.setState({customerData})
   }
   
-  isEditing = record => record.cid === this.state.editingid;
+  totalBuffalo = () =>{
+    var value = 0;
+    const { customerData } = this.state;
+    this.state.customerData.map((item)=>{
+      value = value + item.buffalo;
+      console.log(value);
+    })
+    return value;
+  }
+
+  isEditing = record => record.id === this.state.editingid;
 
   cancel = () => {
     this.setState({ editingid: '' });
   };
 
-  save(form, cid) {
+  save(form, id) {
     form.validateFields((error, row) => {
       if (error) {
         return;
@@ -169,14 +239,14 @@ class EditableTable extends Component {
       const newRow = row;
       // row.rid = 1;
       const newData = [...this.state.customerData];
-      const index = newData.findIndex(item => cid === item.cid);
+      const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        CustomersInfo.putCustomerInfo(this.state.editingid,newRow)
+        CustomersInfoer.putCustomerInfo(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({customerData: newData, editingid: '' })
           })
@@ -188,8 +258,8 @@ class EditableTable extends Component {
     });
   }
 
-  edit(cid) {
-    this.setState({ editingid: cid });
+  edit(id) {
+    this.setState({ editingid: id });
   }
 
   addCustomer = () => {
@@ -197,7 +267,7 @@ class EditableTable extends Component {
   }
 
   addNewCustomer = (event) => {
-    CustomersInfo.postCustomerInfo(event)
+    CustomersInfoer.postCustomerInfo(event)
      .then((response) => {
     })
     this.setState({
@@ -213,6 +283,12 @@ class EditableTable extends Component {
 
 
   render() {
+
+    
+    var date = new Date();
+     dataTo = {defaultValue:moment(date)} 
+    const { size,customerData } = this.state;
+    console.log(customerData);
     const components = {
       body: {
         cell: EditableCell,
@@ -235,25 +311,30 @@ class EditableTable extends Component {
         }),
       };
     });
-
+    
     return (
       <div>
       <EditableContext.Provider value={this.props.form}>
-        <Button onClick={this.addCustomer} type="primary" style={{ marginBottom: 16 }}>
+        {/* <Button onClick={this.addCustomer} shape="round" size="large"  type="primary" style={{ marginBottom: 16 }}>
           Add Customer
-        </Button>
-  
+        </Button> */}
+          <div style={{ display: "flex" , justifyContent: "space-between"}}>
+            <DatePicker onChange={(e,value)=>{this.setState({todaysDate : value})}} defaultValue={moment(date)} size={size} style={{ marginBottom: 16 }} shape="round" />
+            <h3>Today {this.state.todaysDate}  </h3>
+            <Button> Next Day </Button>
+          </div>
+         
+        {/*onChange={(e,value)=>{this.setState({todaysDate : value})}}}*/}
         <Table
-          rowKey="cid" 
+          rowKey="id" 
           components={components}
           bordered
-          dataSource={this.state.customerData}
+          dataSource={customerData}
           columns={columns}
           rowClassName="editable-row"
           colSpan={2}
-          pagination={{
-            onChange: this.cancel,
-          }}
+          pagination={false}
+         
         />
        {
          this.state.visible ? <CustomerModal 
@@ -262,6 +343,9 @@ class EditableTable extends Component {
       /> : null
        } 
       </EditableContext.Provider>
+      <p><b>Edit :- could not less but can increase till ( Sell / Manage )</b> </p>
+      <Quotabuffalo />
+      <Quotacow />
       </div>
     );
   }
