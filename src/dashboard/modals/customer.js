@@ -1,27 +1,34 @@
 import React,{Component} from 'react'
-import { Modal,Input,Form } from 'antd';
-
+import { Modal,Input,Form,Select } from 'antd';
+import axios from 'axios';
+const {Option}=Select;
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 12 },
 };
 
 class ModalForm extends Component{ 
-
+state={
+  routeData:[]
+}
   addNewCustomer=()=> {
     this.props.form.validateFields((err,values) => {
       if(!err) {
         values.distributerid = 1;
-        values.routeid = 1;
       this.props.addNewCustomer(values)
       }
     })
   }
 
-  okText="Save"
+  componentDidMount() {
+    axios.get("http://127.0.0.1:8000/api/GetRoutesByDistributerId/1").then((response) => {
+      this.setState({routeData:response.data})
+    })
+  }
   
   render() {
   const { getFieldDecorator } = this.props.form;
+  const  {routeData } =this.state;
   return (
     <div>
       <Modal
@@ -79,6 +86,20 @@ class ModalForm extends Component{
                   { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
                   ],
               })(<Input placeholder="Please input patyment type" />)}
+              </Form.Item>
+              <Form.Item {...formItemLayout} label="Route Name">
+              {getFieldDecorator('routeid', {
+                  rules: [
+                  {required: true,message: 'Please input route name'},
+                  ],
+              })( <Select
+                style={{ width: '100%' }}
+                placeholder="Please Select Route  Pincodes"
+            >
+                { routeData && routeData.map((item) => {
+                  return <Option value={item.rid}>{item.routeName}</Option>;
+                })}
+            </Select>)}
               </Form.Item>
                   
       </Modal>
