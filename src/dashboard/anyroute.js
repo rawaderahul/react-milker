@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon} from 'antd';
 import axios from 'axios';
 const EditableContext = React.createContext();
 
@@ -87,27 +87,72 @@ class EditableCell extends Component {
   }
 }
 
-export default class AnyRoute extends Component {
+class AnyRoutes extends Component {
   constructor(props) {
     super(props);
+    const { getFieldDecorator } = this.props.form;
+    this.state={
+      count:0,
+      dataSource:[]
+    }
     this.columns = [
-      {
-        title: 'Customer Name',
-        dataIndex: 'customerName',
-        width: '30%',
+        {
+        title: 'Quata',
+        children:[
+          {
+            key:'customerName',
+            title: 'Customer Name',
+            dataIndex: 'customerName',
+            width: '30%',
+            align:'center'
+          }
+        ]
       },
       {
-        title: 'Buffalo',
-        dataIndex: 'buffalo',
-        editable: true,
+        title: "43",
+        children:[
+          {
+            key:'buffalo',
+            title: 'Buffalo',
+            render: (text, record) => (
+              <span>
+                <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
+                   <InputNumber value= {record.buffalo} 
+                   style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
+                   onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
+                <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
+              </span>
 
+           ),
+           align:'center',
+          },
+          
+        ]
       },
       {
-        title: 'Cow',
-        dataIndex: 'cow',
-        editable: true,
+        title: "40",
 
+        children:[
+          {
+           key:'cow',
+            title: 'Cow',
+            render: (text, record) => (
+              <span>
+                <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
+                <InputNumber defaultValue={record.cow} value={record.cow} 
+                style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}} 
+                onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
+                <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
+              </span>
+           ),
+           dataIndex:'cow',
+           editable:true,
+            align:'center'
+    
+          },
+        ]
       },
+     
       {
         title: 'Message',
         dataIndex: 'message',
@@ -120,23 +165,68 @@ export default class AnyRoute extends Component {
       },
     ];
 
-    this.state = {
-      dataSource: [],
-      count:1
-    };
   }
 componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/'+this.props.rid).then((response) => {
+    axios.get('http://localhost:3005/ManageDailyRoute').then((response) => {
     this.setState({ dataSource:response.data })
+    
     })
+  
 }
+handleChange=(event,id,text)=> {
+  const { dataSource }=this.state;
+console.log(event);
+  dataSource.map((item) => {
+     if(item.id==id) {
+       switch(text) {
+         case 'buffalo': item.buffalo=event;
+         break;
+         case 'cow': item.cow=event;
+         break;
+       }
+     }
+   })
+this.setState({dataSource})
 
+}
 handleMessage = id => {
     const dataSource = [...this.state.dataSource];
     // this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
   };
 
+  increament=(id,text)=>{
+    const { dataSource }=this.state;
+   dataSource.map((item) => {
+      if(item.id==id) {
+        switch(text) {
+          case 'buffalo': item.buffalo=item.buffalo + 0.5;
+          break;
+          case 'cow': item.cow=item.cow + 0.5;
+          break;
+        }
+      }
+    })
+this.setState({dataSource})
 
+  }
+  
+  decrement=(id,text)=> {
+    const { dataSource }=this.state;
+    dataSource.map((item) => {
+       if(item.id==id) {
+         switch(text) {
+         
+           case 'buffalo': item.buffalo > 0 ? item.buffalo=item.buffalo - 0.5 : item.buffalo=0  ;
+           break;
+           case 'cow':item.cow > 0 ? item.cow=item.cow - 0.5: item.cow=0;
+           break;
+         }
+       }
+     })
+ this.setState({dataSource})
+ 
+   
+  }
   handleSave = row => {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.id === item.id);
@@ -150,6 +240,8 @@ handleMessage = id => {
 
   render() {
     const { dataSource } = this.state;
+    console.log(dataSource);
+    
     const components = {
       body: {
         row: EditableFormRow,
@@ -174,9 +266,9 @@ handleMessage = id => {
     return (
       <div>
         <Table
-          rowKey="cid"
+          rowKey="id"
           components={components}
-          rowClassName={() => 'editable-row'}
+          // rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
           columns={columns}
@@ -186,3 +278,5 @@ handleMessage = id => {
   }
 }
 
+const AnyRoute = Form.create()(AnyRoutes);
+export default AnyRoute;

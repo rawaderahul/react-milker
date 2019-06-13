@@ -165,5 +165,25 @@
       "routeName": "root3",
       "routeId": 3
     }
+  ],
+  "ManageDailyRoute":[
+    {
+      "id":1,
+      "customerName":"ivision",
+      "buffalo":2,
+      "cow":4.5
+    },
+    {
+      "id":2,
+      "customerName":"Blue Bricks",
+      "buffalo":3,
+      "cow":4
+    },
+    {
+      "id":3,
+      "customerName":"celuepharma",
+      "buffalo":2,
+      "cow":4.5
+    }
   ]
 }
