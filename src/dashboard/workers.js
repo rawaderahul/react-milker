@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
 import * as Workers from '../services/workersInfo';
 
-import WorkerModal from './modals/deliveryboy'
+import WorkerModal from './modals/workers'
 
 const EditableContext = React.createContext();
 

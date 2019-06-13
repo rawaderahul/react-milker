@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import Distributor from '../dashboard/distributor';
 import Customer from '../dashboard/customer';
-import Deliveryboy from '../dashboard/deliveryboy';
+import Deliveryboy from '../dashboard/workers';
 import RouteInfo from '../dashboard/routeinfo';
 import Distributorquota from '../dashboard/distributorquota';
 import Wholesaler from '../dashboard/wholesaler';

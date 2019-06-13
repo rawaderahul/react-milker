@@ -185,5 +185,39 @@
       "buffalo":2,
       "cow":4.5
     }
+  ],
+  "DistributorQuota": [
+    {
+      "id": 1,
+      "routeName" : "root1",
+      "buffalo": 40,
+      "cow": 30,
+      "manageBuffalo": 3,
+      "manageCow": 2
+    },
+    {
+      "id": 2,
+      "routeName" : "root2",
+      "buffalo": 35,
+      "cow": 20,
+      "manageBuffalo": 0,
+      "manageCow": 0
+    },
+    {
+      "id": 3,
+      "routeName" : "root3",
+      "buffalo": 22,
+      "cow": 35,
+      "manageBuffalo": 0,
+      "manageCow": 0
+    },
+    {
+      "id": 4,
+      "routeName" : "root4",
+      "buffalo": 22,
+      "cow": 35,
+      "manageBuffalo": 0,
+      "manageCow": 0
+    }
   ]
 }
