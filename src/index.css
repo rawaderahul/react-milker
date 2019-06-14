@@ -260,3 +260,8 @@ h1 span:after {
 .dashboard .sidebar .submenu:hover{
   background-color: #4ba3f5 !important;
 }
+/*===================Dashboard-main css start here===================*/
+.ant-breadcrumb > span:last-child{
+  color: #3f6ad0;
+  font-weight: 500;
+}
