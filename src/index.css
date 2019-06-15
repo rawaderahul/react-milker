@@ -244,3 +244,24 @@ h1 span:after {
 .marquee span a{ color:rgba(0, 0, 0, 0.65);}
 
 .steps-action{ text-align: right; margin-top: 15px;}
+
+/*===================Sidebar css start here===================*/
+.dashboard .sidebar{
+  background: rgb(254, 254, 255);
+  flex: 0 0 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+  box-shadow: 0 2px 10px rgba(00,00,00,0.2);
+}
+.dashboard .sidebar .ant-layout-sider-trigger{
+  width: 250px !important;
+}
+.dashboard .sidebar .submenu:hover{
+  background-color: #4ba3f5 !important;
+}
+/*===================Dashboard-main css start here===================*/
+.ant-breadcrumb > span:last-child{
+  color: #3f6ad0;
+  font-weight: 500;
+}

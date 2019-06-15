@@ -1,9 +1,10 @@
 import React,{ Component } from 'react'
-import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button ,Select} from 'antd';
 import * as Workers from '../services/workersInfo';
-
+import * as RoutsInfo from '../services/routesInfo'
 import WorkerModal from './modals/workers'
 
+const { Option } = Select;
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
@@ -20,31 +21,69 @@ class EditableCell extends React.Component {
       dataIndex,
       title,
       inputType,
-      record,
+      record, 
       index,
       children,
+      routeData,
       ...restProps
     } = this.props;
+   
+    
     return (
       <td {...restProps}>
         {editing ? (
-          <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator(dataIndex, {
-              rules: [
-                {
-                  required: true,
-                  message: `Please Input ${title}!`,
-                },
-              ],
-              initialValue: record[dataIndex],
-            })(this.getInput())}
+          <span>
+            <Form.Item style={{ margin: 0 }}>
+             {dataIndex=='workerName' ?  getFieldDecorator('workerName', {
+                      rules: [{ required: true, message: 'Please enter worker name!' },
+                              { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+                    ],
+                    initialValue: record['workerName']
+                    })(
+                      <Input  />
+                    ):null} 
           </Form.Item>
+          <Form.Item style={{ margin: 0 }}>
+          {dataIndex=='contact' ?  getFieldDecorator('contact', {
+                   rules: [{ required: true, message: 'Please enter contact number!' },
+                          //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
+                  ],
+                    initialValue: record['contact']
+                    })(
+                      <Input  type="number"/>
+                    ):null} 
+       </Form.Item>
+       <Form.Item style={{ margin: 0 }}>
+       {dataIndex=='routeid' ?  getFieldDecorator('routeid', {
+                      rules: [{ required: false, message: 'Please select route!' },
+                    ],
+                    initialValue: record['routeid']
+                    })(
+                     <Select
+                     onSelect={(value, option) => {this.props.handleRouteName(value, option)
+                     }}
+                      style={{ width: '100px' }}>
+                       {
+                       routeData &&  routeData.map((item) => {
+                         
+                         return <Option key={item.rid}>{item.routeName}</Option>
+                       })
+                       }
+                     </Select>
+                    ):null} 
+       </Form.Item>
+          </span>
+          
         ) : (
           children
         )}
       </td>
     );
   };
+//   handleChange=(value,option)=>{
+// console.log("value",value,"option",option);
+
+  // }
 
   render() {
     return <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>;
@@ -59,7 +98,9 @@ class EditableTable extends Component {
         deliveryBoyData: null,
         editingid: '' ,
         isAddCustomer : false,
-        visible: false
+        visible: false,
+        routeData:[],
+        routeName:{}
 
     };
     this.columns = [
@@ -72,6 +113,12 @@ class EditableTable extends Component {
       {
         title: 'Contact',
         dataIndex: 'contact',
+        width: '15%',
+        editable: true,
+      },
+      {
+        title: 'Route',
+        dataIndex: 'routeid',
         width: '15%',
         editable: true,
       },
@@ -119,8 +166,13 @@ class EditableTable extends Component {
   componentDidMount() {
     Workers.getWorkerListByDistributer().then((res)=>{
       this.setState({deliveryBoyData: res.data})
-      console.log(this.state.deliveryBoyData);
     })
+
+    RoutsInfo.getGetRoutesByDistributerId(1).then((res)=>{
+      this.setState({routeData:res.data})
+    })
+   console.log(this.state.routeData);
+
   }
   
   isEditing = record => record.wid === this.state.editingid;
@@ -136,7 +188,6 @@ class EditableTable extends Component {
       }
       const newRow = row;
       row.distributerid = 1;
-      row.routeid = 1;
       const newData = [...this.state.deliveryBoyData];
       const index = newData.findIndex(item => wid === item.wid);
       if (index > -1) {
@@ -145,6 +196,18 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
+        console.log(newRow);
+        // if(this.state.routeName) {
+        //   newRow.routeid=routeName.key;
+        // }
+        // else {
+        //   this.state.routeData.map((item) => {
+        //     if(item.routeName==newRow.routeName) {
+        //       newRow.routeid=item.routeid;
+        //     }
+        //   })
+        // }
+        
         Workers.putWorkerDetail(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({deliveryBoyData: newData, editingid: '' })
@@ -191,8 +254,12 @@ class EditableTable extends Component {
       visible: false,
     });
   };
+  handleRouteName=(value,option)=> {
+   this.setState({routeName:option})
 
+  }
   render() {
+    
     const components = {
       body: {
         cell: EditableCell,
@@ -211,6 +278,8 @@ class EditableTable extends Component {
           dataIndex: col.dataIndex,
           title: col.title,
           editing: this.isEditing(record),
+          routeData:this.state.routeData,
+          handleRouteName:this.handleRouteName
         }),
       };
     });

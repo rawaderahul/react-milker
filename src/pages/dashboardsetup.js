@@ -66,13 +66,13 @@ class Dashboard extends React.Component {
       );
     })
     return (
-      <Layout style={{ minHeight: '100vh' }} >
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: '#FEFEFF'}}>
+      <Layout style={{ minHeight: '100vh' }} className="dashboard">
+        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: '#FEFEFF'}} className="sidebar">
           <div className="logo" />
           <Menu theme="light" defaultSelectedKeys={['1']}
            mode="inline" style={{  background: '#FEFEFF'}}
            >
-            <SubMenu onClick={this.subMenuHandle}
+            <SubMenu classNmae="submenu" onClick={this.subMenuHandle}
               key="Manage Business"
               title={
                 <span>
@@ -88,7 +88,7 @@ class Dashboard extends React.Component {
               <Menu.Item key="Customer">Customer</Menu.Item>
               
             </SubMenu>
-            <SubMenu onClick={this.subMenuHandle}
+            <SubMenu classNmae="submenu" onClick={this.subMenuHandle}
               key="Manage Daily"
               title={
                 <span>
