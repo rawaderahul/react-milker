@@ -63,13 +63,13 @@ class CreateCustomersForms extends React.Component {
           CreateCustomersData.push({
             "routeName":routeName,
           "customerName":item[0],
-          "address":item[1],
-          "pincode":Number(item[2]),
-          "contact":Number(item[3]),
-          "email":item[4],
-          "paymentType":item[5],
-          "buffaloQuantity":item[6],
-          "cowQuantity":item[7]
+          "buffaloQuantity":Number(item[1]),
+          "cowQuantity":Number(item[2]),
+          "address":item[3],
+          "pincode":Number(item[4]),
+          "contact":Number(item[5]),
+          "email":item[6],
+          "paymentType":item[7],
           })
         }
         return 0;
