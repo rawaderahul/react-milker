@@ -16,7 +16,7 @@ function App() {
       <Layout>
         <MainHeader ></MainHeader>
         
-        <Content>
+        <Content style={{ background: '#f1f1f1' }}>
           <div>
           <Row>
             <Col>  
