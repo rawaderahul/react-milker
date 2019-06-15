@@ -1,12 +1,18 @@
-.ant-table-tbody tr:last-of-type{
+.ant-table-tbody tr:last-of-type {
   background:#fff ;
   color:#000;
 } 
+.ant-table-tbody tr:last-of-type a{
+  display: none;
+}
 /* .ant-table-tbody tr:last-of-type a{
     color: #fff;
   }  */
 .ant-table-tbody tr[data-row-key="400"] {
   background: #fff;
+}
+.ant-table-tbody tr[data-row-key="400"] a{
+  display: none;
 }
 /* .ant-table-tbody  tr:nth-of-type(4) {
     background: red;

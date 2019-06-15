@@ -152,17 +152,17 @@
   "CreateCustomer": [
     {
       "id": 1,
-      "routeName": "root1",
+      "routeName": "route",
       "routeId": 1
     },
     {
       "id": 2,
-      "routeName": "root2",
+      "routeName": "route2",
       "routeId": 2
     },
     {
       "id": 3,
-      "routeName": "root3",
+      "routeName": "route3",
       "routeId": 3
     }
   ],
@@ -189,35 +189,81 @@
   "DistributorQuota": [
     {
       "id": 1,
-      "routeName" : "root1",
+      "routeName" : "route1",
       "buffalo": 40,
       "cow": 30,
       "manageBuffalo": 3,
-      "manageCow": 2
+      "manageCow": 2,
+      "remainsBuffalo" : 3,
+      "remainsCow": 0,
+      "totalRoutes": 0
     },
     {
       "id": 2,
-      "routeName" : "root2",
+      "routeName" : "route2",
       "buffalo": 35,
       "cow": 20,
       "manageBuffalo": 0,
-      "manageCow": 0
+      "manageCow": 0,
+      "remainsBuffalo": 0,
+      "remainsCow": 0,
+      "totalRoutes": 0
+      
     },
     {
       "id": 3,
-      "routeName" : "root3",
+      "routeName" : "route3",
       "buffalo": 22,
       "cow": 35,
       "manageBuffalo": 0,
-      "manageCow": 0
+      "manageCow": 0,
+      "remainsBuffalo":0,
+      "remainsCow": 0,
+      "totalRoutes": 0
+      
     },
     {
       "id": 4,
-      "routeName" : "root4",
+      "routeName" : "route4",
       "buffalo": 22,
       "cow": 35,
       "manageBuffalo": 0,
-      "manageCow": 0
+      "manageCow": 0,
+      "remainsBuffalo": 0,
+      "remainsCow": 0,
+      "totalRoutes": 0
+    }
+  ],
+  "WholeSaler" : [
+    {
+      "id" : 1,
+      "routeName" : "route1",
+      "sellerName" : "Ankush Zambre",
+      "buffalo" :22,
+      "buffaloPrice" : 50,
+      "cow":30,
+      "cowPrice": 40,
+      "totalRoute": 100 
+    },
+    {
+      "id" : 2,
+      "routeName" : " route2",
+      "sellerName" : "Blue Bricks",
+      "buffalo" :40,
+      "buffaloPrice" : 50,
+      "cow":60,
+      "cowPrice": 40,
+      "totalRoute": 1000 
+    },
+    {
+      "id" : 3,
+      "routeName" : "route3",
+      "sellerName" : "Mukand kadu",
+      "buffalo" :45,
+      "buffaloPrice" : 50,
+      "cow":50,
+      "cowPrice": 40,
+      "totalRoute": 5100 
     }
   ]
 }

@@ -2,12 +2,13 @@ import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
 import moment from 'moment';
-import * as CustomersInfo from '../services/distributorInfo';
+import * as DistributorQuota from '../services/distributorInfo';
 import * as CustomersInfoer from '../services/customerInfo'
 import CustomerModal from './modals/customer'
 import Quotabuffalo from './quotabuffalo';
 import Quotacow from './quotacow'
 import './stylesheets/distributorquota.css'
+
 var dataTo=null;
 
 const EditableContext = React.createContext();
@@ -64,7 +65,7 @@ class EditableTable extends Component {
     super(props);
     this.state = { 
         data:null ,
-        customerData: [],
+        DistributorQuotaData: [],
         editingid: '' ,
         visible:false,
         todaysDate: null,
@@ -146,9 +147,9 @@ class EditableTable extends Component {
             </span>
           ) : (
             <span>
-               <a disabled={editingid !== ''} onClick={() => this.edit(record.id)}>
-              Edit
-            </a>&nbsp;&nbsp;&nbsp;
+              <a visible="hidden" disabled={editingid !== ''} onClick={() => this.edit(record.id)}>
+                Edit
+              </a>{" "}{" "} 
             {  
             <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
                <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
@@ -172,7 +173,7 @@ class EditableTable extends Component {
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
-    const {customerData} = this.state;
+    const {DistributorQuotaData} = this.state;
 
     let addColumn1 = {
       id: 400,
@@ -191,7 +192,7 @@ class EditableTable extends Component {
       manageCow: 0
     }
     
-    CustomersInfo.getDistributorQuota()
+    DistributorQuota.getDistributorQuota()
       .then((res)=>{
         res.data.map((item)=>{
           totalbuffalo = totalbuffalo + item.buffalo;
@@ -204,23 +205,21 @@ class EditableTable extends Component {
             manageBuffalo: 0,
             manageCow: 0
           }
-          
         })
         res.data.push(totalData);
         res.data.push(addColumn1);
         res.data.push(addColumn2);
-       this.setState({customerData : res.data });
+       this.setState({DistributorQuotaData : res.data });
       })
-      // this.state.customerData.push();
-      // this.setState({customerData})
+      // this.state.DistributorQuotaData.push();
+      // this.setState({DistributorQuotaData})
   }
   
   totalBuffalo = () =>{
     var value = 0;
-    const { customerData } = this.state;
-    this.state.customerData.map((item)=>{
+    const { DistributorQuotaData } = this.state;
+    this.state.DistributorQuotaData.map((item)=>{
       value = value + item.buffalo;
-      console.log(value);
     })
     return value;
   }
@@ -238,7 +237,7 @@ class EditableTable extends Component {
       }
       const newRow = row;
       // row.rid = 1;
-      const newData = [...this.state.customerData];
+      const newData = [...this.state.DistributorQuotaData];
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
@@ -248,12 +247,12 @@ class EditableTable extends Component {
         });
         CustomersInfoer.putCustomerInfo(this.state.editingid,newRow)
           .then((res)=>{
-            this.setState({customerData: newData, editingid: '' })
+            this.setState({DistributorQuotaData: newData, editingid: '' })
           })
         } 
       else {
         newData.push(row);
-        this.setState({ customerData: newData, editingid: '' });
+        this.setState({ DistributorQuotaData: newData, editingid: '' });
       }
     });
   }
@@ -287,8 +286,7 @@ class EditableTable extends Component {
     
     var date = new Date();
      dataTo = {defaultValue:moment(date)} 
-    const { size,customerData } = this.state;
-    console.log(customerData);
+    const { size,DistributorQuotaData } = this.state;
     const components = {
       body: {
         cell: EditableCell,
@@ -329,7 +327,7 @@ class EditableTable extends Component {
           rowKey="id" 
           components={components}
           bordered
-          dataSource={customerData}
+          dataSource={DistributorQuotaData}
           columns={columns}
           rowClassName="editable-row"
           colSpan={2}
