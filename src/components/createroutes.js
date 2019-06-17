@@ -36,7 +36,8 @@ class CreateRoutesInfoForm extends React.Component {
   componentDidMount() {
     let DistributorInfoData=JSON.parse(sessionStorage.getItem('DistributorInfoData'))
     let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
-
+   console.log(CreateRoutesData);
+   
     if(CreateRoutesData) {
       this.setState({CreateRoutesData})
       this.props.flag()
@@ -84,6 +85,7 @@ class CreateRoutesInfoForm extends React.Component {
         this.props.flag()
         window.sessionStorage.setItem("CreateRoutesData", JSON.stringify(this.state.CreateRoutesData));
         this.props.form.resetFields();
+
       }
     });
   };

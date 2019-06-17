@@ -9,7 +9,8 @@ import  { Redirect } from 'react-router-dom'
 const { Header, Content, Footer, Sider } = Layout;
 // const { SubMenu } = Menu;
 const Step = Steps.Step;
-
+const CreateRoute=[{id:1,name:'Route 10'}]
+const CreateWorker=[{id:1,name:'Vicky Kanade'}]
 function countDown() {
   let secondsToGo = 5;
   const modal = Modal.success({
@@ -34,7 +35,9 @@ class BusinessSetUP extends Component{
         this.state = {
           current: 0,
           flag:true,
-          isRedirect:false
+          isRedirect:false,
+          CreateRoute:[],
+          CreateDeliveryBoys:[]
         };
     }
 
@@ -52,16 +55,64 @@ class BusinessSetUP extends Component{
       }
      
       finish=()=> { 
+        console.log(CreateWorker);
+        
+      //  const { CreateRouteData, CreateDeliveryBoys}=this.state;
         let DistributorInfoData = JSON.parse(sessionStorage.getItem('DistributorInfoData'))
+        let CreateRoutesData = JSON.parse(sessionStorage.getItem('CreateRoutesData'));
+        let CreateDeliveryBoysData = JSON.parse(sessionStorage.getItem('CreateDeliveryBoysData'))
+        let CreateCustomersData = JSON.parse(sessionStorage.getItem('CreateCustomersData'))
         this.setState({isRedirect:true})
         let serviceAreas=DistributorInfoData.serviceAreas.join(",");
         let servicePincodes=DistributorInfoData.servicePincodes.join(",");
         DistributorInfoData.serviceAreas=serviceAreas;
         DistributorInfoData.servicePincodes=servicePincodes;
-        axios.post("http://127.0.0.1:8000/api/Distributer",DistributorInfoData).then((response) => {
-          console.log(response.data);
+        axios.post("http://127.0.0.1:8000/api/Distributer",DistributorInfoData).then((response1) => {
+          console.log("ok distributor");
+          
+          CreateRoutesData.map((item2) => {
+            item2.distributerid=1;
+            item2.routeAreas=item2.routeAreas.join(",");
+            item2.routePincodes=item2.routePincodes.join(",");
+            console.log(item2);
+            axios.post("http://127.0.0.1:8000/api/Route",item2).then((response2) => {
+            // CreateRoute.push({id:response2.Rid,name:response2.RouteName})
+            console.log("Ok route");
+            
+            })
+          })
+          CreateDeliveryBoysData.map((item3) => {
+                item3.distributerid=1;
+                CreateRoute.map((value3) => {
+                  // if(item3.routeName==value3.name) {
+                    
+                    item3.routeid=1
+                       item3.distributerid=1;
+                    axios.post("http://127.0.0.1:8000/api/WorkerDetail",item3).then((response3) => {
+                      console.log("ok Boy");
+                      // CreateDeliveryBoys.push({id:response3.Wid,name:response3.WorkerName})
+                  })
+                  // }
+                })
+
+              })
+              CreateCustomersData.map((item4) => {
+                item4.distributerid=1;
+                CreateWorker.map((value4) => {
+                  // if(item4.routeName==value4.name) {
+                    item4.routeid=1;
+                    axios.post("http://127.0.0.1:8000/api/Customer",item4).then((response4) => {
+                      console.log("ok customer");
+
+                  })
+                  // }
+                })
+
+                countDown(); 
+              })
+
+
         })
-        countDown();
       }
       render(){
       const steps = [
