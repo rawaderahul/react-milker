@@ -21,10 +21,9 @@ class DistributorInfoDataForm extends React.Component {
             citys:[],
             areas:[],
             pincodes:[],
-
             organizationName:null,
-            firstName:null,
-            lastName:null,
+            name:null,
+            email:null,
             contact:null,
             address:null,
             state:[],
@@ -33,7 +32,9 @@ class DistributorInfoDataForm extends React.Component {
             pincode:[],
             serviceAreas:[],
             servicePincodes:[],
-            DistributorInfoData:{}
+            DistributorInfoData:{},
+            dailyCowQuota: null,
+            dailyBuffaloQuota:null
         }
     }
     
@@ -81,8 +82,8 @@ class DistributorInfoDataForm extends React.Component {
             this.props.flag()
             this.setState({
                 organizationName: DistributorInfoData.organizationName,
-                firstName:DistributorInfoData.firstName, 
-                lastName: DistributorInfoData.lastName ,
+                name : DistributorInfoData.name ,
+                email: DistributorInfoData.email,
                 contact: DistributorInfoData.contact,
                 address: DistributorInfoData.address ,
                 state: DistributorInfoData.state ,
@@ -91,11 +92,11 @@ class DistributorInfoDataForm extends React.Component {
                 pincode:DistributorInfoData.pincode ,
                 serviceAreas:DistributorInfoData.serviceAreas,
                 servicePincodes:DistributorInfoData.servicePincodes,
-
+                dailyCowQuota: 10,
+                dailyBuffaloQuota:20
+                // email: 'akshay@gmail.com'
             }) 
-
         }
-
     }
     
     
@@ -104,12 +105,14 @@ class DistributorInfoDataForm extends React.Component {
 
         if (!err) {
             values.deliveryCharge = 0;
-            values.email= "trush@gmail.com";
+            values.dailyBuffaloQuota= 40;
+            values.dailyCowQuota = 30;
+            // values.email= "trush@gmail.com";
             this.setState({
                 DistributorInfoData:values,
                 organizationName:null,
-                firstName:null,
-                lastName:null,
+                name:null,
+                email:null,
                 contact:null,
                 address:null,
                 state:[],
@@ -118,7 +121,11 @@ class DistributorInfoDataForm extends React.Component {
                 pincode:[],
                 serviceAreas:[],
                 servicePincodes:[],
+                dailyBuffaloQuota:null,
+                dailyCowQuota:null
             })
+            console.log(values);
+            
             this.props.flag()
 
            this.props.form.resetFields();
@@ -149,21 +156,21 @@ class DistributorInfoDataForm extends React.Component {
                 })(<Input placeholder="Please input company name" />)}
                 </Form.Item>
 
-                    <Form.Item {...formItemLayout} label="First Name">
-                    {getFieldDecorator('firstName', {
-                        initialValue:this.state.firstName,
+                    <Form.Item {...formItemLayout} label="Name">
+                    {getFieldDecorator('name', {
+                        initialValue:this.state.name,
                         rules: [
-                            {required: true,message: 'Please input first name'},
+                            {required: true,message: 'Please input  name'},
                             { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
                         ],
                     })(<Input placeholder="Please input first name" />)}
                     </Form.Item>
 
-                    <Form.Item {...formItemLayout} label="Last Name">
-                    {getFieldDecorator('lastName', {
-                        initialValue:this.state.lastName,
+                    <Form.Item {...formItemLayout} label="Email">
+                    {getFieldDecorator('email', {
+                        initialValue:this.state.email,
                         rules: [
-                            {required: true,message: 'Please input last name'},
+                            {required: true,message: 'Please enter your email'},
                             { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
                         ],
                     })(<Input placeholder="Please input last name" />)}

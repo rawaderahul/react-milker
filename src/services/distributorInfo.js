@@ -2,8 +2,8 @@ import axios from 'axios';
 import { uri } from './commonURI';
 const url = 'http://localhost:3005/'
 
-export function getPerticluarDistributorInfo(id){
-    return axios.get(uri + 'Distributer/'+id)
+export function getPerticluarDistributorInfo(){
+    return axios.get(uri + 'Distributer/1')
 }
 
 export function getAllDistributorInfo(){

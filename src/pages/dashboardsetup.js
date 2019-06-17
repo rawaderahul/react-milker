@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
           <Menu theme="light" defaultSelectedKeys={['1']}
            mode="inline" style={{  background: '#FEFEFF'}}
            >
-            <SubMenu classNmae="submenu" onClick={this.subMenuHandle}
+            <SubMenu className="submenu" onClick={this.subMenuHandle}
               key="Manage Business"
               title={
                 <span>
@@ -88,7 +88,7 @@ class Dashboard extends React.Component {
               <Menu.Item key="Customer">Customer</Menu.Item>
               
             </SubMenu>
-            <SubMenu classNmae="submenu" onClick={this.subMenuHandle}
+            <SubMenu className="submenu" onClick={this.subMenuHandle}
               key="Manage Daily"
               title={
                 <span>
