@@ -86,7 +86,6 @@ class EditableTable extends Component {
             this.state.cowQuota.map((item)=>{
                 if(item.routeName == item.routeName){
                     routeTotal =  Number ( item.cow + item.remainsCow);
-                    console.log(routeTotal);
                 } return routeTotal;
             })
         ),

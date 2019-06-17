@@ -88,7 +88,6 @@ class EditableTable extends Component {
             this.state.buffaloQuota.map((item)=>{
                 if(item.routeName == item.routeName){
                     routeTotal =  Number ( item.buffalo + item.remainsBuffalo);
-                    console.log(routeTotal);
                 } return routeTotal;
             })
         ),

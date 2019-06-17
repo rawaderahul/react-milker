@@ -61,15 +61,15 @@ class CreateCustomersForms extends React.Component {
       csvDataSource.map((item,index) => {
         if(index!==0){
           CreateCustomersData.push({
-            "routeName":routeName,
+          "routeName":routeName,
           "customerName":item[0],
-          "buffaloQuantity":Number(item[1]),
-          "cowQuantity":Number(item[2]),
-          "address":item[3],
-          "pincode":Number(item[4]),
-          "contact":Number(item[5]),
-          "email":item[6],
-          "paymentType":item[7],
+          "address":item[1],
+          "pincode":Number(item[2]),
+          "contact":Number(item[3]),
+          "email":item[4],
+          "paymentType":item[5],
+          "buffaloQuantity":Number(item[6]),
+          "cowQuantity":Number(item[7])
           })
         }
         return 0;
@@ -84,11 +84,11 @@ class CreateCustomersForms extends React.Component {
 
   exportCSV = (sheetName) => {
     var csvRow=[];
-    var A =[['customerName','buffaloQuantity','cowQuantity','address','pincode','contact','email','paymentType']];
+    var A =[['customerName','address','pincode','contact','email','paymentType','buffaloQuantity','cowQuantity']];
     var re=this.state.blankDataSource;
   
     for(var item=0; item < re.length; item++) {
-      A.push([re[item].customerName,re[item].address, re[item].pincode,re[item].contact,re[item].email,re[item].paymentType]);
+      A.push([re[item].customerName,re[item].address, re[item].pincode,re[item].contact,re[item].email,re[item].paymentType,re[item].buffaloQuantity,re[item].cowQuantity]);
     }
     for(var i=0; i<A.length; ++i) {
       csvRow.push(A[i].join(",")) ;
