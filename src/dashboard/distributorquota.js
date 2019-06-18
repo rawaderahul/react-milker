@@ -3,14 +3,15 @@ import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
 import moment from 'moment';
 import * as DistributorQuota from '../services/distributorInfo';
-import * as CustomersInfoer from '../services/customerInfo'
-import CustomerModal from './modals/customer'
+import * as DistributorInfo from '../services/distributorInfo';
+import * as CustomersInfoer from '../services/customerInfo';
+import CustomerModal from './modals/customer';
 import Quotabuffalo from './quotabuffalo';
-import Quotacow from './quotacow'
-import './stylesheets/distributorquota.css'
+import Quotacow from './quotacow';
+import './stylesheets/distributorquota.css';
 
 var dataTo=null;
-
+var datas = 120;
 const EditableContext = React.createContext();
 
 const { RangePicker } = DatePicker;
@@ -69,98 +70,11 @@ class EditableTable extends Component {
         editingid: '' ,
         visible:false,
         todaysDate: null,
-        dataTo: null
+        dataTo: null,
+        distributorInfo: null,
+        cowQuota:null,
+        buffaloQuota: null
     };
-    this.columns = [
-      {
-        title: 'Daily',
-        children:[
-          {
-            title:'Route Name',
-            align:'center',
-            dataIndex: 'routeName',
-            width: '20%',
-            editable: true,
-          }
-        ],
-      },
-      {
-        title: 'Quota - 100',
-        children:[
-          {
-            title:'Buffalo',
-            align:'center',
-            dataIndex: 'buffalo',
-            width: '15%',
-            editable: true,
-          }
-        ]
-      },
-      {
-        title: 'Quota - 80',
-        children:[
-          {
-            title:'Cow',
-            align:'center',
-            dataIndex: 'cow',
-            width: '15%',
-            editable: true,
-          }
-        ]
-      },
-      {
-        title: 'Manage Buffalo',
-        dataIndex: 'manageBuffalo',
-        width: '15%',
-        editable: true,
-      },
-      {
-        title: 'Manage Cow',
-        dataIndex: 'manageCow',
-        width: '15%',
-        editable: true,
-       
-      },
-      {
-        title: 'operation',
-        dataIndex: 'operation',
-        render: (text, record) => {
-          const { editingid } = this.state;
-          const editable = this.isEditing(record);
-          const deletable=this.isDeleting(record);
-          return editable ? (
-            <span>
-              <EditableContext.Consumer>
-                { form => (
-                  <a
-                    href="javascript:;"
-                    onClick={() => this.save(form, record.id)}
-                    style={{ marginRight: 8 }}
-                  >
-                    Save
-                  </a>
-                )}
-              </EditableContext.Consumer>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
-                <a>Cancel</a>
-              </Popconfirm>
-            </span>
-          ) : (
-            <span>
-              <a visible="hidden" disabled={editingid !== ''} onClick={() => this.edit(record.id)}>
-                Edit
-              </a>{" "}{" "} 
-            {  
-            <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
-               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
-                   <a to="javascript:;">Delete</a>
-                </Popconfirm>
-            }
-            </span>
-          );
-        },
-      },
-    ];
   }
 
   isDeleting=record => record.id === this.state.editingid;
@@ -183,6 +97,7 @@ class EditableTable extends Component {
       manageBuffalo: 3,
       manageCow: 0
     }
+
     let addColumn2 = {
       id: 401,
       routeName:<b>More Purchase </b>,
@@ -211,8 +126,16 @@ class EditableTable extends Component {
         res.data.push(addColumn2);
        this.setState({DistributorQuotaData : res.data });
       })
-      // this.state.DistributorQuotaData.push();
-      // this.setState({DistributorQuotaData})
+
+      DistributorInfo.getPerticluarDistributorInfo(1).then((response)=>{
+        this.setState({distributorInfo: response.data})
+        this.state.distributorInfo.map((item)=>{
+          this.setState({ cowQuota : item.dailyCowQuota })
+          this.setState({ buffaloQuota : item.dailyBuffaloQuota})
+        })
+        console.log(this.state.cowQuota);
+      })
+      
   }
   
   totalBuffalo = () =>{
@@ -283,7 +206,97 @@ class EditableTable extends Component {
 
   render() {
 
-    
+   let columns = [
+      {
+        title: 'Daily',
+        children:[
+          {
+            title:'Route Name',
+            align:'center',
+            dataIndex: 'routeName',
+            width: '20%',
+            editable: true,
+          }
+        ],
+      },
+      {
+        title: <span> Quota - { this.state.buffaloQuota } </span>,
+        children:[
+          {
+            title:'Buffalo',
+            align:'center',
+            dataIndex: 'buffalo',
+            width: '15%',
+            editable: true,
+          }
+        ]
+      },
+      {
+        title: <span> Quota - { this.state.cowQuota } </span>,
+        children:[
+          {
+            title:'Cow',
+            align:'center',
+            dataIndex: 'cow',
+            width: '15%',
+            editable: true,
+          }
+        ]
+      },
+      {
+        title: 'Manage Buffalo',
+        dataIndex: 'manageBuffalo',
+        width: '15%',
+        editable: true,
+      },
+      {
+        title: 'Manage Cow',
+        dataIndex: 'manageCow',
+        width: '15%',
+        editable: true,
+       
+      },
+      {
+        title: 'operation',
+        dataIndex: 'operation',
+        render: (text, record) => {
+          const { editingid } = this.state;
+          const editable = this.isEditing(record);
+          const deletable=this.isDeleting(record);
+          return editable ? (
+            <span>
+              <EditableContext.Consumer>
+                { form => (
+                  <a
+                    href="javascript:;"
+                    onClick={() => this.save(form, record.id)}
+                    style={{ marginRight: 8 }}
+                  >
+                    Save
+                  </a>
+                )}
+              </EditableContext.Consumer>
+              <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
+                <a>Cancel</a>
+              </Popconfirm>
+            </span>
+          ) : (
+            <span>
+              <a visible="hidden" disabled={editingid !== ''} onClick={() => this.edit(record.id)}>
+                Edit
+              </a>{" "}{" "} 
+            {  
+            <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
+               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
+                   <a to="javascript:;">Delete</a>
+                </Popconfirm>
+            }
+            </span>
+          );
+        },
+      },
+    ];
+
     var date = new Date();
      dataTo = {defaultValue:moment(date)} 
     const { size,DistributorQuotaData } = this.state;
@@ -293,7 +306,7 @@ class EditableTable extends Component {
       },
     };
 
-    const columns = this.columns.map(col => {
+     columns = columns.map(col => {
       if (!col.editable) {
         return col;
       }
@@ -342,8 +355,8 @@ class EditableTable extends Component {
        } 
       </EditableContext.Provider>
       <p><b>Edit :- could not less but can increase till ( Sell / Manage )</b> </p>
-      <Quotabuffalo />
-      <Quotacow />
+      <Quotabuffalo buffaloQuota = { this.state.buffaloQuota } />
+      <Quotacow cowQuota = { this.state.cowQuota } />
       </div>
     );
   }

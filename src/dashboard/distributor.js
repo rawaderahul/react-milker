@@ -111,11 +111,9 @@ class ShopDetails extends React.Component {
   }
   componentDidMount = () => {
     let dataSource;
-    DistributorsInfo.getPerticluarDistributorInfo()
+    DistributorsInfo.getPerticluarDistributorInfo(1)
       .then((response) =>{
       this.setState({distributorData:response.data[0]})
-      console.log(this.state.distributorData);
-      
       dataSource= [
         {
           name:<b>OrganizationName:</b>,

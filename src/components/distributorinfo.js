@@ -92,9 +92,8 @@ class DistributorInfoDataForm extends React.Component {
                 pincode:DistributorInfoData.pincode ,
                 serviceAreas:DistributorInfoData.serviceAreas,
                 servicePincodes:DistributorInfoData.servicePincodes,
-                dailyCowQuota: 10,
-                dailyBuffaloQuota:20
-                // email: 'akshay@gmail.com'
+                dailyBuffaloQuota:DistributorInfoData.dailyBuffaloQuota,
+                dailyCowQuota:DistributorInfoData.dailyCowQuota
             }) 
         }
     }
@@ -105,9 +104,6 @@ class DistributorInfoDataForm extends React.Component {
 
         if (!err) {
             values.deliveryCharge = 0;
-            values.dailyBuffaloQuota= 40;
-            values.dailyCowQuota = 30;
-            // values.email= "trush@gmail.com";
             this.setState({
                 DistributorInfoData:values,
                 organizationName:null,
@@ -163,17 +159,17 @@ class DistributorInfoDataForm extends React.Component {
                             {required: true,message: 'Please input  name'},
                             { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
                         ],
-                    })(<Input placeholder="Please input first name" />)}
+                    })(<Input placeholder="Please input your name" />)}
                     </Form.Item>
 
                     <Form.Item {...formItemLayout} label="Email">
                     {getFieldDecorator('email', {
                         initialValue:this.state.email,
                         rules: [
-                            {required: true,message: 'Please enter your email'},
-                            { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+                            {type :'email', message: 'The input is not valid E-mail' },
+                            {required: true,message: 'Please enter your E-mail'},
                         ],
-                    })(<Input placeholder="Please input last name" />)}
+                    })(<Input placeholder="Please input your E-mail" />)}
                     </Form.Item>
 
                     <Form.Item {...formItemLayout} label="Phone Number">
@@ -256,6 +252,26 @@ class DistributorInfoDataForm extends React.Component {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
+                    <Form.Item {...formItemLayout} label="Daily Buffalo Quota">
+                        {getFieldDecorator('dailyBuffaloQuota', {
+                            initialValue:this.state.dailyBuffaloQuota,
+                            rules: [
+                                { required: true, message: 'Please input only number' },
+                                { pattern : '[0-9]', message: 'Please enter only digit!' },
+                        ],
+                        })(<Input placeholder = "Please input Buffalo quota!" style={{ width: '100%' }} />)}
+                    </Form.Item>
+
+                    <Form.Item {...formItemLayout} label="Daily Cow Quota">
+                        {getFieldDecorator('dailyCowQuota', {
+                            initialValue:this.state.dailyCowQuota,
+                            rules: [
+                                { required: true, message: 'Please input only number' },
+                                { pattern : '[0-9]', message: 'Please enter only digit!' },
+                        ],
+                        })(<Input placeholder = "Please input Cow quota!" style={{ width: '100%' }} />)}
+                    </Form.Item>
+
                     <Form.Item {...formItemLayout} label=" Service Areas" >
                             {getFieldDecorator('serviceAreas', {
                                 initialValue:this.state.serviceAreas,

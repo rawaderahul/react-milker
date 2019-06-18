@@ -121,13 +121,12 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-      RoutesInfo.getGetRoutesByDistributerId().then((res)=>{
+      RoutesInfo.getGetRoutesByDistributerId(1).then((res)=>{
           this.setState({rootInfo: res.data})
       })
       axios.get('http://127.0.0.1:8000/api/Distributer/1').then((res)=>{
         this.setState({areas: res.data[0].serviceAreas, pincodes:res.data[0].servicePincodes})
     })
-      
   }
 
   isEditing = record => record.rid === this.state.editingid;

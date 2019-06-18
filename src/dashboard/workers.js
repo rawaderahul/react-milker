@@ -27,7 +27,6 @@ class EditableCell extends React.Component {
       routeData,
       ...restProps
     } = this.props;
-   
     
     return (
       <td {...restProps}>
@@ -35,42 +34,42 @@ class EditableCell extends React.Component {
           <span>
             <Form.Item style={{ margin: 0 }}>
              {dataIndex=='workerName' ?  getFieldDecorator('workerName', {
-                      rules: [{ required: true, message: 'Please enter worker name!' },
-                              { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
-                    ],
-                    initialValue: record['workerName']
-                    })(
-                      <Input  />
-                    ):null} 
-          </Form.Item>
-          <Form.Item style={{ margin: 0 }}>
-          {dataIndex=='contact' ?  getFieldDecorator('contact', {
-                   rules: [{ required: true, message: 'Please enter contact number!' },
-                          //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
-                  ],
-                    initialValue: record['contact']
-                    })(
-                      <Input  type="number"/>
-                    ):null} 
-       </Form.Item>
+                rules: [{ required: true, message: 'Please enter worker name!' },
+                        { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+              ],
+              initialValue: record['workerName']
+              })(
+                <Input  />
+              ):null} 
+            </Form.Item>
+            <Form.Item style={{ margin: 0 }}>
+              {dataIndex=='contact' ?  getFieldDecorator('contact', {
+                rules: [{ required: true, message: 'Please enter contact number!' },
+                      //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
+              ],
+                initialValue: record['contact']
+                })(
+                  <Input  type="number"/>
+                ):null} 
+           </Form.Item>
        <Form.Item style={{ margin: 0 }}>
        {dataIndex=='routeid' ?  getFieldDecorator('routeid', {
-                      rules: [{ required: false, message: 'Please select route!' },
-                    ],
-                    initialValue: record['routeid']
-                    })(
-                     <Select
-                     onSelect={(value, option) => {this.props.handleRouteName(value, option)
-                     }}
-                      style={{ width: '100px' }}>
-                       {
-                       routeData &&  routeData.map((item) => {
-                         
-                         return <Option key={item.rid}>{item.routeName}</Option>
-                       })
-                       }
-                     </Select>
-                    ):null} 
+          rules: [{ required: false, message: 'Please select route!' },
+        ],
+        initialValue: record['routeid']
+        })(
+          <Select
+          onSelect={(value, option) => {this.props.handleRouteName(value, option)
+          }}
+          style={{ width: '100px' }}>
+            {
+            routeData &&  routeData.map((item) => {
+              
+              return <Option key={item.rid}>{item.routeName}</Option>
+            })
+            }
+          </Select>
+        ):null} 
        </Form.Item>
           </span>
           

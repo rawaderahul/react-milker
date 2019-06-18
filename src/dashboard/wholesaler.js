@@ -62,7 +62,8 @@ class EditableCell extends Component {
         style={{ paddingRight: 24 }}
         onClick={this.toggleEdit}
       >
-        {children}
+        { children }
+        
       </div>
     );
   };
@@ -122,23 +123,23 @@ class AnyRoutes extends Component {
             align:'center'
         },
         {
-            title:'buffalo',
+        
             title: 'Buffalo',
             width:'15%',
             render: (text, record) => (
                 <span>
-                <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
-                    <InputNumber value = {record.buffalo} 
-                    style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
-                    onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
-                <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
+                    <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
+                        <InputNumber value = {record.buffalo} 
+                        style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
+                        onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
+                    <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
                 </span>
             ),
             align:'center',
         },
         {
             title: 'Buffalo Price',
-            render: ()=>(
+            render: (record)=>(
                 this.state.TotalBuffaloPrice
             ),
             // dataIndex: this.state.TotalBuffaloPrice,
@@ -146,22 +147,18 @@ class AnyRoutes extends Component {
             align:'center',
         },
         {
-            title:'cow',
-            title: 'Cow',
-            width:'20%',
+            title:'Cow',
+            width:'15%',
             render: (text, record) => (
                 <span>
-                <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
-                <InputNumber defaultValue={record.cow} value={record.cow} 
-                    style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}} 
-                    onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
-                <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
+                    <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
+                        <InputNumber value = {record.cow} 
+                        style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
+                        onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
+                    <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
                 </span>
             ),
-            dataIndex:'cow',
-            editable:true,
-            align:'center'
-
+            align:'center',
         },
         {
             title: 'Cow Price',
@@ -177,17 +174,9 @@ class AnyRoutes extends Component {
     ];
   }
 
-    handleBuffaloPrice(e){
-        this.state.dataSource.map((item)=>{
-            console.log(item);
-        })
-        console.log("Select Buffalo Price on Wholsaler");
-    }
-
     componentDidMount() {
         axios.get('http://127.0.0.1:8000/api/MilkBrands').then((res)=>{
             this.setState({milkbrand: res.data})
-            console.log(this.state.milkbrand);
         })
         axios.get('http://localhost:3005/WholeSaler').then((response) => {
         this.setState({ dataSource:response.data })
@@ -196,7 +185,6 @@ class AnyRoutes extends Component {
 
     handleChange=(event,id,text)=> {
     const { dataSource }=this.state;
-    console.log(event);
     dataSource.map((item) => {
         if(item.id==id) {
         switch(text) {
@@ -217,17 +205,17 @@ class AnyRoutes extends Component {
 
     increament=(id,text)=>{
         const { dataSource }=this.state;
-    dataSource.map((item) => {
-        if(item.id==id) {
-            switch(text) {
-            case 'buffalo': item.buffalo=item.buffalo + 0.5;
-            break;
-            case 'cow': item.cow=item.cow + 0.5;
-            break;
+        dataSource.map((item) => {
+            if(item.id==id) {
+                switch(text) {
+                case 'buffalo': item.buffalo=item.buffalo + 0.5;
+                break;
+                case 'cow': item.cow=item.cow + 0.5;
+                break;
+                }
             }
-        }
-    })
-    this.setState({dataSource})
+        })
+        this.setState({dataSource})
 
         dataSource.map((datas)=>{
             this.state.milkbrand.map((milk)=>{
@@ -238,7 +226,6 @@ class AnyRoutes extends Component {
             })
         })
         this.setState({TotalBuffaloPrice : BuffaloPrice});
-
     }
   
     decrement=(id,text)=> {
@@ -270,8 +257,6 @@ class AnyRoutes extends Component {
     render() {
         const { milkbrand } = this.state;
         const { dataSource } = this.state;
-        console.log(dataSource);
-        console.log(milkbrand);
         const components = {
         body: {
             row: EditableFormRow,
