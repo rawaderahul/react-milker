@@ -67,6 +67,18 @@ class EditableTable extends Component {
         editable: true,
       },
       {
+        title: 'buffaloQuantity',
+        dataIndex: 'buffaloQuantity',
+        width: '20%',
+        editable: true,
+      },
+      {
+        title: 'cowQuantity',
+        dataIndex: 'cowQuantity',
+        width: '20%',
+        editable: true,
+      },
+      {
         title: 'Contact',
         dataIndex: 'contact',
         width: '15%',

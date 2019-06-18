@@ -98,6 +98,7 @@ class BusinessSetUP extends Component{
               })
               CreateCustomersData.map((item4) => {
                 item4.distributerid=1;
+                
                 CreateWorker.map((value4) => {
                   // if(item4.routeName==value4.name) {
                     item4.routeid=1;
@@ -108,7 +109,7 @@ class BusinessSetUP extends Component{
                   // }
                 })
 
-                countDown(); 
+                countDown();  
               })
 
 
