@@ -30,7 +30,7 @@ class CreateDeliveryBoysForm extends React.Component {
       this.props.flag()
       this.setState({CreateDeliveryBoysData})
     }
-   else if(CreateRoutesData) {
+    if(CreateRoutesData) {
       CreateRoutesData.map((item,index) => {
         return(
           this.state.routes.push(<Option value={item.routeName} key={index}>{item.routeName}</Option>)

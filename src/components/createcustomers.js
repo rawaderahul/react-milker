@@ -84,22 +84,22 @@ class CreateCustomersForms extends React.Component {
 
   exportCSV = (sheetName) => {
     var csvRow=[];
-    var A =[['customerName','address','pincode','contact','email','paymentType','buffaloQuantity','cowQuantity']];
+    var head =[['customerName','address','pincode','contact','email','paymentType','buffaloQuantity','cowQuantity']];
     var re=this.state.blankDataSource;
   
     for(var item=0; item < re.length; item++) {
-      A.push([re[item].customerName,re[item].address, re[item].pincode,re[item].contact,re[item].email,re[item].paymentType,re[item].buffaloQuantity,re[item].cowQuantity]);
+      head.push([re[item].customerName,re[item].address, re[item].pincode,re[item].contact,re[item].email,re[item].paymentType,re[item].buffaloQuantity,re[item].cowQuantity]);
     }
-    for(var i=0; i<A.length; ++i) {
-      csvRow.push(A[i].join(",")) ;
+    for(var i=0; i<head.length; ++i) {
+      csvRow.push(head[i].join(",")) ;
     }
     var csvString=csvRow.join("%0A");
-    var a=document.createElement("a");
-    a.href='data:attachment/csv,' + csvString;
-    a.target="_Blank";
-    a.download=`${sheetName}.csv`
-    document.body.appendChild(a);
-    a.click();
+    var headAppend=document.createElement("a");
+    headAppend.href='data:attachment/csv,' + csvString;
+    headAppend.target="_Blank";
+    headAppend.download=`${sheetName}.csv`
+    document.body.appendChild(headAppend);
+    headAppend.click();
     console.log(csvString);
   }
 

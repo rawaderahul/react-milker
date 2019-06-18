@@ -53,7 +53,7 @@ class ModalForm extends Component{
                         style={{ width: '100%' }}
                         placeholder="Please select Route  areas!"
                     >
-                        {this.props.areas.split(",").map((item) => {
+                        {this.props.areas.map((item) => {
                           return(
                             <Option key={item}>{item}</Option>
                           )
@@ -71,7 +71,7 @@ class ModalForm extends Component{
                         style={{ width: '100%' }}
                         placeholder="Please Select Route  Pincodes"
                     >
-                     {this.props.pincodes.split(",").map((item) => {
+                     {this.props.pincodes.map((item) => {
                           return(
                             <Option key={item}>{item}</Option>
                           )

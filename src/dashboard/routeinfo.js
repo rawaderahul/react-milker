@@ -1,10 +1,10 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
-import { Table, Input, InputNumber, Popconfirm, Form ,Button} from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form ,Button,Select} from 'antd';
 import * as RoutesInfo from '../services/routesInfo';
 import RouteModal from './modals/routeinfo'
 const EditableContext = React.createContext();
-
+const { Option } =Select;
 class EditableCell extends React.Component {
   getInput = () => {
     if (this.props.inputType === 'number') {
@@ -22,22 +22,62 @@ class EditableCell extends React.Component {
       record,
       index,
       children,
+      areas,
+      pincodes,
       ...restProps
     } = this.props;
     return (
       <td {...restProps}>
         {editing ? (
-          <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator(dataIndex, {
-              rules: [
+         <span>
+         <Form.Item style={{ margin: 0 }}>
+          {dataIndex=='routeName' ?  getFieldDecorator('routeName', {
+             rules: [{ required: true, message: 'Please enter route name!' },
+                     { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+           ],
+           initialValue: record['routeName']
+           })(
+             <Input  />
+           ):null} 
+         </Form.Item>
+         <Form.Item style={{ margin: 0}}>
+           {dataIndex=='routeAreas' ?  getFieldDecorator('routeAreas', {
+             rules: [{ required: true, message: 'Please enter contact number!' },
+                   //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
+           ],
+             initialValue:Array.isArray(record.routeAreas) ? record.routeAreas  : record.routeAreas.split(",")
+             })(
+              <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+             >
                 {
-                  required: true,
-                  message: `Please Input ${title}!`,
-                },
-              ],
-              initialValue: record[dataIndex],
-            })(this.getInput())}
-          </Form.Item>
+                areas &&  areas.map((item) => {
+                  return <Option key={item} >{item}</Option>
+                })
+                }
+              </Select>
+             ):null} 
+        </Form.Item>
+    <Form.Item style={{ margin: 0 }}>
+    {dataIndex=='routePincodes' ?  getFieldDecorator('routePincodes', {
+       rules: [{ required: true, message: 'Please select route pincodes!' },
+     ],
+     initialValue:Array.isArray(record.routePincodes) ? record.routePincodes : record.routePincodes.split(",")
+     })(
+       <Select
+      mode="multiple"
+      style={{ width: '100%' }}
+       >
+         {
+         pincodes &&  pincodes.map((item) => {
+           return <Option key={item}>{item}</Option>
+         })
+         }
+       </Select>
+     ):null} 
+    </Form.Item>
+       </span>
         ) : (
           children
         )}
@@ -70,13 +110,13 @@ class EditableTable extends Component {
       {
         title: 'Route Areas',
         dataIndex: 'routeAreas',
-        width: '15%',
+        width: '20%',
         editable: true,
       },
       {
         title: 'Route Pin Code',
         dataIndex: 'routePincodes',
-        width: '15%',
+        width: '20%',
         editable: true,
       },
       {
@@ -85,8 +125,9 @@ class EditableTable extends Component {
         render: (text, record) => {
           const { editingid } = this.state;
           const editable = this.isEditing(record);
+
           return editable ? (
-            <span>
+           <span>
               <EditableContext.Consumer>
                 {form => (
                   <a
@@ -125,7 +166,7 @@ class EditableTable extends Component {
           this.setState({rootInfo: res.data})
       })
       axios.get('http://127.0.0.1:8000/api/Distributer/1').then((res)=>{
-        this.setState({areas: res.data[0].serviceAreas, pincodes:res.data[0].servicePincodes})
+        this.setState({areas: res.data[0].serviceAreas.split(","), pincodes:res.data[0].servicePincodes.split(",")})
     })
   }
 
@@ -146,12 +187,18 @@ class EditableTable extends Component {
       const index = newData.findIndex(item => rid === item.rid);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
+
+        newRow.routeAreas=newRow.routeAreas.join(",");
+        newRow.routePincodes=newRow.routePincodes.join(",");
+            newData.splice(index, 1, {
+              ...item,
+              ...newRow,
+            });
+        
         RoutesInfo.putRoutesInfo(this.state.editingid,newRow)
           .then(()=>{
+            console.log(newData,newRow);
+            
             this.setState({rootInfo: newData, editingid: '' })
           })
       } else {
@@ -211,6 +258,8 @@ class EditableTable extends Component {
           dataIndex: col.dataIndex,
           title: col.title,
           editing: this.isEditing(record),
+          areas:this.state.areas,
+          pincodes:this.state.pincodes
         }),
       };
     });
