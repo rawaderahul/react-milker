@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { Table, Input,Form, } from 'antd'
-import * as DistributorsInfo from '../services/distributorInfo';
+import * as DistributorsInfo from '../services/distributor/distributorInfo';
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 

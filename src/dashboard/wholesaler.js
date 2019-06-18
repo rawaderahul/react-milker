@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon} from 'antd';
 import axios from 'axios';
 
-var BuffaloPrice = 0;
-
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -126,6 +124,7 @@ class AnyRoutes extends Component {
         
             title: 'Buffalo',
             width:'15%',
+            dataIndex:'buffalo',
             render: (text, record) => (
                 <span>
                     <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
@@ -140,15 +139,15 @@ class AnyRoutes extends Component {
         {
             title: 'Buffalo Price',
             render: (record)=>(
-                this.state.TotalBuffaloPrice
+             record.buffalo * record.buffaloPrice 
             ),
-            // dataIndex: this.state.TotalBuffaloPrice,
             width: '10%',
             align:'center',
         },
         {
             title:'Cow',
             width:'15%',
+            dataIndex: 'cow',
             render: (text, record) => (
                 <span>
                     <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
@@ -162,13 +161,18 @@ class AnyRoutes extends Component {
         },
         {
             title: 'Cow Price',
-            dataIndex: 'cowPrice',
+            render:(record)=>(
+                record.cow * record.cowPrice
+            ),
             width: '10%',
             align:'center'
         },
         {
             title: 'Total Price',
-            dataIndex: 'totalRoute',
+            render:(record)=>(
+               ( record.cow * record.cowPrice ) + ( record.buffalo * record.buffaloPrice )
+            ),
+            // dataIndex: 'cowPrice',
             width:'20%',
         },
     ];
@@ -217,15 +221,6 @@ class AnyRoutes extends Component {
         })
         this.setState({dataSource})
 
-        dataSource.map((datas)=>{
-            this.state.milkbrand.map((milk)=>{
-                if('Sane' == milk.brandName){
-                    BuffaloPrice = datas.buffalo * milk.literPrice
-                }
-                console.log(BuffaloPrice);
-            })
-        })
-        this.setState({TotalBuffaloPrice : BuffaloPrice});
     }
   
     decrement=(id,text)=> {
