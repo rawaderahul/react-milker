@@ -11,9 +11,6 @@ const formTailLayout = {
   wrapperCol: { span: 8, offset: 8 },
 };
 
-const { Option } = Select;
-function handleChange(value) {
-}
 
 class CreateRoutesInfoForm extends React.Component {
   constructor() {
@@ -29,6 +26,8 @@ class CreateRoutesInfoForm extends React.Component {
             routePincodes:[],
             editableData:{},
             isEdit:false,
+            selectedItems:[],
+            DistributorInfoData:[]
 
 
     }
@@ -36,21 +35,21 @@ class CreateRoutesInfoForm extends React.Component {
   componentDidMount() {
     let DistributorInfoData=JSON.parse(sessionStorage.getItem('DistributorInfoData'))
     let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
-   console.log(CreateRoutesData);
+    this.setState({DistributorInfoData})
    
     if(CreateRoutesData) {
       this.setState({CreateRoutesData})
       this.props.flag()
      }
-   else if(DistributorInfoData) {
+    if(DistributorInfoData) {
       DistributorInfoData.serviceAreas.map((menu,index) => {
         return(
-          this.state.areas.push(<Option value={menu} key={index}>{menu}</Option>) 
+          this.state.areas.push(menu) 
           )
         })
         DistributorInfoData.servicePincodes.map((menu,index) => {
           return(
-            this.state.pincodes.push(<Option value={menu} key={index}>{menu}</Option>) 
+            this.state.pincodes.push(menu) 
             )
           })
         }
@@ -98,9 +97,21 @@ class CreateRoutesInfoForm extends React.Component {
       })
    
   }
+  handleChange = selectedItems => {
+    this.setState({ selectedItems });
+  };
   render() {
+    console.log(this.state.areas);
     
+    let areasfilteredOptions=[];
+    let pincodesfilteredOptions=[];
     const { getFieldDecorator } = this.props.form;
+    const { selectedItems, DistributorInfoData,areas,pincodes } = this.state;
+
+    if(DistributorInfoData) {
+      areasfilteredOptions =  areas.filter(o => !selectedItems.includes(o)) ;
+      pincodesfilteredOptions = pincodes.filter(o => !selectedItems.includes(o)) ;
+  }
     return (
     <div>
       <div className="formbox">
@@ -128,9 +139,13 @@ class CreateRoutesInfoForm extends React.Component {
                         mode="multiple"
                         style={{ width: '100%' }}
                         placeholder="Please select Route  areas!"
-                        onChange={handleChange}
+                        onChange={this.handleChange}
                     >
-                        {this.state.areas}
+                        {areasfilteredOptions.map(item => (
+                        <Select.Option key={item} value={item}>
+                             {item}
+                        </Select.Option>
+                             ))}
                     </Select>,
                 )}
         </Form.Item>
@@ -144,9 +159,13 @@ class CreateRoutesInfoForm extends React.Component {
                         mode="multiple"
                         style={{ width: '100%' }}
                         placeholder="Please Select Route  Pincodes"
-                        onChange={handleChange}
+                        onChange={this.handleChange}
                     >
-                        {this.state.pincodes}
+                        {pincodesfilteredOptions.map(item => (
+                        <Select.Option key={item} value={item}>
+                             {item}
+                        </Select.Option>
+                             ))}
                     </Select>,
                 )}
         </Form.Item>   
@@ -171,7 +190,8 @@ class CreateRoutesInfoForm extends React.Component {
               }
              {this.state.isEdit ?
                <EditRoutes handleOk={this.handleOk} handleCancel={this.handleCancel} 
-               editableData={this.state.editableData} pincodes={this.state.pincodes} areas={this.state.areas}
+               editableData={this.state.editableData} pincodes={this.state.pincodes}
+                areas={this.state.areas}
                /> : null}
 
              </Col>

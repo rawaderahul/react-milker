@@ -117,7 +117,7 @@ class AnyRoutes extends Component {
             render: (text, record) => (
               <span>
                 <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
-                   <InputNumber value= {record.buffalo} 
+                   <InputNumber value= {record.buffaloQuantity} 
                    style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
                    onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
                 <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
@@ -139,7 +139,7 @@ class AnyRoutes extends Component {
             render: (text, record) => (
               <span>
                 <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
-                <InputNumber defaultValue={record.cow} value={record.cow} 
+                <InputNumber value={record.cowQuantity}
                 style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}} 
                 onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
                 <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
@@ -165,11 +165,15 @@ class AnyRoutes extends Component {
       },
     ];
 
-  }
-componentDidMount() {
-    axios.get('http://localhost:3005/ManageDailyRoute').then((response) => {
+    axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/'+ this.props.rid).then((response) => {
     this.setState({ dataSource:response.data })
-    
+    })
+  }
+  
+  
+componentWillReceiveProps(nextProps) {
+    axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/'+ nextProps.rid).then((response) => {
+    this.setState({ dataSource:response.data })
     })
   
 }
@@ -199,9 +203,9 @@ handleMessage = id => {
    dataSource.map((item) => {
       if(item.id==id) {
         switch(text) {
-          case 'buffalo': item.buffalo=item.buffalo + 0.5;
+          case 'buffalo': item.buffaloQuantity=item.buffaloQuantity + 0.5;
           break;
-          case 'cow': item.cow=item.cow + 0.5;
+          case 'cow': item.cowQuantity=item.cowQuantity + 0.5;
           break;
         }
       }
@@ -216,9 +220,9 @@ this.setState({dataSource})
        if(item.id==id) {
          switch(text) {
          
-           case 'buffalo': item.buffalo > 0 ? item.buffalo=item.buffalo - 0.5 : item.buffalo=0  ;
+           case 'buffalo': item.buffaloQuantity > 0 ? item.buffaloQuantity=item.buffaloQuantity - 0.5 : item.buffaloQuantity=0  ;
            break;
-           case 'cow':item.cow > 0 ? item.cow=item.cow - 0.5: item.cow=0;
+           case 'cow':item.cowQuantity > 0 ? item.cowQuantity=item.cowQuantity - 0.5: item.cowQuantity=0;
            break;
          }
        }
@@ -239,6 +243,8 @@ this.setState({dataSource})
   };
 
   render() {
+  console.log(this.props.rid);
+
     const { dataSource } = this.state;
     console.log(dataSource);
     

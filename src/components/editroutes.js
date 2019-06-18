@@ -10,6 +10,10 @@ const formItemLayout = {
     // console.log(`selected ${value}`);
   }
 class Edit extends Component {
+
+    state={
+        selectedItems:[]
+    }
     handleOk=() => {
         this.props.form.validateFields((err,values) => {
             if (!err) {
@@ -19,9 +23,21 @@ class Edit extends Component {
             }
         })
     }
+    handleChange = selectedItems => {
+        this.setState({ selectedItems });
+      };
     render() {
         const { getFieldDecorator } = this.props.form;
         
+    let areasfilteredOptions=[];
+    let pincodesfilteredOptions=[];
+    const { selectedItems } = this.state;
+    const { areas , pincodes }  = this.props;
+
+    if(areas && pincodes) {
+      areasfilteredOptions =  areas.filter(o => !selectedItems.includes(o)) ;
+      pincodesfilteredOptions = pincodes.filter(o => !selectedItems.includes(o)) ;
+  }
         return (
             <div>
                    <Modal
@@ -49,13 +65,17 @@ class Edit extends Component {
                     rules: [{ required: true, message: 'Please select Route  areas!' }],
                 })(
                     <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="Please select Route  areas!"
-                        onChange={handleChange}
-                    >
-                        {this.props.areas}
-                    </Select>,
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder="Please select Route  areas!"
+                    onChange={this.handleChange}
+                >
+                    {areasfilteredOptions.map(item => (
+                    <Select.Option key={item} value={item}>
+                         {item}
+                    </Select.Option>
+                         ))}
+                </Select>,
                 )}
         </Form.Item>
 
@@ -65,12 +85,17 @@ class Edit extends Component {
                     rules: [{ required: true, message: 'Please Select Route  Pincodes' }],
                 })(
                     <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
-                        placeholder="Please Select Route  Pincodes"
-                    >
-                        {this.props.pincodes}
-                    </Select>,
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder="Please Select Route  Pincodes"
+                    onChange={this.handleChange}
+                >
+                    {pincodesfilteredOptions.map(item => (
+                    <Select.Option key={item} value={item}>
+                         {item}
+                    </Select.Option>
+                         ))}
+                </Select>,
                 )}
         </Form.Item>   
                     

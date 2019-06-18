@@ -34,7 +34,8 @@ class DistributorInfoDataForm extends React.Component {
             servicePincodes:[],
             DistributorInfoData:{},
             dailyCowQuota: null,
-            dailyBuffaloQuota:null
+            dailyBuffaloQuota:null,
+            selectedItems: [],
         }
     }
     
@@ -118,7 +119,8 @@ class DistributorInfoDataForm extends React.Component {
                 serviceAreas:[],
                 servicePincodes:[],
                 dailyBuffaloQuota:null,
-                dailyCowQuota:null
+                dailyCowQuota:null,
+                // selectedItems:[]
             })
             console.log(values);
             
@@ -133,9 +135,19 @@ class DistributorInfoDataForm extends React.Component {
 
   };
 
+  handleChange = selectedItems => {
+    this.setState({ selectedItems });
+  };
+ 
   render() {
+    let areasfilteredOptions=[];
+    let pincodesfilteredOptions=[]
     const { getFieldDecorator } = this.props.form;
-    
+    const { selectedItems,locationData } = this.state;
+    if(locationData.length > 0) {
+        areasfilteredOptions =  locationData[0].area.filter(o => !selectedItems.includes(o)) ;
+        pincodesfilteredOptions =  locationData[0].pincode.filter(o => !selectedItems.includes(o)) ;
+    }
     return (
       <div>
       <div className="formbox">
@@ -198,9 +210,9 @@ class DistributorInfoDataForm extends React.Component {
                             { required: true, message: 'Please select state!' }
                         ],
                     })(
-                        <Select placeholder="Please select state" >
-                        {/* <Option value="maharastra">Maharastra</Option>
-                        <Option value="gujrat">Gujrat</Option> */}
+                        <Select placeholder="Please select state" 
+                        showSearch>
+                        
                         {this.state.states}
                         </Select>,
                     )}
@@ -213,7 +225,8 @@ class DistributorInfoDataForm extends React.Component {
                             { required: true, message: 'Please select city!' }
                         ],
                     })(
-                        <Select placeholder="Please select city">
+                        <Select placeholder="Please select city"
+                        showSearch>
                         {this.state.citys}
                         </Select>,
                     )}
@@ -226,7 +239,8 @@ class DistributorInfoDataForm extends React.Component {
                             { required: true, message: 'Please select area!' }
                         ],
                     })(
-                        <Select placeholder="Please select area">
+                        <Select placeholder="Please select area"
+                        showSearch>
                         {this.state.areas}
                         </Select>,
                     )}
@@ -236,10 +250,11 @@ class DistributorInfoDataForm extends React.Component {
                     {getFieldDecorator('pincode', {
                         initialValue:this.state.pincode,
                         rules: [
-                            { required: true, message: 'Please select area!' }
+                            { required: true, message: 'Please select pincode!' }
                         ],
                     })(
-                        <Select placeholder="Please select area">
+                        <Select placeholder="Please select pincode"
+                        showSearch>
                         {this.state.pincodes}
                         </Select>,
                     )}
@@ -282,9 +297,14 @@ class DistributorInfoDataForm extends React.Component {
                         <Select
                             mode="multiple"
                             style={{ width: '100%' }}
+                            onChange={this.handleChange}
                             placeholder="Please select Distributor areas!"
                         >
-                            {this.state.areas}
+                           {areasfilteredOptions.map(item => (
+                        <Select.Option key={item} value={item}>
+                             {item}
+                        </Select.Option>
+                             ))}
                         </Select>,
                                 )}
                     </Form.Item>
@@ -300,9 +320,13 @@ class DistributorInfoDataForm extends React.Component {
                             mode="multiple"
                             style={{ width: '100%' }}
                             placeholder="Please select Distributor Pincodes!"
-                            // onChange={handleChange}
+                            onChange={this.handleChange}
                         >
-                            {this.state.pincodes}
+                            {pincodesfilteredOptions.map(item => (
+                        <Select.Option key={item} value={item}>
+                             {item}
+                        </Select.Option>
+                             ))}
                         </Select>,
                         )}
                     </Form.Item>        
