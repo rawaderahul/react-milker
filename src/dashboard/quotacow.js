@@ -82,12 +82,8 @@ class EditableTable extends Component {
       },
       {
         title: 'Total Routes',
-        render: () =>(
-            this.state.cowQuota.map((item)=>{
-                if(item.routeName == item.routeName){
-                    routeTotal =  Number ( item.cow + item.remainsCow);
-                } return routeTotal;
-            })
+        render: (record,text) =>(
+           record.remainsCow + record.cow 
         ),
         width: '15%',
         editable: true,
@@ -152,7 +148,7 @@ class EditableTable extends Component {
 
     return (
       <div>
-          <h1> Quota Cow : 100 </h1>
+        <h1> Quota Cow : { this.props.cowQuota } </h1>
       <EditableContext.Provider value={this.props.form}>
         <Table
           rowKey="id" 
@@ -167,7 +163,6 @@ class EditableTable extends Component {
       <br/>
       <br/>
       <br/>
-      
       </div>
     );
   }

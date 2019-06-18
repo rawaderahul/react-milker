@@ -1,6 +1,9 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
 import * as BuffaloQuota from '../services/distributorInfo';
+import * as DistributorInfo from '../services/distributorInfo'
+import { func } from 'prop-types';
+
 
 const EditableContext = React.createContext();
 
@@ -60,7 +63,9 @@ class EditableTable extends Component {
         buffaloQuota: null,
         editingid: '' ,
         isAddCustomer : false,
-        visible: false
+        visible: false,
+        buffaloQuota: null,
+        distributorInfo:null
 
     };
     this.columns = [
@@ -84,12 +89,8 @@ class EditableTable extends Component {
       },
       {
         title: 'Total Routes',
-        render: () =>(
-            this.state.buffaloQuota.map((item)=>{
-                if(item.routeName == item.routeName){
-                    routeTotal =  Number ( item.buffalo + item.remainsBuffalo);
-                } return routeTotal;
-            })
+        render: (record,text) =>(
+          record.buffalo + record.remainsBuffalo
         ),
         width: '15%',
         editable: true,
@@ -101,9 +102,10 @@ class EditableTable extends Component {
     var totalData = {};
     var totalbuffalo = 0;
     BuffaloQuota.getDistributorQuota().then((res)=>{
-        res.data.map((item)=>{
+        res.data.map(( item,index )=>{
             remains = remains + item.remainsBuffalo;
             totalbuffalo = totalbuffalo + item.buffalo;
+            item.index = index;
         })
 
         totalData = {
@@ -116,6 +118,7 @@ class EditableTable extends Component {
         res.data.push(totalData);
         this.setState({buffaloQuota: res.data})
     })
+
   }
 
   render() {
@@ -142,7 +145,7 @@ class EditableTable extends Component {
 
     return (
       <div>
-          <h1> Quota Buffalo : 100 </h1>
+          <h1> Quota Buffalo : {this.props.buffaloQuota} </h1>
       <EditableContext.Provider value={this.props.form}>
         <Table
           rowKey="id" 
@@ -151,14 +154,13 @@ class EditableTable extends Component {
           dataSource={this.state.buffaloQuota}
           columns={columns}
           rowClassName="editable-row"
-         pagination={false}
+          pagination={false}
         />
       </EditableContext.Provider>
       <br/>
       <br/>
       <br/>
       <br/>
-      
       </div>
     );
   }
