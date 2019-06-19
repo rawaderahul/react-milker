@@ -8,9 +8,7 @@ const formItemLayout = {
 };
 
 class ModalForm extends Component{ 
-state={
-  routeData:[]
-}
+
   addNewCustomer=()=> {
     this.props.form.validateFields((err,values) => {
       if(!err) {
@@ -20,15 +18,9 @@ state={
     })
   }
 
-  componentDidMount() {
-    axios.get("http://127.0.0.1:8000/api/GetRoutesByDistributerId/1").then((response) => {
-      this.setState({routeData:response.data})
-    })
-  }
-  
+ 
   render() {
   const { getFieldDecorator } = this.props.form;
-  const  {routeData } =this.state;
   return (
     <div>
       <Modal
@@ -96,7 +88,7 @@ state={
                 style={{ width: '100%' }}
                 placeholder="Please Select Route  Pincodes"
             >
-                { routeData && routeData.map((item) => {
+                { this.props.routeData && this.props.routeData.map((item) => {
                   return <Option value={item.rid}>{item.routeName}</Option>;
                 })}
             </Select>)}

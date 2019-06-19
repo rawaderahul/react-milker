@@ -6,9 +6,6 @@ const formItemLayout = {
     wrapperCol: { span: 12 },
   };
   
-  function handleChange(value) {
-    // console.log(`selected ${value}`);
-  }
 class Edit extends Component {
 
     state={

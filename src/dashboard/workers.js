@@ -53,19 +53,19 @@ class EditableCell extends React.Component {
                 ):null} 
            </Form.Item>
        <Form.Item style={{ margin: 0 }}>
-       {dataIndex=='routeid' ?  getFieldDecorator('routeid', {
+       {title=='Route' ?  getFieldDecorator('routeid', {
           rules: [{ required: false, message: 'Please select route!' },
         ],
         initialValue: record['routeid']
         })(
           <Select
-          onSelect={(value, option) => {this.props.handleRouteName(value, option)
-          }}
+          // onSelect={(value, option) => {this.props.handleRouteName(value, option)
+          // }}
           style={{ width: '100px' }}>
             {
             routeData &&  routeData.map((item) => {
               
-              return <Option key={item.rid}>{item.routeName}</Option>
+              return <Option value={item.rid}>{item.routeName}</Option>
             })
             }
           </Select>
@@ -117,7 +117,17 @@ class EditableTable extends Component {
       },
       {
         title: 'Route',
-        dataIndex: 'routeid',
+       render:(record,text) => {
+         let routeName='';
+         record.routeid=record.routeid;
+         this.state.routeData.map((item) => {
+          if(record.routeid==item.rid) {
+            routeName=item.routeName
+          }
+        })
+        return routeName;
+
+       },
         width: '15%',
         editable: true,
       },
@@ -170,7 +180,6 @@ class EditableTable extends Component {
     RoutsInfo.getGetRoutesByDistributerId(1).then((res)=>{
       this.setState({routeData:res.data})
     })
-   console.log(this.state.routeData);
 
   }
   
@@ -192,7 +201,7 @@ class EditableTable extends Component {
       if (index > -1) {
         const item = newData[index];
         newData.splice(index, 1, {
-          ...item,
+          ...item, 
           ...row,
         });
         console.log(newRow);
@@ -258,6 +267,7 @@ class EditableTable extends Component {
 
   }
   render() {
+   
     
     const components = {
       body: {
