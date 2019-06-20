@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as BuffaloQuota from '../services/distributorInfo';
-import * as DistributorInfo from '../services/distributorInfo'
+import * as BuffaloQuota from '../services/distributor/distributorQuota';
+import * as DistributorInfo from '../services/distributor/distributorInfo'
 import { func } from 'prop-types';
 
 
@@ -72,27 +72,27 @@ class EditableTable extends Component {
       {
         title: 'Route Name',
         dataIndex: 'routeName',
-        width: '10%',
+        width: '11%',
         editable: true,
       },
       {
         title: 'Buffalo',
         dataIndex: 'buffalo',
-        width: '15%',
+        width: '11%',
         editable: true,
       },
       {
         title: 'Remains',
         dataIndex: 'remainsBuffalo',
-        width: '15%',
+        width: '11%',
         editable: true,
       },
       {
         title: 'Total Routes',
         render: (record,text) =>(
-          record.buffalo + record.remainsBuffalo
+         Number( record.buffalo ) + Number(record.remainsBuffalo )
         ),
-        width: '15%',
+        width: '11%',
         editable: true,
       },
     ];

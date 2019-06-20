@@ -166,41 +166,41 @@
       "routeId": 3
     }
   ],
-  "ManageDailyRoute":[
+  "ManageDailyRoute": [
     {
-      "id":1,
-      "customerName":"ivision",
-      "buffalo":2,
-      "cow":4.5
+      "id": 1,
+      "customerName": "ivision",
+      "buffalo": 2,
+      "cow": 4.5
     },
     {
-      "id":2,
-      "customerName":"Blue Bricks",
-      "buffalo":3,
-      "cow":4
+      "id": 2,
+      "customerName": "Blue Bricks",
+      "buffalo": 3,
+      "cow": 4
     },
     {
-      "id":3,
-      "customerName":"celuepharma",
-      "buffalo":2,
-      "cow":4.5
+      "id": 3,
+      "customerName": "celuepharma",
+      "buffalo": 2,
+      "cow": 4.5
     }
   ],
   "DistributorQuota": [
     {
-      "id": 1,
-      "routeName" : "route1",
-      "buffalo": 40,
-      "cow": 30,
-      "manageBuffalo": 3,
-      "manageCow": 2,
-      "remainsBuffalo" : 3,
+      "manageBuffalo": 15,
+      "manageCow": 0,
+      "buffalo": 35,
+      "cow": 20,
+      "routeName": "route1",
+      "remainsBuffalo": 0,
       "remainsCow": 0,
-      "totalRoutes": 0
+      "totalRoutes": 0,
+      "id": 1
     },
     {
       "id": 2,
-      "routeName" : "route2",
+      "routeName": "route2",
       "buffalo": 35,
       "cow": 20,
       "manageBuffalo": 0,
@@ -208,23 +208,21 @@
       "remainsBuffalo": 0,
       "remainsCow": 0,
       "totalRoutes": 0
-      
     },
     {
       "id": 3,
-      "routeName" : "route3",
+      "routeName": "route3",
       "buffalo": 22,
       "cow": 35,
       "manageBuffalo": 0,
       "manageCow": 0,
-      "remainsBuffalo":0,
+      "remainsBuffalo": 0,
       "remainsCow": 0,
       "totalRoutes": 0
-      
     },
     {
       "id": 4,
-      "routeName" : "route4",
+      "routeName": "route4",
       "buffalo": 22,
       "cow": 35,
       "manageBuffalo": 0,
@@ -234,36 +232,36 @@
       "totalRoutes": 0
     }
   ],
-  "WholeSaler" : [
+  "WholeSaler": [
     {
-      "id" : 1,
-      "routeName" : "route1",
-      "sellerName" : "Ankush Zambre",
-      "buffalo" :22,
-      "buffaloPrice" : 50,
-      "cow":30,
+      "id": 1,
+      "routeName": "route1",
+      "sellerName": "Ankush Zambre",
+      "buffalo": 22,
+      "buffaloPrice": 50,
+      "cow": 30,
       "cowPrice": 40,
-      "totalRoute": 100 
+      "totalRoute": 100
     },
     {
-      "id" : 2,
-      "routeName" : " route2",
-      "sellerName" : "Blue Bricks",
-      "buffalo" :40,
-      "buffaloPrice" : 50,
-      "cow":60,
+      "id": 2,
+      "routeName": " route2",
+      "sellerName": "Blue Bricks",
+      "buffalo": 40,
+      "buffaloPrice": 50,
+      "cow": 60,
       "cowPrice": 40,
-      "totalRoute": 1000 
+      "totalRoute": 1000
     },
     {
-      "id" : 3,
-      "routeName" : "route3",
-      "sellerName" : "Mukand kadu",
-      "buffalo" :45,
-      "buffaloPrice" : 50,
-      "cow":50,
+      "id": 3,
+      "routeName": "route3",
+      "sellerName": "Mukand kadu",
+      "buffalo": 45,
+      "buffaloPrice": 50,
+      "cow": 50,
       "cowPrice": 40,
-      "totalRoute": 5100 
+      "totalRoute": 5100
     }
   ]
 }

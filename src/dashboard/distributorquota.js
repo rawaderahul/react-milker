@@ -2,8 +2,8 @@ import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
 import moment from 'moment';
-import * as DistributorQuota from '../services/distributorInfo';
-import * as DistributorInfo from '../services/distributorInfo';
+import * as DistributorQuota from '../services/distributor/distributorQuota';
+import * as DistributorInfo from '../services/distributor/distributorInfo';
 import * as CustomersInfoer from '../services/customerInfo';
 import CustomerModal from './modals/customer';
 import Quotabuffalo from './quotabuffalo';
@@ -18,10 +18,7 @@ const { RangePicker } = DatePicker;
 
 class EditableCell extends React.Component {
   getInput = () => {
-    if (this.props.inputType === 'number') {
       return <InputNumber />;
-    }
-    return <Input />;
   };
 
   renderCell = ({ getFieldDecorator }) => {
@@ -43,7 +40,7 @@ class EditableCell extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: `Please Input ${title}!`,
+                  message: 'Please Input `${title}`',
                 },
               ],
               initialValue: record[dataIndex],
@@ -73,7 +70,7 @@ class EditableTable extends Component {
         dataTo: null,
         distributorInfo: null,
         cowQuota:null,
-        buffaloQuota: null
+        buffaloQuota: null,
     };
   }
 
@@ -87,6 +84,8 @@ class EditableTable extends Component {
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
+    var totalManageBuffalo = 0;
+    var totalManageCow = 0;
     const {DistributorQuotaData} = this.state;
 
     let addColumn1 = {
@@ -112,13 +111,15 @@ class EditableTable extends Component {
         res.data.map((item)=>{
           totalbuffalo = totalbuffalo + item.buffalo;
           totalcow = totalcow + item.cow;
+          totalManageBuffalo = totalManageBuffalo + item.manageBuffalo;
+          totalManageCow = totalManageCow + item.manageCow;
            totalData = {
             id: 402,
             routeName:<b>Total </b>,
             buffalo: totalbuffalo,
             cow: totalcow,
-            manageBuffalo: 0,
-            manageCow: 0
+            manageBuffalo: totalManageBuffalo,
+            manageCow: totalManageCow
           }
         })
         res.data.push(totalData);
@@ -159,16 +160,21 @@ class EditableTable extends Component {
         return;
       }
       const newRow = row;
-      // row.rid = 1;
       const newData = [...this.state.DistributorQuotaData];
       const index = newData.findIndex(item => id === item.id);
       if (index > -1) {
         const item = newData[index];
+        row.buffalo = item.buffalo;
+        row.cow = item.cow;
+        row.routeName = item.routeName;
+        row.remainsBuffalo = item.remainsBuffalo;
+        row.remainsCow = item.remainsCow;
+        row. totalRoutes = item.totalRoutes; 
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        CustomersInfoer.putCustomerInfo(this.state.editingid,newRow)
+        DistributorQuota.putDistributorQuota(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({DistributorQuotaData: newData, editingid: '' })
           })
@@ -184,28 +190,7 @@ class EditableTable extends Component {
     this.setState({ editingid: id });
   }
 
-  addCustomer = () => {
-    this.setState({visible:true});
-  }
-
-  addNewCustomer = (event) => {
-    CustomersInfoer.postCustomerInfo(event)
-     .then((response) => {
-    })
-    this.setState({
-    visible: false,
-    });
-  };
-
-  hideModal = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-
   render() {
-
    let columns = [
       {
         title: 'Daily',
@@ -262,7 +247,7 @@ class EditableTable extends Component {
         render: (text, record) => {
           const { editingid } = this.state;
           const editable = this.isEditing(record);
-          const deletable=this.isDeleting(record);
+          const deletable = this.isDeleting(record);
           return editable ? (
             <span>
               <EditableContext.Consumer>
@@ -286,10 +271,10 @@ class EditableTable extends Component {
                 Edit
               </a>{" "}{" "} 
             {  
-            <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
-               <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
-                   <a to="javascript:;">Delete</a>
-                </Popconfirm>
+            // <a disabled={deletable !== ''} onClick={() => this.delete(record.id)}>Delete</a> && 
+            //    <Popconfirm title="Sure to delete?" onConfirm={() => this.delete(record.id)}>
+            //        <a to="javascript:;">Delete</a>
+            //     </Popconfirm>
             }
             </span>
           );
@@ -326,14 +311,11 @@ class EditableTable extends Component {
     return (
       <div>
       <EditableContext.Provider value={this.props.form}>
-        {/* <Button onClick={this.addCustomer} shape="round" size="large"  type="primary" style={{ marginBottom: 16 }}>
-          Add Customer
-        </Button> */}
-          <div style={{ display: "flex" , justifyContent: "space-between"}}>
-            <DatePicker onChange={(e,value)=>{this.setState({todaysDate : value})}} defaultValue={moment(date)} size={size} style={{ marginBottom: 16 }} shape="round" />
-            <h3>Today {this.state.todaysDate}  </h3>
-            <Button> Next Day </Button>
-          </div>
+        <div style={{ display: "flex" , justifyContent: "space-between"}}>
+          <DatePicker onChange={(e,value)=>{this.setState({todaysDate : value})}} defaultValue={moment(date)} size={size} style={{ marginBottom: 16 }} shape="round" />
+          <h3>Today {this.state.todaysDate}  </h3>
+          <Button> Next Day </Button>
+        </div>
          
         {/*onChange={(e,value)=>{this.setState({todaysDate : value})}}}*/}
         <Table
@@ -345,18 +327,22 @@ class EditableTable extends Component {
           rowClassName="editable-row"
           colSpan={2}
           pagination={false}
-         
         />
-       {
-         this.state.visible ? <CustomerModal 
-         addNewCustomer={this.addNewCustomer}
-         hideModal={this.hideModal}
-      /> : null
-       } 
+        {
+          this.state.visible ? <CustomerModal 
+          addNewCustomer={this.addNewCustomer}
+          hideModal={this.hideModal}
+        /> : null
+        } 
       </EditableContext.Provider>
-      <p><b>Edit :- could not less but can increase till ( Sell / Manage )</b> </p>
+      <br/>
+      <br/>
+      <br/>
+      
+      {/* <p><b>Edit :- could not less but can increase till ( Sell / Manage )</b> </p> */}
       <Quotabuffalo buffaloQuota = { this.state.buffaloQuota } />
       <Quotacow cowQuota = { this.state.cowQuota } />
+
       </div>
     );
   }

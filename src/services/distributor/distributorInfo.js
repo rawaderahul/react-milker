@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { uri } from './commonURI';
+import { uri } from '../commonURI';
 const url = 'http://localhost:3005/'
 
 export function getPerticluarDistributorInfo(id){

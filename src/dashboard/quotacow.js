@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as CowQuota from '../services/distributorInfo';
+import * as CowQuota from '../services/distributor/distributorQuota';
 
 var routeTotal = 0;
 const EditableContext = React.createContext();
@@ -65,19 +65,19 @@ class EditableTable extends Component {
       {
         title: 'Route Name',
         dataIndex: 'routeName',
-        width: '20%',
+        width: '11%',
         editable: true,
       },
       {
         title: 'Cow',
         dataIndex: 'cow',
-        width: '15%',
+        width: '11%',
         editable: true,
       },
       {
         title: 'Remains',
         dataIndex: 'remainsCow',
-        width: '15%',
+        width: '11%',
         editable: true,
       },
       {
@@ -85,7 +85,7 @@ class EditableTable extends Component {
         render: (record,text) =>(
            record.remainsCow + record.cow 
         ),
-        width: '15%',
+        width: '11%',
         editable: true,
       },
     ];
