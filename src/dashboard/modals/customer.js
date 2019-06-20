@@ -1,6 +1,5 @@
 import React,{Component} from 'react'
-import { Modal,Input,Form,Select } from 'antd';
-import axios from 'axios';
+import { Modal,Input,Form,Select, InputNumber } from 'antd';
 const {Option}=Select;
 const formItemLayout = {
   labelCol: { span: 8 },
@@ -39,6 +38,20 @@ class ModalForm extends Component{
                   ],
               })(<Input placeholder="Please input customer name" />)}
               </Form.Item>
+              <Form.Item {...formItemLayout} label="Buffalo Quantity">
+                  {getFieldDecorator('buffaloQuantity', {
+                      rules: [
+                          { required: true, message: 'Please input your buffalo quantity!' },
+                  ],
+                  })(<InputNumber placeholder = "Please input your buffalo quantity!" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                  <Form.Item {...formItemLayout} label="Cow Quantity">
+                  {getFieldDecorator('cowQuantity', {
+                      rules: [
+                          { required: true, message: 'Please input your cow quantity!' },
+                  ],
+                  })(<InputNumber placeholder = "Please input your cow quantity!" style={{ width: '100%' }} />)}
+                  </Form.Item>
               <Form.Item {...formItemLayout} label="Address">
                   {getFieldDecorator('address', {
                       rules: [
@@ -89,7 +102,7 @@ class ModalForm extends Component{
                 placeholder="Please Select Route  Pincodes"
             >
                 { this.props.routeData && this.props.routeData.map((item) => {
-                  return <Option value={item.rid}>{item.routeName}</Option>;
+                  return <Option value={item.rid} key={item.rid}>{item.routeName}</Option>;
                 })}
             </Select>)}
               </Form.Item>
