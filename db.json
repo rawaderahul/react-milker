@@ -189,7 +189,7 @@
   "DistributorQuota": [
     {
       "manageBuffalo": 15,
-      "manageCow": 8,
+      "manageCow": 0,
       "buffalo": 35,
       "cow": 20,
       "routeName": "route1",

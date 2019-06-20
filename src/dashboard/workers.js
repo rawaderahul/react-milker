@@ -51,26 +51,26 @@ class EditableCell extends React.Component {
                 })(
                   <Input  type="number"/>
                 ):null} 
-           </Form.Item>
-       <Form.Item style={{ margin: 0 }}>
-       {title=='Route' ?  getFieldDecorator('routeid', {
-          rules: [{ required: false, message: 'Please select route!' },
-        ],
-        initialValue: record['routeid']
-        })(
-          <Select
-          // onSelect={(value, option) => {this.props.handleRouteName(value, option)
-          // }}
-          style={{ width: '100px' }}>
-            {
-            routeData &&  routeData.map((item) => {
-              
-              return <Option value={item.rid}>{item.routeName}</Option>
-            })
-            }
-          </Select>
-        ):null} 
-       </Form.Item>
+            </Form.Item>
+
+            <Form.Item style={{ margin: 0 }}>
+              { title=='Route' ?  getFieldDecorator('routeid', {
+                  rules: [{ required: false, message: 'Please select route!' },
+                ],
+                initialValue: record['routeid']
+                })(
+                  <Select
+                  // onSelect={(value, option) => {this.props.handleRouteName(value, option)
+                  // }}
+                  style={{ width: '100px' }}>
+                    {
+                    routeData &&  routeData.map((item) => {
+                      return <Option value={item.rid}>{item.routeName}</Option>
+                    })
+                    }
+                  </Select>
+                ):null } 
+            </Form.Item>
           </span>
           
         ) : (
@@ -313,6 +313,7 @@ class EditableTable extends Component {
         />
 
         {this.state.visible ? < WorkerModal 
+        routeData = {this.state.routeData}
          addNewWorker = { this.addNewWorker }
          handleOk = { this.handleOk }
          /> :null}
