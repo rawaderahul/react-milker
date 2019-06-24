@@ -64,13 +64,13 @@ class EditableTable extends Component {
     this.columns = [
       {
         title: 'Route Name',
-        dataIndex: 'routeName',
+        dataIndex: 'RouteName',
         width: '11%',
         editable: true,
       },
       {
         title: 'Cow',
-        dataIndex: 'cow',
+        dataIndex: 'COW',
         width: '11%',
         editable: true,
       },
@@ -148,7 +148,7 @@ class EditableTable extends Component {
 
     return (
       <div>
-        <h1> Quota Cow : { this.props.cowQuota } </h1>
+        <h1> Quota Cow : { this.props.cowQuota } Ltr </h1>
       <EditableContext.Provider value={this.props.form}>
         <Table
           rowKey="id" 

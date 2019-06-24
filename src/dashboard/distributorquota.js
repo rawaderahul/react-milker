@@ -108,6 +108,7 @@ class EditableTable extends Component {
     
     DistributorQuota.getDistributorQuota()
       .then((res)=>{
+        console.log(res.data);
         res.data.map((item)=>{
           totalbuffalo = totalbuffalo + item.buffalo;
           totalcow = totalcow + item.cow;
@@ -130,6 +131,7 @@ class EditableTable extends Component {
 
       DistributorInfo.getPerticluarDistributorInfo(1).then((response)=>{
         this.setState({distributorInfo: response.data})
+        console.log("Distributer info",this.state.distributorInfo);
         this.state.distributorInfo.map((item)=>{
           this.setState({ cowQuota : item.dailyCowQuota })
           this.setState({ buffaloQuota : item.dailyBuffaloQuota})
@@ -198,7 +200,7 @@ class EditableTable extends Component {
           {
             title:'Route Name',
             align:'center',
-            dataIndex: 'routeName',
+            dataIndex: 'RouteName',
             width: '20%',
             editable: true,
           }
@@ -210,7 +212,7 @@ class EditableTable extends Component {
           {
             title:'Buffalo',
             align:'center',
-            dataIndex: 'buffalo',
+            dataIndex: 'Buffalow',
             width: '15%',
             editable: true,
           }
@@ -222,7 +224,7 @@ class EditableTable extends Component {
           {
             title:'Cow',
             align:'center',
-            dataIndex: 'cow',
+            dataIndex: 'COW',
             width: '15%',
             editable: true,
           }

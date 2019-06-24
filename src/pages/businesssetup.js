@@ -122,7 +122,7 @@ class BusinessSetUP extends Component{
 
            })
        }
-       
+
       finish =  async()=> { 
         let DistributorInfoData = JSON.parse(sessionStorage.getItem('DistributorInfoData'))
         let serviceAreas=DistributorInfoData.serviceAreas.join(",");
