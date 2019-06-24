@@ -93,7 +93,9 @@ class AnyRoutes extends Component {
     const { getFieldDecorator } = this.props.form;
     this.state={
       count:0,
-      dataSource:[]
+      dataSource:[],
+      editQuata:[],
+      editQuataId:[]
     }
     this.columns = [
         {
@@ -178,7 +180,7 @@ componentWillReceiveProps(nextProps) {
   
 }
 handleChange=(event,id,text)=> {
-  const { dataSource }=this.state;
+  const { dataSource,editQuata }=this.state;
 console.log(event);
   dataSource.map((item) => {
      if(item.id==id) {
@@ -188,6 +190,7 @@ console.log(event);
          case 'cow': item.cow=event;
          break;
        }
+      
      }
    })
 this.setState({dataSource})
@@ -199,23 +202,36 @@ handleMessage = id => {
   };
 
   increament=(id,text)=>{
-    const { dataSource }=this.state;
+    const { dataSource,editQuata,editQuataId }=this.state;
    dataSource.map((item) => {
-      if(item.id==id) {
+      if(item.cid==id) {
         switch(text) {
           case 'buffalo': item.buffaloQuantity=item.buffaloQuantity + 0.5;
           break;
           case 'cow': item.cowQuantity=item.cowQuantity + 0.5;
           break;
         }
+        // if(editQuataId.includes(id)) {
+          
+        // }
+        // else {
+        //   editQuata.push(item)
+        //   editQuataId.push(item.cid)
+        //   this.setState({editQuata:unique})
+
+        // }
+
       }
+      
     })
+
+
 this.setState({dataSource})
 
   }
   
   decrement=(id,text)=> {
-    const { dataSource }=this.state;
+    const { dataSource,editQuata }=this.state;
     dataSource.map((item) => {
        if(item.id==id) {
          switch(text) {
@@ -225,6 +241,7 @@ this.setState({dataSource})
            case 'cow':item.cowQuantity > 0 ? item.cowQuantity=item.cowQuantity - 0.5: item.cowQuantity=0;
            break;
          }
+
        }
      })
  this.setState({dataSource})
@@ -243,7 +260,7 @@ this.setState({dataSource})
   };
 
   render() {
-  console.log(this.props.rid);
+  console.log(this.state.editQuata);
 
     const { dataSource } = this.state;
     console.log(dataSource);

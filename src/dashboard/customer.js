@@ -283,6 +283,7 @@ class EditableTable extends Component {
           ...item,
           ...row,
         });
+        
         CustomersInfo.putCustomerInfo(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({customerData: newData, editingid: '' })
@@ -304,6 +305,8 @@ class EditableTable extends Component {
   }
 
   addNewCustomer = (event) => {
+    console.log(event);
+
     CustomersInfo.postCustomerInfo(event)
      .then((response) => {
     })
