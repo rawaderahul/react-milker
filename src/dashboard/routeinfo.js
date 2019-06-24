@@ -196,8 +196,8 @@ class EditableTable extends Component {
             });
         
         RoutesInfo.putRoutesInfo(this.state.editingid,newRow)
-          .then(()=>{
-            console.log(newData,newRow);
+          .then((response)=>{
+            console.log(response);
             
             this.setState({rootInfo: newData, editingid: '' })
           })
@@ -227,6 +227,8 @@ class EditableTable extends Component {
   addNewRoute = (event) => {
     RoutesInfo.postRoutesInfo(event)
     .then((response) => {
+      console.log(response);
+      
     })
     this.setState({
       visible: false,

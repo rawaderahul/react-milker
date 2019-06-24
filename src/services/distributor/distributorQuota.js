@@ -3,7 +3,7 @@ import { uri } from '../commonURI';
 const url = 'http://localhost:3005/'
 
 export function getDistributorQuota(){
-    return axios.get(url + 'DistributorQuota/')
+    return axios.get(uri + 'MilkQuota/1/')
 }
 
 export function getPerticluarDistributorQuota(id){

@@ -98,10 +98,11 @@ class BusinessSetUP extends Component{
               })
               CreateCustomersData.map((item4) => {
                 item4.distributerid=1;
-                
                 CreateWorker.map((value4) => {
                   // if(item4.routeName==value4.name) {
-                    item4.routeid=1;
+                    item4.routeid=2;
+                    console.log(item4);
+                    
                     axios.post("http://127.0.0.1:8000/api/Customer",item4).then((response4) => {
                       console.log("ok customer");
 
