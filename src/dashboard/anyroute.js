@@ -118,11 +118,11 @@ class AnyRoutes extends Component {
             title: 'Buffalo',
             render: (text, record) => (
               <span>
-                <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
+                <Icon type="minus" onClick={() => this.decrement(record.cid,'buffalo')}/>
                    <InputNumber value= {record.buffaloQuantity} 
                    style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
-                   onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
-                <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
+                   onChange={(e)=> this.handleChange(e,record.cid,'buffalo')}/>
+                <Icon type="plus" onClick={() => this.increament(record.cid,'buffalo')} style={{fontWeight:'bolder'}}/>
               </span>
 
            ),
@@ -140,11 +140,11 @@ class AnyRoutes extends Component {
             title: 'Cow',
             render: (text, record) => (
               <span>
-                <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
+                <Icon type="minus" onClick={() => this.decrement(record.cid,'cow')}/>
                 <InputNumber value={record.cowQuantity}
                 style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}} 
-                onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
-                <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
+                onChange={(e)=> this.handleChange(e,record.cid,'cow')}/>
+                <Icon type="plus" onClick={() => this.increament(record.cid,'cow')} style={{fontWeight:'bolder'}}/>
               </span>
            ),
            dataIndex:'cow',
@@ -160,7 +160,7 @@ class AnyRoutes extends Component {
         dataIndex: 'message',
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleMessage(record.id)}>
+            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleMessage(record.cid)}>
               <a href="javascript:;">Edit Message</a>
             </Popconfirm>
           ) : null,
@@ -180,16 +180,30 @@ componentWillReceiveProps(nextProps) {
   
 }
 handleChange=(event,id,text)=> {
-  const { dataSource,editQuata }=this.state;
-console.log(event);
+  const { dataSource,editQuata,editQuataId }=this.state;
+console.log(event,id,text);
   dataSource.map((item) => {
-     if(item.id==id) {
+     if(item.cid==id) {
        switch(text) {
-         case 'buffalo': item.buffalo=event;
+         case 'buffalo': item.buffaloQuantity=event;
          break;
-         case 'cow': item.cow=event;
+         case 'cow': item.cowQuantity=event;
          break;
        }
+       if(editQuataId.includes(id)) {
+        const index = editQuata.findIndex(item => id === item.cid);
+        const row = editQuata[index];
+        editQuata.splice(index, 1, {
+          ...row,
+          ...item,
+        });
+      }
+      else {
+        editQuata.push(item)
+        editQuataId.push(item.cid)
+      }
+
+      this.setState({editQuata,editQuataId})
       
      }
    })
@@ -211,15 +225,21 @@ handleMessage = id => {
           case 'cow': item.cowQuantity=item.cowQuantity + 0.5;
           break;
         }
-        // if(editQuataId.includes(id)) {
-          
-        // }
-        // else {
-        //   editQuata.push(item)
-        //   editQuataId.push(item.cid)
-        //   this.setState({editQuata:unique})
 
-        // }
+        if(editQuataId.includes(id)) {
+          const index = editQuata.findIndex(item => id === item.cid);
+          const row = editQuata[index];
+          editQuata.splice(index, 1, {
+            ...row,
+            ...item,
+          });
+        }
+        else {
+          editQuata.push(item)
+          editQuataId.push(item.cid)
+        }
+
+        this.setState({editQuata,editQuataId})
 
       }
       
@@ -227,13 +247,12 @@ handleMessage = id => {
 
 
 this.setState({dataSource})
-
   }
   
   decrement=(id,text)=> {
-    const { dataSource,editQuata }=this.state;
+    const { dataSource,editQuata ,editQuataId}=this.state;
     dataSource.map((item) => {
-       if(item.id==id) {
+       if(item.cid==id) {
          switch(text) {
          
            case 'buffalo': item.buffaloQuantity > 0 ? item.buffaloQuantity=item.buffaloQuantity - 0.5 : item.buffaloQuantity=0  ;
@@ -241,6 +260,20 @@ this.setState({dataSource})
            case 'cow':item.cowQuantity > 0 ? item.cowQuantity=item.cowQuantity - 0.5: item.cowQuantity=0;
            break;
          }
+         if(editQuataId.includes(id)) {
+          const index = editQuata.findIndex(item => id === item.cid);
+          const row = editQuata[index];
+          editQuata.splice(index, 1, {
+            ...row,
+            ...item,
+          });
+        }
+        else {
+          editQuata.push(item)
+          editQuataId.push(item.cid)
+        }
+
+        this.setState({editQuata,editQuataId})
 
        }
      })
@@ -263,7 +296,6 @@ this.setState({dataSource})
   console.log(this.state.editQuata);
 
     const { dataSource } = this.state;
-    console.log(dataSource);
     
     const components = {
       body: {
