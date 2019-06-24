@@ -199,15 +199,15 @@
       "id": 1
     },
     {
-      "id": 2,
-      "routeName": "route2",
-      "buffalo": 35,
-      "cow": 20,
       "manageBuffalo": 0,
       "manageCow": 0,
+      "buffalo": 35,
+      "cow": 20,
+      "routeName": "route2",
       "remainsBuffalo": 0,
       "remainsCow": 0,
-      "totalRoutes": 0
+      "totalRoutes": 0,
+      "id": 2
     },
     {
       "id": 3,

@@ -60,8 +60,7 @@ class EditableCell extends React.Component {
                 initialValue: record['routeid']
                 })(
                   <Select
-                  // onSelect={(value, option) => {this.props.handleRouteName(value, option)
-                  // }}
+                  
                   style={{ width: '100px' }}>
                     {
                     routeData &&  routeData.map((item) => {
@@ -262,10 +261,7 @@ class EditableTable extends Component {
       visible: false,
     });
   };
-  handleRouteName=(value,option)=> {
-   this.setState({routeName:option})
-
-  }
+ 
   render() {
    
     
@@ -288,7 +284,7 @@ class EditableTable extends Component {
           title: col.title,
           editing: this.isEditing(record),
           routeData:this.state.routeData,
-          handleRouteName:this.handleRouteName
+         
         }),
       };
     });
