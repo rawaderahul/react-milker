@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url ='http://localhost:3005/DemoSheet';
+const url ='http://localhost:3005/';
 
 export function getDemoSheet(){
     return axios.get(url + 'DemoSheet/')

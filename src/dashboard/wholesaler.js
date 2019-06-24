@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon} from 'antd';
+import * as WholesalerInfo from '../services/wholesaler/wholesaler';
 import axios from 'axios';
 
 const EditableContext = React.createContext();
@@ -109,14 +110,17 @@ class AnyRoutes extends Component {
         },
         {
             title : 'Route Name',
-            dataIndex : 'routeName',
+            dataIndex : 'routeid',
             width: '10%',
+            render : (record) =>(
+                console.log(record)
+            ),
             align: 'center'
 
         },
         {
-            title: 'Customer Name',
-            dataIndex: 'sellerName',
+            title: 'Wholesaler Name',
+            dataIndex: 'name',
             width: '15%',
             align:'center'
         },
@@ -124,14 +128,13 @@ class AnyRoutes extends Component {
         
             title: 'Buffalo',
             width:'15%',
-            dataIndex:'buffalo',
             render: (text, record) => (
                 <span>
-                    <Icon type="minus" onClick={() => this.decrement(record.id,'buffalo')}/>
-                        <InputNumber value = {record.buffalo} 
+                    <Icon type="minus" onClick={() => this.decrement(record.id,'dailyBuffaloQuota')}/>
+                        <InputNumber value = {record.dailyBuffaloQuota} 
                         style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
-                        onChange={(e)=> this.handleChange(e,record.id,'buffalo')}/>
-                    <Icon type="plus" onClick={() => this.increament(record.id,'buffalo')} style={{fontWeight:'bolder'}}/>
+                        onChange={(e)=> this.handleChange(e,record.id,'dailyBuffaloQuota')}/>
+                    <Icon type="plus" onClick={() => this.increament(record.id,'dailyBuffaloQuota')} style={{fontWeight:'bolder'}}/>
                 </span>
             ),
             align:'center',
@@ -139,7 +142,7 @@ class AnyRoutes extends Component {
         {
             title: 'Buffalo Price',
             render: (record)=>(
-             record.buffalo * record.buffaloPrice 
+             record.dailyBuffaloQuota * record.buffaloPrice 
             ),
             width: '10%',
             align:'center',
@@ -150,11 +153,11 @@ class AnyRoutes extends Component {
             dataIndex: 'cow',
             render: (text, record) => (
                 <span>
-                    <Icon type="minus" onClick={() => this.decrement(record.id,'cow')}/>
-                        <InputNumber value = {record.cow} 
+                    <Icon type="minus" onClick={() => this.decrement(record.id,'dailyCowQuota')}/>
+                        <InputNumber value = {record.dailyCowQuota} 
                         style={{width:60,marginLeft:10,marginRight:10,textAlign:'center'}}
-                        onChange={(e)=> this.handleChange(e,record.id,'cow')}/>
-                    <Icon type="plus" onClick={() => this.increament(record.id,'cow')} style={{fontWeight:'bolder'}}/>
+                        onChange={(e)=> this.handleChange(e,record.id,'dailyCowQuota')}/>
+                    <Icon type="plus" onClick={() => this.increament(record.id,'dailyCowQuota')} style={{fontWeight:'bolder'}}/>
                 </span>
             ),
             align:'center',
@@ -162,7 +165,7 @@ class AnyRoutes extends Component {
         {
             title: 'Cow Price',
             render:(record)=>(
-                record.cow * record.cowPrice
+                record.dailyCowQuota * record.cowPrice
             ),
             width: '10%',
             align:'center'
@@ -170,7 +173,7 @@ class AnyRoutes extends Component {
         {
             title: 'Total Price',
             render:(record)=>(
-               ( record.cow * record.cowPrice ) + ( record.buffalo * record.buffaloPrice )
+               ( record.dailyCowQuota * record.cowPrice ) + ( record.dailyBuffaloQuota * record.buffaloPrice )
             ),
             // dataIndex: 'cowPrice',
             width:'20%',
@@ -179,12 +182,14 @@ class AnyRoutes extends Component {
   }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/MilkBrands').then((res)=>{
-            this.setState({milkbrand: res.data})
+        WholesalerInfo.getWholesalerInfo().then((res)=>{
+            this.setState({dataSource: res.data})
+            console.log(this.state.dataSource);
+            
         })
-        axios.get('http://localhost:3005/WholeSaler').then((response) => {
-        this.setState({ dataSource:response.data })
-        })
+        // axios.get('http://localhost:3005/WholeSaler').then((response) => {
+        // this.setState({ dataSource:response.data })
+        // })
     }
 
     handleChange=(event,id,text)=> {
@@ -192,9 +197,9 @@ class AnyRoutes extends Component {
     dataSource.map((item) => {
         if(item.id==id) {
         switch(text) {
-            case 'buffalo': item.buffalo=event;
+            case 'dailyBuffaloQuota': item.dailyBuffaloQuota = event;
             break;
-            case 'cow': item.cow=event;
+            case 'dailyCowQuota': item.dailyCowQuota = event;
             break;
         }
         }
@@ -207,14 +212,14 @@ class AnyRoutes extends Component {
         // this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
     };
 
-    increament=(id,text)=>{
-        const { dataSource }=this.state;
+    increament = (id,text) =>{
+        const { dataSource } = this.state;
         dataSource.map((item) => {
             if(item.id==id) {
                 switch(text) {
-                case 'buffalo': item.buffalo=item.buffalo + 0.5;
+                case 'dailyBuffaloQuota': item.dailyBuffaloQuota = item.dailyBuffaloQuota + 0.5;
                 break;
-                case 'cow': item.cow=item.cow + 0.5;
+                case 'dailyCowQuota': item.dailyCowQuota = item.dailyCowQuota + 0.5;
                 break;
                 }
             }
@@ -223,14 +228,14 @@ class AnyRoutes extends Component {
 
     }
   
-    decrement=(id,text)=> {
-        const { dataSource }=this.state;
+    decrement = (id,text) => {
+        const { dataSource } = this.state;
         dataSource.map((item) => {
         if(item.id==id) {
             switch(text) {
             case 'buffalo': item.buffalo > 0 ? item.buffalo=item.buffalo - 0.5 : item.buffalo=0  ;
             break;
-            case 'cow':item.cow > 0 ? item.cow=item.cow - 0.5: item.cow=0;
+            case 'dailyCowQuota':item.dailyCowQuota > 0 ? item.dailyCowQuota = item.dailyCowQuota - 0.5: item.dailyCowQuota=0;
             break;
             }
         }

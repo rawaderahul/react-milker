@@ -7,6 +7,7 @@ import RouteInfo from '../dashboard/routeinfo';
 import Distributorquota from '../dashboard/distributorquota';
 import Wholesaler from '../dashboard/wholesaler';
 import Messages from '../dashboard/messages';
+import * as RouteData from '../services/routesInfo'
 import axios from 'axios';
 import AnyRoute from '../dashboard/anyroute'
 
@@ -28,8 +29,10 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((response)=> {
+    let distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    RouteData.getGetRoutesByDistributerId(distributerid).then((response)=> {
     this.setState({routeData:response.data})
+    console.log(this.state.routeData);
     })
   }
   

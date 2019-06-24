@@ -85,7 +85,7 @@ class CreateDeliveryBoysForm extends React.Component {
         <h2> Step 3:  Create Delivery Boy   </h2>
           <Row>
             <Col span={12}>
-              <Form.Item {...formItemLayout} label="Name">
+              <Form.Item {...formItemLayout} label="Delivery Boy Name">
                 {getFieldDecorator('workerName', {
                   rules: [
                   {required: true,message: 'Please enter delivery boy name',},

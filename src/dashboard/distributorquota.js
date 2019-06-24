@@ -76,11 +76,13 @@ class EditableTable extends Component {
 
   isDeleting=record => record.id === this.state.editingid;
 
-  delete = (id) => {
-  axios.delete("http://127.0.0.1:8000/api/Customer/"+id).then((response)=>{
-  })
-  }
+  // delete = (id) => {
+  // axios.delete("http://127.0.0.1:8000/api/Customer/"+id).then((response)=>{
+  // })
+  // }
+
   componentDidMount() {
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
@@ -106,7 +108,7 @@ class EditableTable extends Component {
       manageCow: 0
     }
     
-    DistributorQuota.getDistributorQuota()
+    DistributorQuota.getDistributorQuota(distributerid)
       .then((res)=>{
         console.log(res.data);
         res.data.map((item)=>{
@@ -129,7 +131,7 @@ class EditableTable extends Component {
        this.setState({DistributorQuotaData : res.data });
       })
 
-      DistributorInfo.getPerticluarDistributorInfo(1).then((response)=>{
+      DistributorInfo.getPerticluarDistributorInfo(distributerid).then((response)=>{
         this.setState({distributorInfo: response.data})
         console.log("Distributer info",this.state.distributorInfo);
         this.state.distributorInfo.map((item)=>{

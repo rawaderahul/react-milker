@@ -118,7 +118,7 @@ class CreateRoutesInfoForm extends React.Component {
       <h2> Step 2: Create Routes </h2>
         <Row>
           <Col span = {12}>
-            <Form.Item {...formItemLayout} label="Number">
+            <Form.Item {...formItemLayout} label="Your Route Number">
             {getFieldDecorator('routeName', {
               initialValue:this.state.routeName,
                 rules: [
@@ -130,7 +130,7 @@ class CreateRoutesInfoForm extends React.Component {
             })(<Input placeholder="Please input your route number" />)}
             </Form.Item>
             
-            <Form.Item {...formItemLayout} label="Areas" >
+            <Form.Item {...formItemLayout} label="Select Route Areas" >
               {getFieldDecorator('routeAreas', {
                 initialValue:this.state.routeAreas,
                   rules: [{ required: true, message: 'Please select route areas!' }],
