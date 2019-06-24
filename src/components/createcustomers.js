@@ -4,10 +4,12 @@ import axios from 'axios';
 import csv from 'csv';
 import ReactFileReader from 'react-file-reader';
 import { CSVLink } from "react-csv";
+import * as CsvSheet from '../services/customer/csvSheet';
+
 class CreateCustomersForms extends React.Component {
   constructor() {
     super();
-    this.state={
+    this.state = {
       demoDataSource:[],
       csvDataSource:[],
       sheets:[],
@@ -19,8 +21,9 @@ class CreateCustomersForms extends React.Component {
   }
     
   componentDidMount() {
-    let CreateCustomersData=JSON.parse(sessionStorage.getItem('CreateCustomersData'))
-    let CreateRoutesData=JSON.parse(sessionStorage.getItem('CreateRoutesData'))
+    let CreateCustomersData = JSON.parse(sessionStorage.getItem('CreateCustomersData'))
+    let CreateRoutesData = JSON.parse(sessionStorage.getItem('CreateRoutesData'))
+    
       if(CreateRoutesData) {
         this.setState({CreateRoutesData})
       }
@@ -29,17 +32,17 @@ class CreateCustomersForms extends React.Component {
         this.setState({CreateCustomersData})
       }
 
-    axios.get('http://localhost:3005/DemoSheet').then((response) => {
+    CsvSheet.getDemoSheet().then((response) => {
       this.setState({demoDataSource:response.data})
     })
     
-    axios.get('http://localhost:3005/BlankSheet').then((response) => {
+    CsvSheet.getBlankSheet().then((response) => {
       this.setState({blankDataSource:response.data})
     })
   }
 
   handleFiles = (files,routeName) => {
-    if(files[0].name===`${routeName}.csv`) {
+    if(files[0].name === `${routeName}.csv`) {
       var reader = new FileReader();
     reader.onload = (e) => {
     csv.parse(reader.result, (err, data) => {
@@ -83,21 +86,21 @@ class CreateCustomersForms extends React.Component {
   }
 
   exportCSV = (sheetName) => {
-    var csvRow=[];
-    var head =[['customerName','address','pincode','contact','email','paymentType','buffaloQuantity','cowQuantity']];
-    var re=this.state.blankDataSource;
+    var csvRow = [];
+    var head = [['customerName','address','pincode','contact','email','paymentType','buffaloQuantity','cowQuantity']];
+    var record = this.state.blankDataSource;
   
-    for(var item=0; item < re.length; item++) {
-      head.push([re[item].customerName,re[item].address, re[item].pincode,re[item].contact,re[item].email,re[item].paymentType,re[item].buffaloQuantity,re[item].cowQuantity]);
+    for(var item = 0; item < record.length; item++) {
+      head.push([record[item].customerName,record[item].address, record[item].pincode,record[item].contact,record[item].email,record[item].paymentType,record[item].buffaloQuantity,record[item].cowQuantity]);
     }
-    for(var i=0; i<head.length; ++i) {
+    for(var i = 0; i<head.length; ++i) {
       csvRow.push(head[i].join(",")) ;
     }
-    var csvString=csvRow.join("%0A");
-    var headAppend=document.createElement("a");
-    headAppend.href='data:attachment/csv,' + csvString;
-    headAppend.target="_Blank";
-    headAppend.download=`${sheetName}.csv`
+    var csvString = csvRow.join("%0A");
+    var headAppend = document.createElement("a");
+    headAppend.href = 'data:attachment/csv,' + csvString;
+    headAppend.target = "_Blank";
+    headAppend.download = `${sheetName}.csv`
     document.body.appendChild(headAppend);
     headAppend.click();
     console.log(csvString);
@@ -113,18 +116,18 @@ class CreateCustomersForms extends React.Component {
               {this.state.CreateRoutesData && 
               this.state.CreateRoutesData.map((item,index) => {
               return(
-                <div key={index}>
+                <div key = {index}>
                   <h3> Download {item.routeName} blank template </h3>
                   <Row>
                   <Col span={12} >
-                    <Button type="primary"  onClick={() => this.exportCSV(item.routeName)}>
+                    <Button type="primary"  onClick = {() => this.exportCSV(item.routeName)}>
                         Download {item.routeName} blank Sheet
                     </Button>
                   </Col>
                   <Col span={12} >
-                    <ReactFileReader handleFiles={(e) => this.handleFiles(e,item.routeName)} fileTypes={'.csv'} >
+                    <ReactFileReader handleFiles = {(e) => this.handleFiles(e,item.routeName)} fileTypes={'.csv'} >
                       <Button >
-                        <Icon type="inbox"  />Upload {item.routeName} blank Sheet
+                        <Icon type="inbox" /> Upload {item.routeName} blank Sheet
                       </Button>
                     </ReactFileReader>
                   </Col>
@@ -138,9 +141,9 @@ class CreateCustomersForms extends React.Component {
             <Col span={12}> 
               <h3> Demo Sheet for understand how to write data in sheet  </h3>  
               <CSVLink
-                data={this.state.demoDataSource}
-                filename={"demo-sheet.csv"}
-                target="_blank"
+                data = {this.state.demoDataSource}
+                filename = {"demo-sheet.csv"}
+                target = "_blank"
               >
                 <Button type="primary" >
                   Download Demo Sheet
