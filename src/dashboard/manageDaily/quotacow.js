@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as CowQuota from '../services/distributor/distributorQuota';
+import * as CowQuota from '../../services/distributor/distributorQuota';
 
 var routeTotal = 0;
 const EditableContext = React.createContext();

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Button, Select,Row, Col,Icon} from 'antd';
-import EditDeliveryBoy from './editdeliveryboy';
+import EditDeliveryBoy from './modal/editdeliveryboy';
 
 const formItemLayout = {
   labelCol: { span: 8 },

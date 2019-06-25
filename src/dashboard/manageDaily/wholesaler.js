@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 
 import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon} from 'antd';
-import * as WholesalerInfo from '../services/wholesaler/wholesaler';
-import axios from 'axios';
+import * as WholesalerInfo from '../../services/wholesaler/wholesaler';
 
 const EditableContext = React.createContext();
 

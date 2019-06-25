@@ -1,6 +1,5 @@
 import React from 'react'
 import { Form, Button, Icon,  Row, Col, message } from 'antd';
-import axios from 'axios';
 import csv from 'csv';
 import ReactFileReader from 'react-file-reader';
 import { CSVLink } from "react-csv";

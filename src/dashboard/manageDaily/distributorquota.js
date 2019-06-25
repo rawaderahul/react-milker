@@ -1,14 +1,13 @@
 import React,{ Component } from 'react'
-import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
 import moment from 'moment';
-import * as DistributorQuota from '../services/distributor/distributorQuota';
-import * as DistributorInfo from '../services/distributor/distributorInfo';
-import * as CustomersInfoer from '../services/customerInfo';
-import CustomerModal from './modals/customer';
+import * as DistributorQuota from '../../services/distributor/distributorQuota';
+import * as DistributorInfo from '../../services/distributor/distributorInfo';
+import * as CustomersInfoer from '../../services/customer/customerInfo';
+import CustomerModal from '../modals/customer';
 import Quotabuffalo from './quotabuffalo';
 import Quotacow from './quotacow';
-import './stylesheets/distributorquota.css';
+import '../stylesheets/distributorquota.css';
 
 var dataTo=null;
 var datas = 120;

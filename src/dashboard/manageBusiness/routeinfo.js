@@ -1,10 +1,13 @@
 import React,{ Component } from 'react'
 import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form ,Button,Select} from 'antd';
-import * as RoutesInfo from '../services/routesInfo';
-import RouteModal from './modals/routeinfo'
+import * as RoutesInfo from '../../services/route/routesInfo';
+import RouteModal from '../modals/routeinfo'
+
 const EditableContext = React.createContext();
-const { Option } =Select;
+
+const { Option } = Select;
+
 class EditableCell extends React.Component {
   getInput = () => {
     if (this.props.inputType === 'number') {

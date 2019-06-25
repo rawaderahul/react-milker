@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Button, Select,Row, Col,Icon} from 'antd';
-import EditRoutes from './editroutes';
+import EditRoutes from './modal/editroutes';
 
 const formItemLayout = {
   labelCol: { span: 8 },
