@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-
-import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon} from 'antd';
+import * as Customer from '../services/customerInfo'
+import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon,message} from 'antd';
 import axios from 'axios';
 const EditableContext = React.createContext();
 
@@ -47,7 +47,7 @@ class EditableCell extends Component {
           rules: [
             {
               required: true,
-              message: `${title} is required.`,
+              // message: `${title} is required.`,
             },
           ],
           initialValue: record[dataIndex],
@@ -167,14 +167,14 @@ class AnyRoutes extends Component {
       },
     ];
 
-    axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/'+ this.props.rid).then((response) => {
+    Customer.getCustomerListByRouteId(this.props.id).then((response) => {
     this.setState({ dataSource:response.data })
     })
   }
   
   
 componentWillReceiveProps(nextProps) {
-    axios.get('http://127.0.0.1:8000/api/CustomerListByRouteId/'+ nextProps.rid).then((response) => {
+  Customer.getCustomerListByRouteId(this.props.id).then((response) => {
     this.setState({ dataSource:response.data })
     })
   
@@ -292,6 +292,20 @@ this.setState({dataSource})
     this.setState({ dataSource: newData });
   };
 
+  saveChanges = () => {
+    message
+    .loading('Action in progress..', 2.5)
+    .then(() => message.success('Save Changes Successfully', 2.5))
+
+    this.state.editQuata.map((item) => {
+      Customer.putCustomerInfo(item.cid,item).then((res)=>{
+         console.log(("ok"));
+         
+      })
+    })
+    this.setState({editQuata:[]})
+
+  }
   render() {
   console.log(this.state.editQuata);
 
@@ -320,6 +334,8 @@ this.setState({dataSource})
     });
     return (
       <div>
+        <Button type="primary" onClick = {this.saveChanges} disabled={ this.state.editQuata.length===0}
+         style={{marginBottom:10}}>Save Changes</Button>
         <Table
           rowKey="id"
           components={components}
