@@ -2,8 +2,8 @@ import axios from 'axios';
 import { uri } from '../commonURI';
 const url = 'http://localhost:3005/'
 
-export function getDistributorQuota(){
-    return axios.get(uri + 'MilkQuota/1/')
+export function getDistributorQuota(id){
+    return axios.get(uri + 'MilkQuota/'+ id)
 }
 
 export function getPerticluarDistributorQuota(id){

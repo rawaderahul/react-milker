@@ -1,14 +1,14 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import Distributor from '../dashboard/distributor';
-import Customer from '../dashboard/customer';
-import Deliveryboy from '../dashboard/workers';
-import RouteInfo from '../dashboard/routeinfo';
-import Distributorquota from '../dashboard/distributorquota';
-import Wholesaler from '../dashboard/wholesaler';
-import Messages from '../dashboard/messages';
-import axios from 'axios';
-import AnyRoute from '../dashboard/anyroute'
+import Distributor from '../dashboard/manageBusiness/distributor';
+import Customer from '../dashboard/manageBusiness/customer';
+import Deliveryboy from '../dashboard/manageBusiness/workers';
+import RouteInfo from '../dashboard/manageBusiness/routeinfo';
+import Distributorquota from '../dashboard/manageDaily/distributorquota';
+import Wholesaler from '../dashboard/manageDaily/wholesaler';
+import Messages from '../dashboard/manageDaily/messages';
+import * as RouteData from '../services/route/routesInfo'
+import AnyRoute from '../dashboard/manageDaily/anyroute'
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -28,8 +28,10 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8000/api/GetRoutesByDistributerId/1').then((response)=> {
+    let distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    RouteData.getGetRoutesByDistributerId(distributerid).then((response)=> {
     this.setState({routeData:response.data})
+    console.log(this.state.routeData);
     })
   }
   

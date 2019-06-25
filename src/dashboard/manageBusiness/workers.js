@@ -1,8 +1,8 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button ,Select} from 'antd';
-import * as Workers from '../services/workersInfo';
-import * as RoutsInfo from '../services/routesInfo'
-import WorkerModal from './modals/workers'
+import * as Workers from '../../services/worker/workersInfo';
+import * as RoutsInfo from '../../services/route/routesInfo'
+import WorkerModal from '../modals/workers'
 
 const { Option } = Select;
 const EditableContext = React.createContext();

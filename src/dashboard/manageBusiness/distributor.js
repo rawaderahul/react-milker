@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { Table, Input,Form, } from 'antd'
-import * as DistributorsInfo from '../services/distributor/distributorInfo';
+import * as DistributorsInfo from '../../services/distributor/distributorInfo'
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -113,7 +113,8 @@ class ShopDetails extends React.Component {
     let dataSource;
     DistributorsInfo.getPerticluarDistributorInfo(1)
       .then((response) =>{
-      this.setState({distributorData:response.data[0]})
+        this.setState({distributorData:response.data[0]})
+        console.log(this.state.distributorData);
       dataSource= [
         {
           name:<b>OrganizationName:</b>,
@@ -177,6 +178,16 @@ class ShopDetails extends React.Component {
           id:'servicePincodes'
         },
         {
+          name:<b>Daily Buffalo Quota:</b>,
+          value:this.state.distributorData['dailyBuffaloQuota'],
+          id:'dailyBuffaloQuota'
+        },
+        {
+          name:<b>Daily Cow Quota:</b>,
+          value:this.state.distributorData['dailyCowQuota'],
+          id:'dailyCowQuota'
+        },
+        {
           name:<b>DeliveryCharge:</b>,
           value:this.state.distributorData['deliveryCharge'],
           id:'deliveryCharge'
@@ -234,8 +245,8 @@ class ShopDetails extends React.Component {
     return (
       <div>
         <Table className='header distributor-details'
-         rowKey="did"
-         pagination={false}
+          rowKey="did"
+          pagination={false}
           components={components}
           rowClassName={() => 'editable-row'}
           bordered

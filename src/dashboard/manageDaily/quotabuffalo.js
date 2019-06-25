@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
-import * as BuffaloQuota from '../services/distributor/distributorQuota';
-import * as DistributorInfo from '../services/distributor/distributorInfo'
+import * as BuffaloQuota from '../../services/distributor/distributorQuota';
+import * as DistributorInfo from '../../services/distributor/distributorInfo'
 import { func } from 'prop-types';
 
 

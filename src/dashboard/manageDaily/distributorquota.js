@@ -1,14 +1,13 @@
 import React,{ Component } from 'react'
-import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,DatePicker  } from 'antd';
 import moment from 'moment';
-import * as DistributorQuota from '../services/distributor/distributorQuota';
-import * as DistributorInfo from '../services/distributor/distributorInfo';
-import * as CustomersInfoer from '../services/customerInfo';
-import CustomerModal from './modals/customer';
+import * as DistributorQuota from '../../services/distributor/distributorQuota';
+import * as DistributorInfo from '../../services/distributor/distributorInfo';
+import * as CustomersInfoer from '../../services/customer/customerInfo';
+import CustomerModal from '../modals/customer';
 import Quotabuffalo from './quotabuffalo';
 import Quotacow from './quotacow';
-import './stylesheets/distributorquota.css';
+import '../stylesheets/distributorquota.css';
 
 var dataTo=null;
 var datas = 120;
@@ -76,11 +75,13 @@ class EditableTable extends Component {
 
   isDeleting=record => record.id === this.state.editingid;
 
-  delete = (id) => {
-  axios.delete("http://127.0.0.1:8000/api/Customer/"+id).then((response)=>{
-  })
-  }
+  // delete = (id) => {
+  // axios.delete("http://127.0.0.1:8000/api/Customer/"+id).then((response)=>{
+  // })
+  // }
+
   componentDidMount() {
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
@@ -106,7 +107,7 @@ class EditableTable extends Component {
       manageCow: 0
     }
     
-    DistributorQuota.getDistributorQuota()
+    DistributorQuota.getDistributorQuota(distributerid)
       .then((res)=>{
         console.log(res.data);
         res.data.map((item)=>{
@@ -129,7 +130,7 @@ class EditableTable extends Component {
        this.setState({DistributorQuotaData : res.data });
       })
 
-      DistributorInfo.getPerticluarDistributorInfo(1).then((response)=>{
+      DistributorInfo.getPerticluarDistributorInfo(distributerid).then((response)=>{
         this.setState({distributorInfo: response.data})
         console.log("Distributer info",this.state.distributorInfo);
         this.state.distributorInfo.map((item)=>{

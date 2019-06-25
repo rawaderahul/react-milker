@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { uri } from './commonURI';
+import { uri } from '../commonURI';
 
 export function getRoutesInfo(){
     return axios.get(uri+ 'Route/')
