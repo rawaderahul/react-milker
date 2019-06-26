@@ -40,8 +40,15 @@ class DistributorInfoDataForm extends React.Component {
             selectedItems: [],
         }
     }
-   
+   componentWillReceiveProps(nextProps) {
+       if(nextProps.clicked) {
+        this.check();
+       }
+   }
+ 
     componentDidMount() {
+        console.log("did",this.props.form);
+      
         axios.get("http://localhost:3005/location").then((response) => {
         this.setState({locationData:response.data})
 
@@ -101,36 +108,17 @@ class DistributorInfoDataForm extends React.Component {
     
     check = () => {
         this.props.form.validateFields((err,values) => {
-
             if (!err) {
                 this.setState({
                     DistributorInfoData:values,
-                    organizationName:null,
-                    name:null,
-                    email:null,
-                    contact:null,
-                    address:null,
-                    state:[],
-                    city:[],
-                    area:[],
-                    pincode:[],
-                    serviceAreas:[],
-                    servicePincodes:[],
-                    dailyBuffaloQuota:null,
-                    dailyCowQuota:null,
-                    deliveryCharge:null
-                    // selectedItems:[]
                 })
-                console.log(values);
-                
-                this.props.flag()
-
+                this.props.next();
             this.props.form.resetFields();
             
         window.sessionStorage.setItem("DistributorInfoData", JSON.stringify(values));
-
         }
         });
+        this.props.handleChange()
     };
 
     handleChange = selectedItems => {
@@ -262,9 +250,6 @@ class DistributorInfoDataForm extends React.Component {
                             </Form.Item>    
 
                             <Form.Item {...formTailLayout}>
-                            <Button type="primary" onClick={this.check}>
-                                Check
-                            </Button>
                             </Form.Item>
                         </Col>
                         

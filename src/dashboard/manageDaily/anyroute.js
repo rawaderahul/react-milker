@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import * as Customer from '../services/customerInfo'
+import * as Customer from '../../services/customer/customerInfo'
 import { Table, InputNumber,Input, Button, Popconfirm, Form ,Icon,message} from 'antd';
 import axios from 'axios';
 const EditableContext = React.createContext();
