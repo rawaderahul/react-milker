@@ -27,7 +27,8 @@ class CreateRoutesInfoForm extends React.Component {
       editableData:{},
       isEdit:false,
       selectedItems:[],
-      DistributorInfoData:[]
+      DistributorInfoData:[],
+      routeNumber :1
     }
   }
 
@@ -37,7 +38,7 @@ class CreateRoutesInfoForm extends React.Component {
     this.setState({DistributorInfoData})
    
     if(CreateRoutesData) {
-      this.setState({CreateRoutesData})
+      this.setState({CreateRoutesData,routeNumber:Number(this.state.routeNumber) + CreateRoutesData.length })
       this.props.flag()
      }
     if(DistributorInfoData) {
@@ -82,6 +83,7 @@ class CreateRoutesInfoForm extends React.Component {
     this.props.form.validateFields((err,values) => {
       if (!err) {
         this.state.CreateRoutesData.push(values);
+        this.setState({routeNumber:Number(this.state.routeNumber) + 1 })
         this.props.flag()
         window.sessionStorage.setItem("CreateRoutesData",JSON.stringify(this.state.CreateRoutesData));
         this.props.form.resetFields();
@@ -120,7 +122,7 @@ class CreateRoutesInfoForm extends React.Component {
           <Col span = {12}>
             <Form.Item {...formItemLayout} label="Your Route Number">
             {getFieldDecorator('routeName', {
-              initialValue:this.state.routeName,
+              initialValue:'00' +this.state.routeNumber,
                 rules: [
                 {
                     required: true,

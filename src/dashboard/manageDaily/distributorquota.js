@@ -82,6 +82,12 @@ class EditableTable extends Component {
 
   componentDidMount() {
     var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    if(!distributerid) {
+      window.sessionStorage.setItem("distributerid",1);
+      var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    }
+    console.log(distributerid); 
+    
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
