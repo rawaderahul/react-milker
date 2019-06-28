@@ -39,10 +39,11 @@ class BusinessSetUP extends Component{
           isRedirect:false,
           CreateRoute:[],
           CreateDeliveryBoys:[],
+          clicked:false
         };
     }
 
-      next() {
+      next=()=> {
         const current = this.state.current + 1;
         this.setState({ current });
         this.setState({flag:true})
@@ -50,7 +51,7 @@ class BusinessSetUP extends Component{
       flag=()=> {
       this.setState({flag:false})
       }
-      prev() {
+      prev=()=> {
         const current = this.state.current - 1;
         this.setState({ current });
       }
@@ -136,11 +137,21 @@ class BusinessSetUP extends Component{
          await this.CreateRoutes()
         })
       }
+
+      click=(e)=> {
+       console.log(e);
+       
+      }
+      handleChange=()=>{
+        this.setState({clicked:false});
+      }
       render(){
       const steps = [
         {
           title: 'Distributer',
-          content: <DistributorInfo flag={this.flag} />,
+          content: <DistributorInfo flag={this.flag} click={this.click} next={this.next} 
+          clicked={this.state.clicked}
+          handleChange={this.handleChange}/>,
         },
         {
           title: 'Create Routes',
@@ -187,8 +198,14 @@ class BusinessSetUP extends Component{
                             Previous
                           </Button>
                         )}
-                        {current < steps.length - 1 && (
+                        
+                        {current < steps.length - 1 && current !== 0 && (
                           <Button type="primary" onClick={() => this.next()} disabled={this.state.flag}>
+                            Next
+                          </Button>
+                        )}
+                        {current === 0 && (
+                          <Button type="primary" onClick={() => this.setState({clicked:true})} >
                             Next
                           </Button>
                         )}
