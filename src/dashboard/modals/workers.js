@@ -21,18 +21,18 @@ class ModalForm extends React.Component {
     return (
       <div>
         <Modal
-          title="Add Worker"
-          visible={true}
-          onOk={this.addNewWorker}
-          onCancel={this.props.handleOk}
-          okText="Save"
-          cancelText="Cancel"
+          title = "Add Worker"
+          visible = { true }
+          onOk = { this.addNewWorker }
+          onCancel = { this.props.handleOk }
+          okText = "Save"
+          cancelText = "Cancel"
         >
           <Form>
             <Form.Item
-              label="Name"
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 12 }}
+              label = "Worker Name"
+              labelCol = {{ span: 6 }}
+              wrapperCol = {{ span: 12 }}
             >
               {getFieldDecorator('workerName', {
                 rules: [
@@ -44,9 +44,9 @@ class ModalForm extends React.Component {
               )}
             </Form.Item>
             <Form.Item
-              label="Contact"
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 12 }}
+              label = "Worker Contact"
+              labelCol = {{ span: 6 }}
+              wrapperCol = {{ span: 12 }}
             >
               {getFieldDecorator('contact', {
                 rules: [
@@ -59,19 +59,20 @@ class ModalForm extends React.Component {
               )}
             </Form.Item>
             <Form.Item
-             label="Route Name"
-             labelCol={{ span: 5 }}
-             wrapperCol={{ span: 12 }}
+             label = "Route Number"
+             labelCol = {{ span: 6 }}
+             wrapperCol = {{ span: 12 }}
             >
             { getFieldDecorator('routeid', {
-                  rules: [{ required: true, message: 'Please select route!' },
+                rules: [
+                  { required: true, message: 'Please select route!' },
                 ],
               })(
                 <Select
-                  style={{ width: '100%' }}>
+                  style = {{ width: '100%' }}>
                     {
                     this.props.routeData &&  this.props.routeData.map((item) => {
-                      return <Option value={item.rid}>{item.routeName}</Option>
+                      return <Option value = { item.rid }> { item.routeName } </Option>
                     })
                     }
                 </Select>
