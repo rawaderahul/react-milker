@@ -125,7 +125,7 @@ class EditableCell extends React.Component {
             </Form.Item>
 
             <Form.Item style={{ margin: 0 }}>
-              {dataIndex=='routeid' ?  getFieldDecorator('routeid', {
+              {title=='Route' ?  getFieldDecorator('routeid', {
                 rules: [
                   { required: true,message: 'Please input route name'},
                 ],
@@ -217,8 +217,18 @@ class EditableTable extends Component {
       },
       {
         title: 'Route',
-        dataIndex: 'routeid',
-        width: '10%',
+       render:(record,text) => {
+         let routeName='';
+         record.routeid=record.routeid;
+         this.state.routeData.map((item) => {
+          if(record.routeid==item.rid) {
+            routeName=item.routeName
+          }
+        })
+        return routeName;
+
+       },
+        width: '15%',
         editable: true,
       },
       {
@@ -272,12 +282,13 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
     CustomersInfo.getCustomerListByDistributerId()
       .then((res)=>{
         this.setState({customerData: res.data})
       })
 
-      axios.get("http://127.0.0.1:8000/api/GetRoutesByDistributerId/1").then((response) => {
+      axios.get("http://127.0.0.1:8000/api/GetRoutesByDistributerId/"+distributerid).then((response) => {
         this.setState({routeData:response.data})
       })
   }
@@ -304,9 +315,12 @@ class EditableTable extends Component {
           ...row,
         });
         
+        console.log(newRow);
         CustomersInfo.putCustomerInfo(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({customerData: newData, editingid: '' })
+            console.log("OKKK");
+            
           })
         } 
       else {
