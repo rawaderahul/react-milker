@@ -54,7 +54,7 @@ class EditableCell extends React.Component {
             </Form.Item>
 
             <Form.Item style={{ margin: 0 }}>
-              { title=='Route' ?  getFieldDecorator('routeid', {
+              { title=='Route Number' ?  getFieldDecorator('routeid', {
                   rules: [{ required: false, message: 'Please select route!' },
                 ],
                 initialValue: record['routeid']
@@ -115,7 +115,7 @@ class EditableTable extends Component {
         editable: true,
       },
       {
-        title: 'Route',
+        title: 'Route Number',
        render:(record,text) => {
          let routeName = '';
          this.state.routeData.map((item) => {
@@ -208,17 +208,6 @@ class EditableTable extends Component {
           ...row,
         });
         console.log(newRow);
-        // if(this.state.routeName) {
-        //   newRow.routeid=routeName.key;
-        // }
-        // else {
-        //   this.state.routeData.map((item) => {
-        //     if(item.routeName==newRow.routeName) {
-        //       newRow.routeid=item.routeid;
-        //     }
-        //   })
-        // }
-        
         Workers.putWorkerDetail(this.state.editingid,newRow)
           .then((res)=>{
             this.setState({deliveryBoyData: newData, editingid: '' })

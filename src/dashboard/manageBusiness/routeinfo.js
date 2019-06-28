@@ -35,8 +35,7 @@ class EditableCell extends React.Component {
           <span>
             <Form.Item style={{ margin: 0 }}>
               {dataIndex=='routeName' ?  getFieldDecorator('routeName', {
-                rules: [{ required: true, message: 'Please enter route name!' },
-                        { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+                rules: [{ required: true, message: 'Please enter route Number!' },
               ],
               initialValue: record['routeName']
               })(
@@ -108,7 +107,7 @@ class EditableTable extends Component {
 
     this.columns = [
       {
-        title: 'Name',
+        title: 'Route Number',
         dataIndex: 'routeName',
         width: '20%',
         editable: true,
