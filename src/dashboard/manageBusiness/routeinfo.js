@@ -168,7 +168,8 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-      RoutesInfo.getGetRoutesByDistributerId().then((res)=>{
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'));
+      RoutesInfo.getRoutesByDistributerId(distributerid).then((res)=>{
         this.setState({rootInfo: res.data})
       })
 

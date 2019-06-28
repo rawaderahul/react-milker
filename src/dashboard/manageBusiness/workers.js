@@ -117,13 +117,15 @@ class EditableTable extends Component {
       {
         title: 'Route',
        render:(record,text) => {
-         let routeName='';
-         record.routeid=record.routeid;
+         let routeName = '';
          this.state.routeData.map((item) => {
           if(record.routeid==item.rid) {
+            console.log(item.routeName);
+            
             routeName=item.routeName
           }
         })
+
         return routeName;
 
        },
@@ -172,11 +174,13 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'));
+
     Workers.getWorkerListByDistributer().then((res)=>{
       this.setState({deliveryBoyData: res.data})
     })
 
-    RoutsInfo.getGetRoutesByDistributerId(1).then((res)=>{
+    RoutsInfo.getRoutesByDistributerId(distributerid).then((res)=>{
       this.setState({routeData:res.data})
     })
 
