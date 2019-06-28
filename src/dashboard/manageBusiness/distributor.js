@@ -219,7 +219,6 @@ class ShopDetails extends React.Component {
   }
 
   render() {
-    
     const { dataSource } = this.state;
     const components = {
       body: {

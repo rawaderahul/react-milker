@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     let distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
-    RouteData.getGetRoutesByDistributerId(distributerid).then((response)=> {
+    RouteData.getGetRoutesByDistributerId().then((response)=> {
     this.setState({routeData:response.data})
     console.log(this.state.routeData);
     })

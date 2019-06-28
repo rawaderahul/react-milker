@@ -6,7 +6,7 @@ export function getRoutesInfo(){
 }
 
 export function getGetRoutesByDistributerId(id){
-    return axios.get(uri + 'GetRoutesByDistributerId/'+id)
+    return axios.get(uri + 'GetRoutesByDistributerId/1'+id)
 }
 
 export function deleteRoutesInfo(id){

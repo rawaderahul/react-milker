@@ -26,7 +26,7 @@ class ModalForm extends Component{
   return (
     <div>
       <Modal
-        title="Modal"
+        title="Add Route"
         visible={true}
         onOk={this.addNewRoute}
         onCancel={this.props.hideModal}

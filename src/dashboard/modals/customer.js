@@ -16,14 +16,13 @@ class ModalForm extends Component{
       }
     })
   }
-
  
   render() {
   const { getFieldDecorator } = this.props.form;
   return (
     <div>
       <Modal
-        title="Modal"
+        title="Add Customer"
         visible={true}
         onOk={this.addNewCustomer}
         onCancel={this.props.hideModal}

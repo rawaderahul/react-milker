@@ -32,55 +32,57 @@ class EditableCell extends React.Component {
     return (
       <td {...restProps}>
         {editing ? (
-         <span>
-         <Form.Item style={{ margin: 0 }}>
-          {dataIndex=='routeName' ?  getFieldDecorator('routeName', {
-             rules: [{ required: true, message: 'Please enter route name!' },
-                     { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
-           ],
-           initialValue: record['routeName']
-           })(
-             <Input  />
-           ):null} 
-         </Form.Item>
-         <Form.Item style={{ margin: 0}}>
-           {dataIndex=='routeAreas' ?  getFieldDecorator('routeAreas', {
-             rules: [{ required: true, message: 'Please enter contact number!' },
-                   //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
-           ],
-             initialValue:Array.isArray(record.routeAreas) ? record.routeAreas  : record.routeAreas.split(",")
-             })(
+          <span>
+            <Form.Item style={{ margin: 0 }}>
+              {dataIndex=='routeName' ?  getFieldDecorator('routeName', {
+                rules: [{ required: true, message: 'Please enter route name!' },
+                        { pattern: '[A-Za-z]', message: 'Please enter only characters!' }
+              ],
+              initialValue: record['routeName']
+              })(
+                <Input  />
+              ):null} 
+            </Form.Item>
+
+            <Form.Item style={{ margin: 0}}>
+              {dataIndex=='routeAreas' ?  getFieldDecorator('routeAreas', {
+                rules: [{ required: true, message: 'Please enter contact number!' },
+                      //  { pattern: '[0-9]', message: 'Please enter Sale Price with only digit ' }
+              ],
+                initialValue:Array.isArray(record.routeAreas) ? record.routeAreas  : record.routeAreas.split(",")
+                })(
+                <Select
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                >
+                  {
+                  areas &&  areas.map((item) => {
+                    return <Option key={item} >{item}</Option>
+                  })
+                  }
+                </Select>
+                ):null} 
+            </Form.Item>
+
+            <Form.Item style={{ margin: 0 }}>
+              {dataIndex=='routePincodes' ?  getFieldDecorator('routePincodes', {
+                rules: [{ required: true, message: 'Please select route pincodes!' },
+              ],
+              initialValue:Array.isArray(record.routePincodes) ? record.routePincodes : record.routePincodes.split(",")
+              })(
               <Select
-              mode="multiple"
-              style={{ width: '100%' }}
-             >
+                mode="multiple"
+                style={{ width: '100%' }}
+              >
                 {
-                areas &&  areas.map((item) => {
-                  return <Option key={item} >{item}</Option>
+                pincodes &&  pincodes.map((item) => {
+                  return <Option key={item}>{item}</Option>
                 })
                 }
               </Select>
-             ):null} 
-        </Form.Item>
-    <Form.Item style={{ margin: 0 }}>
-    {dataIndex=='routePincodes' ?  getFieldDecorator('routePincodes', {
-       rules: [{ required: true, message: 'Please select route pincodes!' },
-     ],
-     initialValue:Array.isArray(record.routePincodes) ? record.routePincodes : record.routePincodes.split(",")
-     })(
-       <Select
-      mode="multiple"
-      style={{ width: '100%' }}
-       >
-         {
-         pincodes &&  pincodes.map((item) => {
-           return <Option key={item}>{item}</Option>
-         })
-         }
-       </Select>
-     ):null} 
-    </Form.Item>
-       </span>
+              ):null} 
+            </Form.Item>
+          </span>
         ) : (
           children
         )}
@@ -97,12 +99,13 @@ class EditableTable extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        data:null ,
-        rootInfo: null,
-        editingid: '' ,
-        areas:[],
-        pincodes:[]
+      data:null ,
+      rootInfo: null,
+      editingid: '' ,
+      areas:[],
+      pincodes:[]
     };
+
     this.columns = [
       {
         title: 'Name',
@@ -130,7 +133,7 @@ class EditableTable extends Component {
           const editable = this.isEditing(record);
 
           return editable ? (
-           <span>
+            <span>
               <EditableContext.Consumer>
                 {form => (
                   <a
@@ -142,6 +145,7 @@ class EditableTable extends Component {
                   </a>
                 )}
               </EditableContext.Consumer>
+
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.rid)}>
                 <a>Cancel</a>
               </Popconfirm>
@@ -165,9 +169,10 @@ class EditableTable extends Component {
   }
 
   componentDidMount() {
-      RoutesInfo.getGetRoutesByDistributerId(1).then((res)=>{
-          this.setState({rootInfo: res.data})
+      RoutesInfo.getGetRoutesByDistributerId().then((res)=>{
+        this.setState({rootInfo: res.data})
       })
+
       axios.get('http://127.0.0.1:8000/api/Distributer/1').then((res)=>{
         this.setState({areas: res.data[0].serviceAreas.split(","), pincodes:res.data[0].servicePincodes.split(",")})
     })
@@ -190,13 +195,12 @@ class EditableTable extends Component {
       const index = newData.findIndex(item => rid === item.rid);
       if (index > -1) {
         const item = newData[index];
-
         newRow.routeAreas=newRow.routeAreas.join(",");
         newRow.routePincodes=newRow.routePincodes.join(",");
-            newData.splice(index, 1, {
-              ...item,
-              ...newRow,
-            });
+          newData.splice(index, 1, {
+            ...item,
+            ...newRow,
+          });
         
         RoutesInfo.putRoutesInfo(this.state.editingid,newRow)
           .then((response)=>{
@@ -230,8 +234,6 @@ class EditableTable extends Component {
   addNewRoute = (event) => {
     RoutesInfo.postRoutesInfo(event)
     .then((response) => {
-      console.log(response);
-      
     })
     this.setState({
       visible: false,
@@ -299,5 +301,4 @@ class EditableTable extends Component {
 }
 
 const RouteInfo = Form.create()(EditableTable);
-
 export default RouteInfo;
