@@ -96,19 +96,19 @@ class EditableTable extends Component {
     const {DistributorQuotaData} = this.state;
 
     let addColumn1 = {
+      RouteName:<b>Should Sell / Manage </b>,
       id: 400,
-      routeName:<b>Should Sell / Manage </b>,
-      buffalo: 2,
-      cow: 0,
-      manageBuffalo: 3,
+      Buffalo: 2,
+      Cow: 0,
+      manageBuffalo: 0,
       manageCow: 0
     }
 
     let addColumn2 = {
       id: 401,
-      routeName:<b>More Purchase </b>,
-      buffalo: 0,
-      cow: 5,
+      RouteName:<b>More Purchase </b>,
+      Buffalo: 0,
+      Cow: 5,
       manageBuffalo: 0,
       manageCow: 0
     }
@@ -123,9 +123,9 @@ class EditableTable extends Component {
           totalManageCow = totalManageCow + item.manageCow;
            totalData = {
             id: 402,
-            routeName:<b>Total </b>,
-            buffalo: totalbuffalo,
-            cow: totalcow,
+            RouteName:<b>Total </b>,
+            Buffalo: totalbuffalo,
+            Cow: totalcow,
             manageBuffalo: totalManageBuffalo,
             manageCow: totalManageCow
           }
@@ -200,6 +200,8 @@ class EditableTable extends Component {
   }
 
   render() {
+    console.log(this.state.DistributorQuotaData);
+    
    let columns = [
       {
         title: 'Daily',

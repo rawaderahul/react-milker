@@ -64,7 +64,7 @@ class EditableCell extends React.Component {
                   style={{ width: '100px' }}>
                     {
                     routeData &&  routeData.map((item) => {
-                      return <Option value={item.rid}>{item.routeName}</Option>
+                      return <Option key={item.rid} value={item.rid}>{item.routeName}</Option>
                     })
                     }
                   </Select>

@@ -164,20 +164,19 @@ class AnyRoutes extends Component {
       },
     ];
 
-    Customer.getCustomerListByRouteId(this.props.id).then((response) => {
+    Customer.getCustomerListByRouteId(this.props.rid).then((response) => {
     this.setState({ dataSource:response.data })
     })
   }
   
   componentWillReceiveProps(nextProps) {
-    Customer.getCustomerListByRouteId(this.props.id).then((response) => {
+    Customer.getCustomerListByRouteId(nextProps.rid).then((response) => {
       this.setState({ dataSource:response.data })
     })
   }
 
   handleChange=(event,id,text)=> {
     const { dataSource,editQuata,editQuataId }=this.state;
-    console.log(event,id,text);
     dataSource.map((item) => {
       if(item.cid==id) {
         switch(text) {
@@ -283,14 +282,12 @@ class AnyRoutes extends Component {
     .then(() => message.success('Save Changes Successfully', 2.5))
     this.state.editQuata.map((item) => {
       Customer.putCustomerInfo(item.cid,item).then((res)=>{
-        console.log(("ok"));
       })
     })
     this.setState({editQuata:[]})
   }
 
   render() {
-    console.log(this.state.editQuata);
     const { dataSource } = this.state;
     const components = {
       body: {

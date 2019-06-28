@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { uri } from '../commonURI';
 
-export function getCustomerListByDistributerId(){
-    return axios.get(uri + 'CustomerListByDistributerId/1')
+export function getCustomerListByDistributerId(id){
+    return axios.get(uri + 'CustomerListByDistributerId/'+id)
 }
 
-export function getCustomerListByRouteId(){
-    return axios.get(uri + 'CustomerListByRouteId/1')
+export function getCustomerListByRouteId(id){
+    return axios.get(uri + 'CustomerListByRouteId/'+id)
 }
 
 export function putCustomerInfo(id,data){
