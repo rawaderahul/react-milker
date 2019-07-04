@@ -16,3 +16,6 @@ export function putCustomerInfo(id,data){
 export function postCustomerInfo(data){
     return axios.post(uri + 'Customer', data)
 }
+export function deleteCustomerInfo(id){
+    return axios.delete(uri + 'Customer/'+id)
+}

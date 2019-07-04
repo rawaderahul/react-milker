@@ -71,6 +71,18 @@ class EditableTable extends Component {
         cowQuota:null,
         buffaloQuota: null,
     };
+    var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    if(!distributerid) {
+      window.sessionStorage.setItem("distributerid",1);
+      var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
+    }
+    DistributorInfo.getPerticluarDistributorInfo(distributerid).then((response)=>{
+      this.setState({distributorInfo: response.data})
+      this.state.distributorInfo.map((item)=>{
+        this.setState({ cowQuota : item.dailyCowQuota })
+        this.setState({ buffaloQuota : item.dailyBuffaloQuota})
+      })
+    })
   }
 
   isDeleting=record => record.id === this.state.editingid;
@@ -82,52 +94,47 @@ class EditableTable extends Component {
 
   componentDidMount() {
     var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
-    if(!distributerid) {
-      window.sessionStorage.setItem("distributerid",1);
-      var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
-    }
-    console.log(distributerid); 
-    
+
     var totalbuffalo = 0;
     var totalcow = 0;
     var totalData = {};
+    let addColumn1={};
+    let addColumn2={};
     var totalManageBuffalo = 0;
     var totalManageCow = 0;
     const {DistributorQuotaData} = this.state;
-
-    let addColumn1 = {
-      RouteName:<b>Should Sell / Manage </b>,
-      id: 400,
-      Buffalo: 2,
-      Cow: 0,
-      manageBuffalo: 0,
-      manageCow: 0
-    }
-
-    let addColumn2 = {
-      id: 401,
-      RouteName:<b>More Purchase </b>,
-      Buffalo: 0,
-      Cow: 5,
-      manageBuffalo: 0,
-      manageCow: 0
-    }
+    
     
     DistributorQuota.getDistributorQuota(distributerid)
       .then((res)=>{
-        console.log(res.data);
         res.data.map((item)=>{
-          totalbuffalo = totalbuffalo + item.buffalo;
+          totalbuffalo = totalbuffalo + item.buffalow;
           totalcow = totalcow + item.cow;
           totalManageBuffalo = totalManageBuffalo + item.manageBuffalo;
           totalManageCow = totalManageCow + item.manageCow;
            totalData = {
             id: 402,
-            RouteName:<b>Total </b>,
-            Buffalo: totalbuffalo,
-            Cow: totalcow,
+            routeName:<b>Total </b>,
+            buffalow: totalbuffalo,
+            cow: totalcow,
             manageBuffalo: totalManageBuffalo,
             manageCow: totalManageCow
+          }
+           addColumn1 = {
+            routeName:<b>Should Sell / Manage </b>,
+            id: 400,
+            buffalow: Number(this.state.buffaloQuota-totalbuffalo) ,
+            cow: Number(this.state.buffaloQuota-totalcow),
+            manageBuffalo: 0,
+            manageCow: 0
+          }
+           addColumn2 = {
+            id: 401,
+            routeName:<b>More Purchase </b>,
+            buffalow: 0,
+            cow:0 ,
+            manageBuffalo: 0,
+            manageCow: 0
           }
         })
         res.data.push(totalData);
@@ -136,15 +143,7 @@ class EditableTable extends Component {
        this.setState({DistributorQuotaData : res.data });
       })
 
-      DistributorInfo.getPerticluarDistributorInfo(distributerid).then((response)=>{
-        this.setState({distributorInfo: response.data})
-        console.log("Distributer info",this.state.distributorInfo);
-        this.state.distributorInfo.map((item)=>{
-          this.setState({ cowQuota : item.dailyCowQuota })
-          this.setState({ buffaloQuota : item.dailyBuffaloQuota})
-        })
-        console.log(this.state.cowQuota);
-      })
+      
       
   }
   
@@ -209,7 +208,7 @@ class EditableTable extends Component {
           {
             title:'Route Name',
             align:'center',
-            dataIndex: 'RouteName',
+            dataIndex: 'routeName',
             width: '20%',
             editable: true,
           }
@@ -221,7 +220,7 @@ class EditableTable extends Component {
           {
             title:'Buffalo',
             align:'center',
-            dataIndex: 'Buffalow',
+            dataIndex: 'buffalow',
             width: '15%',
             editable: true,
           }
@@ -233,7 +232,7 @@ class EditableTable extends Component {
           {
             title:'Cow',
             align:'center',
-            dataIndex: 'COW',
+            dataIndex: 'cow',
             width: '15%',
             editable: true,
           }

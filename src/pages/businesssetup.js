@@ -4,14 +4,13 @@ import DistributorInfo from '../components/distributorinfo'
 import CreateRoutes from '../components/createroutes'
 import CreateDeliveryBoys from '../components/createdeliveryboys'
 import CreateCustomers from '../components/createcustomers'
-import axios from 'axios';
+import { postDistributorInfo } from '../services/distributor/distributorInfo';
+import { postRoutesInfo } from '../services/route/routesInfo';
+import { postWorkerDetail } from '../services/worker/workersInfo';
+import { postCustomerInfo } from '../services/customer/customerInfo';
 import  { Redirect } from 'react-router-dom'
-import { async } from 'q';
 const { Header, Content, Footer, Sider } = Layout;
-// const { SubMenu } = Menu;
 const Step = Steps.Step;
-const CreateRoute=[{id:1,name:'Route 10'}]
-const CreateWorker=[{id:1,name:'Vicky Kanade'}]
 function countDown() {
   let secondsToGo = 5;
   const modal = Modal.success({
@@ -64,7 +63,8 @@ class BusinessSetUP extends Component{
           item2.distributerid=distributerid;
           item2.routeAreas=item2.routeAreas.join(",");
           item2.routePincodes=item2.routePincodes.join(",");
-           axios.post("http://127.0.0.1:8000/api/Route",item2).then((response2) => {
+
+          postRoutesInfo(item2).then((response2) => {
             CreateRoute.push({id:response2.data.id,name:response2.data.RouteName})
             console.log("Ok route");
             window.sessionStorage.setItem("CreateRoute", JSON.stringify(CreateRoute));
@@ -86,7 +86,7 @@ class BusinessSetUP extends Component{
               if(value3.name==item3.route) {
                 item3.routeid=value3.id;
                 item3.distributerid=distributerid;
-                axios.post("http://127.0.0.1:8000/api/WorkerDetail",item3).then((response3) => {
+                postWorkerDetail(item3).then((response3) => {
                   console.log("ok Boy");
                   CreateDeliveryBoys.push({id:response3.data.id,name:response3.data.WorkerName})
                    window.sessionStorage.setItem("CreateDeliveryBoys", JSON.stringify(CreateDeliveryBoys));
@@ -96,7 +96,6 @@ class BusinessSetUP extends Component{
                   })
               }
             })
-            
           })
       }
 
@@ -110,7 +109,7 @@ class BusinessSetUP extends Component{
              CreateRoute.map((value4) => {
                if(value4.name==item4.routeName) {
                  item4.routeid=value4.id;
-                 axios.post("http://127.0.0.1:8000/api/Customer",item4).then((response4) => {
+                 postCustomerInfo(item4).then((response4) => {
                    console.log("ok customer");
                    CreateCustomers.push(response4.data.id)
                    if(CreateCustomers.length === CreateCustomersData.length) {
@@ -120,7 +119,6 @@ class BusinessSetUP extends Component{
                })
                }
              })
-
            })
        }
 
@@ -130,18 +128,14 @@ class BusinessSetUP extends Component{
         let servicePincodes=DistributorInfoData.servicePincodes.join(",");
         DistributorInfoData.serviceAreas=serviceAreas;
         DistributorInfoData.servicePincodes=servicePincodes;
-
-        await axios.post("http://127.0.0.1:8000/api/Distributer",DistributorInfoData).then(async(response1) => {
+        postDistributorInfo(DistributorInfoData).then(async(response1) => {
           window.sessionStorage.setItem("distributerid", JSON.stringify(response1.data.id));
           console.log("ok distributor");
          await this.CreateRoutes()
         })
       }
 
-      click=(e)=> {
-       console.log(e);
-       
-      }
+      
       handleChange=()=>{
         this.setState({clicked:false});
       }
@@ -149,7 +143,7 @@ class BusinessSetUP extends Component{
       const steps = [
         {
           title: 'Distributer',
-          content: <DistributorInfo flag={this.flag} click={this.click} next={this.next} 
+          content: <DistributorInfo flag={this.flag} next={this.next} 
           clicked={this.state.clicked}
           handleChange={this.handleChange}/>,
         },

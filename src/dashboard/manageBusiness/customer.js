@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
-import axios from 'axios'
 import { Table, Input, InputNumber, Popconfirm, Form, Button,Select } from 'antd';
 import * as CustomersInfo from '../../services/customer/customerInfo';
+import * as RouteInfo from '../../services/route/routesInfo';
 import CustomerModal from '../modals/customer'
 
 const EditableContext = React.createContext();
@@ -277,18 +277,18 @@ class EditableTable extends Component {
   isDeleting = record => record.cid === this.state.editingid;
 
   delete = (cid) => {
-    axios.delete("http://127.0.0.1:8000/api/Customer/"+cid).then((response)=>{
+    CustomersInfo.deleteCustomerInfo(cid).then((response)=>{
     })
   }
 
   componentDidMount() {
     var distributerid = JSON.parse(sessionStorage.getItem('distributerid'))
-    CustomersInfo.getCustomerListByDistributerId()
+    CustomersInfo.getCustomerListByDistributerId(distributerid)
       .then((res)=>{
         this.setState({customerData: res.data})
       })
 
-      axios.get("http://127.0.0.1:8000/api/GetRoutesByDistributerId/"+distributerid).then((response) => {
+      RouteInfo.getRoutesByDistributerId(distributerid).then((response) => {
         this.setState({routeData:response.data})
       })
   }
