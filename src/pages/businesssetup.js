@@ -163,9 +163,9 @@ class BusinessSetUP extends Component{
         const { current } = this.state;
         return(
           <Layout style={{ minHeight: '100vh' }} >
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: 'orange'}}>
+        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{  background: '#f7f7f7'}}>
           <div className="logo" />
-          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" style={{  background: 'orange'}}>
+          <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" style={{  background: '#f7f7f7'}}>
             <Menu.Item key="1">
               <Icon type="pie-chart" />
               <span>Business Setup</span>
