@@ -26,7 +26,7 @@ function App() {
               <Route exact path="/businesssetup" component={ BusinessSetUP } /> 
               <Route exact path="/managebusiness" component={ Dashboard } /> 
 
-              <Route exact path="/" component={ Home } />   
+              <Route exact path="/" component={ BusinessSetUP } />   
             </Col>  
           </Row>
           </div>
